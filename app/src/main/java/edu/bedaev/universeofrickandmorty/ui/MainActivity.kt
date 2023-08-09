@@ -1,5 +1,6 @@
 package edu.bedaev.universeofrickandmorty.ui
 
+import android.content.res.Configuration
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -43,10 +44,15 @@ fun MainApp(modifier: Modifier = Modifier) {
     }
 }
 
+@Preview(name = "Dark", showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL
+)
 @Preview(showBackground = true)
 @Composable
 fun PreviewMainApp() {
     AppTheme {
-        MainApp()
+        Surface {
+            MainApp()
+        }
     }
 }

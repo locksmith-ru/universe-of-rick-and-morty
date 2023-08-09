@@ -2,6 +2,12 @@
     <string name="app_name">Universe of Rick and Morty</string>
 
     <!--    Onboarding screen-->
+    <string name="what_is_this">What is this?</string>
+    <string name="about">\"Universe of Rick and Morty\" this is a mobile application based on the television show \"Rick and Morty\"</string>
+    <string name="hundred_locations">Hundreds of locations</string>
+    <string name="access_locations">You will have access to about hundreds of characters, images, locations and episodes.</string>
+    <string name="rick_and_morty_api_title">The Rick and Morty API</string>
+    <string name="rick_and_morty_api_desc">The Rick and Morty API is filled with canonical information as seen on the TV show.</string>
     <string name="get_started">Get started</string>
     <string name="skip">Skip</string>
     <string name="next">Next</string>

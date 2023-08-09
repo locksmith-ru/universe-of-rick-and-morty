@@ -66,7 +66,10 @@ fun OnBoardingPager(
     onComplete: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Box(modifier = modifier)
+    Box(
+        modifier = modifier
+            .background(color = MaterialTheme.colorScheme.background)
+    )
     {
         val scope = rememberCoroutineScope()
         Column(horizontalAlignment = Alignment.CenterHorizontally) {

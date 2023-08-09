@@ -3,6 +3,12 @@
     <string name="app_name">Вселенная Рика и Морти</string>
 
 <!--    Onboarding screen-->
+    <string name="what_is_this">Что это?</string>
+    <string name="about">\"Вселенная Рика и Морти\" это мобильное приложение основанное на телевизионном шоу \"Рик и Морти\"</string>
+    <string name="hundred_locations">Сотни локаций</string>
+    <string name="access_locations">У вас будет доступ примерно к сотням персонажей, изображений, локаций и эпизодов.</string>
+    <string name="rick_and_morty_api_title">Рик и Морти API</string>
+    <string name="rick_and_morty_api_desc">API Рика и Морти заполнен канонической информацией, которую можно увидеть в телешоу.</string>
     <string name="get_started">Начать</string>
     <string name="skip">Пропустить</string>
     <string name="next">Следующий</string>
