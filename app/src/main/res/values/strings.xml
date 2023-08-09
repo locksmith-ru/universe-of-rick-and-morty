@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Universe of Rick and Morty</string>
+
+    <!--    Onboarding screen-->
+    <string name="get_started">Get started</string>
+    <string name="skip">Skip</string>
+    <string name="next">Next</string>
 </resources>

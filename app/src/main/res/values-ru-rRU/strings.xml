@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Вселенная Рика и Морти</string>
+
+<!--    Onboarding screen-->
+    <string name="get_started">Начать</string>
+    <string name="skip">Пропустить</string>
+    <string name="next">Следующий</string>
 </resources>
