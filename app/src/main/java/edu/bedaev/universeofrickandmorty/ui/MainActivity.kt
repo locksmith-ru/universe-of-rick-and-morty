@@ -13,7 +13,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import edu.bedaev.universeofrickandmorty.ui.screen.characters.CharactersScreen
+import androidx.lifecycle.viewmodel.compose.viewModel
+import edu.bedaev.universeofrickandmorty.ui.screen.characters.ListScreen
+import edu.bedaev.universeofrickandmorty.ui.screen.characters.CharactersViewModel
 import edu.bedaev.universeofrickandmorty.ui.screen.onboarding.OnBoardingScreen
 import edu.bedaev.universeofrickandmorty.ui.theme.AppTheme
 
@@ -41,7 +43,11 @@ fun MainApp(modifier: Modifier = Modifier) {
             onComplete = { onBoardingIsShown = true }
         )
     } else {
-        CharactersScreen()
+        val viewModel: CharactersViewModel = viewModel()
+        ListScreen(
+            loadingState = viewModel.loadingState,
+            onError = { viewModel.loadContent() }
+        )
     }
 }
 

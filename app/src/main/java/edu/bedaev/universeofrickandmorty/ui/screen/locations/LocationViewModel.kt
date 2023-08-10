@@ -1,4 +1,4 @@
-package edu.bedaev.universeofrickandmorty.ui.screen.characters
+package edu.bedaev.universeofrickandmorty.ui.screen.locations
 
 import androidx.lifecycle.viewModelScope
 import edu.bedaev.universeofrickandmorty.ui.screen.AppLoadingState
@@ -8,12 +8,11 @@ import kotlinx.coroutines.launch
 import okio.IOException
 import retrofit2.HttpException
 
-class CharactersViewModel : BaseViewModel() {
+class LocationViewModel : BaseViewModel() {
 
     init {
         loadContent()
     }
-
     override fun loadContent() {
         viewModelScope.launch {
             loadingState = AppLoadingState.Loading
@@ -21,7 +20,7 @@ class CharactersViewModel : BaseViewModel() {
             delay(3000)
             loadingState = try {
                 // todo Здесь загрузка данных из сети
-                AppLoadingState.Success(data = List(100) { i -> "Character_${i}" })
+                AppLoadingState.Success(data = List(100) { i -> "Location_${i}" })
             }catch (e: IOException){
                 AppLoadingState.Error
             } catch (e: HttpException){
@@ -29,5 +28,4 @@ class CharactersViewModel : BaseViewModel() {
             }
         }
     }
-
 }
