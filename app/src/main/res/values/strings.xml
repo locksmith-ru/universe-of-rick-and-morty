@@ -12,9 +12,20 @@
     <string name="skip">Skip</string>
     <string name="next">Next</string>
 
+<!--    loading screen-->
+    <string name="loading">Loading</string>
+<!--    error screen-->
+    <string name="error">Error</string>
+    <string name="loading_failed">Failed to load</string>
+    <string name="retry">Retry</string>
+
     <!--    navigation bar-->
     <string name="characters">Characters</string>
     <string name="locations">Locations</string>
     <string name="episodes">Episodes</string>
+
+    <!--    floating action button-->
+    <string name="to_up">Up</string>
+    <string name="label_loading">Process loading ...\nPlease wait.</string>
 
 </resources>

@@ -13,9 +13,20 @@
     <string name="skip">Пропустить</string>
     <string name="next">Следующий</string>
 
+    <!--    loading screen-->
+    <string name="loading">Загрузка</string>
+    <!--    error screen-->
+    <string name="error">Ошибка</string>
+    <string name="loading_failed">Ошибка загрузки</string>
+    <string name="retry">Повторить</string>
+
     <!--    navigation bar-->
     <string name="characters">Персонажи</string>
     <string name="locations">Локации</string>
     <string name="episodes">Эпизоды</string>
+
+<!--    floating action button-->
+    <string name="to_up">Наверх</string>
+    <string name="label_loading">Process loading ...\nPlease wait.</string>
 
 </resources>

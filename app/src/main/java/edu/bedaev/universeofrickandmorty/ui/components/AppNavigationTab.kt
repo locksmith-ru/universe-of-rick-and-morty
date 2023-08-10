@@ -21,24 +21,24 @@ import edu.bedaev.universeofrickandmorty.ui.theme.AppTheme
 @Composable
 fun AppBottomNavigationBar(
     modifier: Modifier = Modifier,
-    destinations: List<AppDestination>,
-    onDrawerClicked: () -> Unit = {}
+    onDrawerClicked: (AppDestination) -> Unit = {}
 ) {
+    val destinations: List<AppDestination> = navTabScreens
     NavigationBar(modifier = modifier.fillMaxWidth()) {
         NavigationBarItem(selected = true,
-            onClick = onDrawerClicked,
+            onClick = { onDrawerClicked(destinations[0]) },
             icon = {
                 Icon(imageVector = destinations[0].icon,
                     contentDescription = stringResource(id = R.string.characters))
             })
         NavigationBarItem(selected = false,
-            onClick = onDrawerClicked,
+            onClick = { onDrawerClicked(destinations[1]) },
             icon = {
                 Icon(imageVector = destinations[1].icon,
                     contentDescription = stringResource(id = R.string.locations))
             })
         NavigationBarItem(selected = false,
-            onClick = onDrawerClicked,
+            onClick = { onDrawerClicked(destinations[2]) },
             icon = {
                 Icon(imageVector = destinations[2].icon,
                     contentDescription = stringResource(id = R.string.episodes))
@@ -49,13 +49,13 @@ fun AppBottomNavigationBar(
 @Composable
 fun AppNavigationRail(
     modifier: Modifier = Modifier,
-    destinations: List<AppDestination>,
-    onDrawerClicked: () -> Unit = {}
+    onDrawerClicked: (AppDestination) -> Unit = {}
 ) {
+    val destinations: List<AppDestination> = navTabScreens
     NavigationRail(modifier = modifier.fillMaxHeight()) {
         NavigationRailItem(
             selected = true,
-            onClick =  onDrawerClicked ,
+            onClick = { onDrawerClicked(destinations[0]) } ,
             icon = {
                 Icon(
                     imageVector = destinations[0].icon,
@@ -65,7 +65,7 @@ fun AppNavigationRail(
         )
         NavigationRailItem(
             selected = false,
-            onClick =  onDrawerClicked ,
+            onClick = { onDrawerClicked(destinations[1]) } ,
             icon = {
                 Icon(
                     imageVector = destinations[1].icon,
@@ -75,7 +75,7 @@ fun AppNavigationRail(
         )
         NavigationRailItem(
             selected = false,
-            onClick =  onDrawerClicked ,
+            onClick = { onDrawerClicked(destinations[2]) } ,
             icon = {
                 Icon(
                     imageVector = destinations[2].icon,
@@ -94,7 +94,7 @@ fun AppNavigationRail(
 fun PreviewNavigationBottom() {
     AppTheme {
         Surface {
-            AppBottomNavigationBar(destinations = navTabScreens)
+            AppBottomNavigationBar()
         }
     }
 }
@@ -107,7 +107,7 @@ fun PreviewNavigationBottom() {
 fun PreviewNavigationRail() {
     AppTheme {
         Surface {
-            AppNavigationRail(destinations = navTabScreens)
+            AppNavigationRail()
         }
     }
 }
