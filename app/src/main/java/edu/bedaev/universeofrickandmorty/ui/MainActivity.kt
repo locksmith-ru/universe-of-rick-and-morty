@@ -13,9 +13,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import edu.bedaev.universeofrickandmorty.ui.screen.characters.ListScreen
-import edu.bedaev.universeofrickandmorty.ui.screen.characters.CharactersViewModel
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
+import edu.bedaev.universeofrickandmorty.navigation.Characters
+import edu.bedaev.universeofrickandmorty.navigation.navTabScreens
+import edu.bedaev.universeofrickandmorty.ui.screen.characters.CharactersScreen
 import edu.bedaev.universeofrickandmorty.ui.screen.onboarding.OnBoardingScreen
 import edu.bedaev.universeofrickandmorty.ui.theme.AppTheme
 
@@ -43,15 +45,12 @@ fun MainApp(modifier: Modifier = Modifier) {
             onComplete = { onBoardingIsShown = true }
         )
     } else {
-        val viewModel: CharactersViewModel = viewModel()
-        ListScreen(
-            loadingState = viewModel.loadingState,
-            onError = { viewModel.loadContent() }
-        )
+        CharactersScreen()
     }
 }
 
-@Preview(name = "Dark", showBackground = true,
+@Preview(
+    name = "Dark", showBackground = true,
     uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL
 )
 @Preview(showBackground = true)

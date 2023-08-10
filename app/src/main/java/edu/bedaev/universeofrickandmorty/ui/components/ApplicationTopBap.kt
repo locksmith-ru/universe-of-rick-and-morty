@@ -33,7 +33,8 @@ fun ApplicationTopBar(
             Image(
                 painter = painterResource(id = R.drawable.ic_default),
                 contentDescription = "",
-                modifier = Modifier.size(48.dp))
+                modifier = Modifier.size(48.dp)
+            )
         }
     )
 }

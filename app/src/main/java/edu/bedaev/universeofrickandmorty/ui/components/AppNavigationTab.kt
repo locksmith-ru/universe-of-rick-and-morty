@@ -11,78 +11,49 @@ import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import edu.bedaev.universeofrickandmorty.R
 import edu.bedaev.universeofrickandmorty.navigation.AppDestination
+import edu.bedaev.universeofrickandmorty.navigation.Characters
 import edu.bedaev.universeofrickandmorty.navigation.navTabScreens
 import edu.bedaev.universeofrickandmorty.ui.theme.AppTheme
 
 @Composable
 fun AppBottomNavigationBar(
     modifier: Modifier = Modifier,
-    onDrawerClicked: (AppDestination) -> Unit = {}
+    onDrawerClicked: (AppDestination) -> Unit = {},
+    destinations: List<AppDestination> = navTabScreens,
+    currentScreen: AppDestination = Characters
 ) {
-    val destinations: List<AppDestination> = navTabScreens
     NavigationBar(modifier = modifier.fillMaxWidth()) {
-        NavigationBarItem(selected = true,
-            onClick = { onDrawerClicked(destinations[0]) },
-            icon = {
-                Icon(imageVector = destinations[0].icon,
-                    contentDescription = stringResource(id = R.string.characters))
-            })
-        NavigationBarItem(selected = false,
-            onClick = { onDrawerClicked(destinations[1]) },
-            icon = {
-                Icon(imageVector = destinations[1].icon,
-                    contentDescription = stringResource(id = R.string.locations))
-            })
-        NavigationBarItem(selected = false,
-            onClick = { onDrawerClicked(destinations[2]) },
-            icon = {
-                Icon(imageVector = destinations[2].icon,
-                    contentDescription = stringResource(id = R.string.episodes))
-            })
+        destinations.forEach{ destination ->
+            NavigationBarItem(
+                selected = currentScreen == destination,
+                onClick = { onDrawerClicked(destination) },
+                icon = {
+                    Icon(imageVector = destination.icon, contentDescription = "")
+                }
+            )
+        }
     }
 }
 
 @Composable
 fun AppNavigationRail(
     modifier: Modifier = Modifier,
-    onDrawerClicked: (AppDestination) -> Unit = {}
+    onDrawerClicked: (AppDestination) -> Unit = {},
+    destinations: List<AppDestination> = navTabScreens,
+    currentScreen: AppDestination = Characters
 ) {
-    val destinations: List<AppDestination> = navTabScreens
     NavigationRail(modifier = modifier.fillMaxHeight()) {
-        NavigationRailItem(
-            selected = true,
-            onClick = { onDrawerClicked(destinations[0]) } ,
-            icon = {
-                Icon(
-                    imageVector = destinations[0].icon,
-                    contentDescription = stringResource(id = R.string.characters)
-                )
-            }
-        )
-        NavigationRailItem(
-            selected = false,
-            onClick = { onDrawerClicked(destinations[1]) } ,
-            icon = {
-                Icon(
-                    imageVector = destinations[1].icon,
-                    contentDescription = stringResource(id = R.string.locations)
-                )
-            }
-        )
-        NavigationRailItem(
-            selected = false,
-            onClick = { onDrawerClicked(destinations[2]) } ,
-            icon = {
-                Icon(
-                    imageVector = destinations[2].icon,
-                    contentDescription = stringResource(id = R.string.episodes)
-                )
-            }
-        )
+        destinations.forEach{ destination ->
+            NavigationRailItem(
+                selected = currentScreen == destination,
+                onClick = { onDrawerClicked(destination) },
+                icon = {
+                    Icon(imageVector = destination.icon, contentDescription = "")
+                }
+            )
+        }
     }
 }
 

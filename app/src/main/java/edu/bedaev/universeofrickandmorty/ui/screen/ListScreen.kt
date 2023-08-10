@@ -1,8 +1,10 @@
-package edu.bedaev.universeofrickandmorty.ui.screen.characters
+package edu.bedaev.universeofrickandmorty.ui.screen
 
 import android.content.res.Configuration
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -24,9 +26,6 @@ import edu.bedaev.universeofrickandmorty.R
 import edu.bedaev.universeofrickandmorty.ui.components.AppBottomNavigationBar
 import edu.bedaev.universeofrickandmorty.ui.components.AppFloatingActionButton
 import edu.bedaev.universeofrickandmorty.ui.components.ApplicationTopBar
-import edu.bedaev.universeofrickandmorty.ui.screen.AppLoadingState
-import edu.bedaev.universeofrickandmorty.ui.screen.ErrorScreen
-import edu.bedaev.universeofrickandmorty.ui.screen.LoadingScreen
 import edu.bedaev.universeofrickandmorty.ui.theme.AppTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -34,8 +33,10 @@ import kotlinx.coroutines.launch
 @Composable
 fun ListScreen(
     modifier: Modifier = Modifier,
+    screenTitle: String = stringResource(id = R.string.app_name),
     loadingState: AppLoadingState,
-    onError: () -> Unit = {}
+    onError: () -> Unit = {},
+    onItemSelected: () -> Unit = {}
 ) {
     val lazyListState = rememberLazyListState()
 
@@ -48,7 +49,7 @@ fun ListScreen(
     Scaffold(
         modifier = modifier,
         topBar = {
-            ApplicationTopBar(title = stringResource(id = R.string.characters))
+            ApplicationTopBar(title = screenTitle)
         },
         floatingActionButton = {
             if (showFloatingButton) {
@@ -72,11 +73,11 @@ fun ListScreen(
                 ScreenContent(
                     modifier = Modifier.padding(padding),
                     lazyState = lazyListState,
-                    data = loadingState.data
+                    data = loadingState.data,
+                    onItemClicked = onItemSelected
                 )
 
         }
-
     }
 }
 
@@ -84,16 +85,20 @@ fun ListScreen(
 private fun ScreenContent(
     modifier: Modifier,
     lazyState: LazyListState,
-    data: List<Any>
+    data: List<Any>,
+    onItemClicked: () -> Unit
 ) {
     LazyColumn(
-        modifier = modifier,
+        modifier = modifier.fillMaxWidth(),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 32.dp),
         state = lazyState,
     ) {
         item { Spacer(modifier = Modifier.height(16.dp)) }
         items(data) { item ->
-            Text(text = item.toString())
+            Text(
+                text = item.toString(),
+                modifier = Modifier.clickable { onItemClicked() }
+            )
         }
     }
 }
@@ -106,11 +111,10 @@ private fun ScreenContent(
 @Composable
 fun PreviewCharactersScreens() {
     AppTheme {
-//        ListScreen(loadingState = AppLoadingState.Loading)
         ListScreen(
             loadingState =
             AppLoadingState.Success((1..150).toList()
-                .map{ i -> "Element_${i}" })
+                .map { i -> "Element_${i}" })
         )
     }
 }
