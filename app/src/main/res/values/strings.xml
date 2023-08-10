@@ -11,4 +11,10 @@
     <string name="get_started">Get started</string>
     <string name="skip">Skip</string>
     <string name="next">Next</string>
+
+    <!--    navigation bar-->
+    <string name="characters">Characters</string>
+    <string name="locations">Locations</string>
+    <string name="episodes">Episodes</string>
+
 </resources>

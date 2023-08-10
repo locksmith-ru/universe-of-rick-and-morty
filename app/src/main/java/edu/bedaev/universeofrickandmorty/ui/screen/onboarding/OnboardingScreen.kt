@@ -39,8 +39,8 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun OnBoardingScreen(
-    onComplete: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onComplete: () -> Unit = {}
 ) {
     val items = DefineOnboardingPages()
     val pagerState = rememberPagerState(
@@ -61,10 +61,10 @@ fun OnBoardingScreen(
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun OnBoardingPager(
+    modifier: Modifier = Modifier,
     items: List<OnBoardingData>,
     pagerState: PagerState,
-    onComplete: () -> Unit,
-    modifier: Modifier = Modifier
+    onComplete: () -> Unit = {}
 ) {
     Box(
         modifier = modifier
@@ -170,8 +170,8 @@ private fun BottomPanel(
     modifier: Modifier = Modifier,
     size: Int,
     currentPage: Int,
-    onNext: () -> Unit,
-    onComplete: () -> Unit,
+    onNext: () -> Unit = {},
+    onComplete: () -> Unit = {},
 ) {
     Row(
         modifier = modifier
@@ -197,8 +197,8 @@ private fun BottomPanel(
 
 @Composable
 private fun GetStartedButton(
-    getStartedClicked: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    getStartedClicked: () -> Unit = {}
 ) {
     OutlinedButton(
         shape = MaterialTheme.shapes.extraLarge,
@@ -218,7 +218,7 @@ private fun GetStartedButton(
 private fun TextLabel(
     modifier: Modifier = Modifier,
     text: String = "",
-    onTextPressed: () -> Unit
+    onTextPressed: () -> Unit = {}
 ) {
     Text(
         text = text,
