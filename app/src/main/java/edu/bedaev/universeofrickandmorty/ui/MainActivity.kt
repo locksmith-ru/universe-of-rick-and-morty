@@ -41,40 +41,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Composable
-fun MainApp(modifier: Modifier = Modifier) {
-    var onBoardingIsShown by rememberSaveable { mutableStateOf(false) }
 
-    if (!onBoardingIsShown) {
-        OnBoardingScreen(
-            modifier = modifier,
-            onComplete = { onBoardingIsShown = true }
-        )
-    } else {
-        val navController = rememberNavController()
-        val currentBackStack by navController.currentBackStackEntryAsState()
-        val currentDestination = currentBackStack?.destination
-        val currentScreen =
-            navTabScreens.find { it.route == currentDestination?.route } ?: Characters
-
-        Scaffold(
-            topBar = { ApplicationTopBar(title = stringResource(id = currentScreen.titleResId)) },
-            bottomBar = {
-                AppBottomNavigationBar(
-                    onTabSelected = { newScreen ->
-                        navController.navigateSingleTopTo(newScreen.route)
-                    },
-                    currentScreen = currentScreen
-                )
-            }
-        ) { padding ->
-            AppNavHost(
-                modifier = Modifier.padding(padding),
-                navController = navController
-            )
-        }
-    }
-}
 
 @Preview(
     name = "Dark", showBackground = true,

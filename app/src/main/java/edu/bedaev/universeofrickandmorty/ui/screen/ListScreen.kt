@@ -33,7 +33,7 @@ fun ListScreen(
     modifier: Modifier = Modifier,
     loadingState: AppLoadingState,
     onError: () -> Unit = {},
-    onItemSelected: () -> Unit = {}
+    onItemSelected: (String) -> Unit = {}
 ) {
     val lazyListState = rememberLazyListState()
 
@@ -45,7 +45,7 @@ fun ListScreen(
                 modifier = modifier,
                 lazyState = lazyListState,
                 data = loadingState.data,
-                onItemClicked = onItemSelected
+                onItemClicked =  onItemSelected
             )
         else -> {}
     }
@@ -56,7 +56,7 @@ private fun ScreenContent(
     modifier: Modifier,
     lazyState: LazyListState,
     data: List<Any>,
-    onItemClicked: () -> Unit
+    onItemClicked: (String) -> Unit
 ) {
     Box(modifier = modifier) {
         val showFloatingButton by remember {
@@ -72,7 +72,7 @@ private fun ScreenContent(
             items(data) { item ->
                 Text(
                     text = item.toString(),
-                    modifier = Modifier.clickable { onItemClicked() }
+                    modifier = Modifier.clickable { onItemClicked(item.toString()) }
                 )
             }
         }

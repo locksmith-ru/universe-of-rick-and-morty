@@ -1,6 +1,5 @@
 package edu.bedaev.universeofrickandmorty.navigation
 
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -22,13 +21,13 @@ fun AppNavHost(
         modifier = modifier
     ) {
         composable(route = Characters.route) {
-            CharactersScreen()
+            CharactersScreen(navController = navController)
         }
         composable(route = Locations.route) {
-            LocationsScreen()
+            LocationsScreen(navController = navController)
         }
         composable(route = Episodes.route) {
-            EpisodesScreen()
+            EpisodesScreen(navController = navController)
         }
     }
 }
