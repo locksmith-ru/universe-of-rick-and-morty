@@ -26,6 +26,9 @@
 
     <!--    floating action button-->
     <string name="to_up">Up</string>
-    <string name="label_loading">Process loading ...\nPlease wait.</string>
+    <string name="label_loading">Process loading …\nPlease wait.</string>
+
+    <!--    icon button navigation menu-->
+    <string name="navigation_menu">Navigation menu</string>
 
 </resources>

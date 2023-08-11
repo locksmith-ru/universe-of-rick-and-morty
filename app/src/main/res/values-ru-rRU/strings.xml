@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">Вселенная Рика и Морти</string>
 
-<!--    Onboarding screen-->
+    <!--    Onboarding screen-->
     <string name="what_is_this">Что это?</string>
     <string name="about">\"Вселенная Рика и Морти\" это мобильное приложение основанное на телевизионном шоу \"Рик и Морти\"</string>
     <string name="hundred_locations">Сотни локаций</string>
@@ -25,8 +25,11 @@
     <string name="locations">Локации</string>
     <string name="episodes">Эпизоды</string>
 
-<!--    floating action button-->
+    <!--    floating action button-->
     <string name="to_up">Наверх</string>
-    <string name="label_loading">Process loading ...\nPlease wait.</string>
+    <string name="label_loading">Process loading …\nPlease wait.</string>
+
+    <!--    icon button navigation menu-->
+    <string name="navigation_menu">Меню навигации</string>
 
 </resources>

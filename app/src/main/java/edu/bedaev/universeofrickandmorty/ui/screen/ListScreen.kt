@@ -47,6 +47,7 @@ fun ListScreen(
                 data = loadingState.data,
                 onItemClicked = onItemSelected
             )
+        else -> {}
     }
 }
 
