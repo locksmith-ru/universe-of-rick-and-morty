@@ -20,7 +20,7 @@ import edu.bedaev.universeofrickandmorty.ui.theme.AppTheme
 @Composable
 fun AppBottomNavigationBar(
     modifier: Modifier = Modifier,
-    onDrawerClicked: (AppDestination) -> Unit = {},
+    onTabSelected: (AppDestination) -> Unit = {},
     destinations: List<AppDestination> = navTabScreens,
     currentScreen: AppDestination = Characters
 ) {
@@ -28,7 +28,7 @@ fun AppBottomNavigationBar(
         destinations.forEach{ destination ->
             NavigationBarItem(
                 selected = currentScreen == destination,
-                onClick = { onDrawerClicked(destination) },
+                onClick = { onTabSelected(destination) },
                 icon = {
                     Icon(imageVector = destination.icon, contentDescription = "")
                 }
@@ -40,7 +40,7 @@ fun AppBottomNavigationBar(
 @Composable
 fun AppNavigationRail(
     modifier: Modifier = Modifier,
-    onDrawerClicked: (AppDestination) -> Unit = {},
+    onTabSelected: (AppDestination) -> Unit = {},
     destinations: List<AppDestination> = navTabScreens,
     currentScreen: AppDestination = Characters
 ) {
@@ -48,7 +48,7 @@ fun AppNavigationRail(
         destinations.forEach{ destination ->
             NavigationRailItem(
                 selected = currentScreen == destination,
-                onClick = { onDrawerClicked(destination) },
+                onClick = { onTabSelected(destination) },
                 icon = {
                     Icon(imageVector = destination.icon, contentDescription = "")
                 }
