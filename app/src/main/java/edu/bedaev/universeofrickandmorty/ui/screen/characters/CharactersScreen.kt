@@ -1,43 +1,40 @@
 package edu.bedaev.universeofrickandmorty.ui.screen.characters
 
 import android.util.Log
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import edu.bedaev.universeofrickandmorty.navigation.Characters
 import edu.bedaev.universeofrickandmorty.navigation.navigateSingleTopTo
-import edu.bedaev.universeofrickandmorty.ui.components.AppBottomNavigationBar
-import edu.bedaev.universeofrickandmorty.ui.screen.ListScreen
+import edu.bedaev.universeofrickandmorty.ui.AdaptiveScreenContent
+import edu.bedaev.universeofrickandmorty.ui.utils.ContentType
+import edu.bedaev.universeofrickandmorty.ui.utils.NavigationType
 
 private const val TAG = "_CharactersScreen"
 
 @Composable
 fun CharactersScreen(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    navController: NavHostController,
+    adaptiveParams: Pair<NavigationType, ContentType> =
+        Pair(NavigationType.BOTTOM_NAVIGATION, ContentType.LIST_ONLY)
 ) {
     val viewModel: CharactersViewModel = viewModel()
 
-    Column(
-        modifier = modifier.fillMaxWidth()
-    ) {
-        ListScreen(
-            modifier = Modifier.weight(1f),
-            loadingState = viewModel.loadingState,
-            onError = { viewModel.loadContent() },
-            onItemSelected = { item -> onItemClicked(item = item) },
-        )
-        AppBottomNavigationBar(
-            modifier = Modifier,
-            onTabSelected = { newScreen ->
-                navController.navigateSingleTopTo(newScreen.route)
-            },
-            currentScreen = Characters
-        )
-    }
+    AdaptiveScreenContent(
+        modifier = modifier,
+        loadingState = viewModel.loadingState,
+        adaptiveParams = adaptiveParams,
+        currentDestination = Characters,
+        onError = { viewModel.loadContent() },
+        onTabSelected = { dst ->
+            navController.navigateSingleTopTo(dst.route)
+        },
+        onItemClicked = { item ->
+            onItemClicked(item = item)
+        }
+    )
 }
 
 private fun onItemClicked(item: String){

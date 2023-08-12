@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MenuOpen
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -61,11 +62,22 @@ fun AppBottomNavigationBar(
 @Composable
 fun AppNavigationRail(
     modifier: Modifier = Modifier,
+    onMenuDrawerClicked: () -> Unit = {},
     onTabSelected: (AppDestination) -> Unit = {},
     destinations: List<AppDestination> = navTabScreens,
     currentScreen: AppDestination = Characters
 ) {
     NavigationRail(modifier = modifier.fillMaxHeight()) {
+        NavigationRailItem(
+            selected = false,
+            onClick = onMenuDrawerClicked,
+            icon = {
+                Icon(
+                    imageVector = Icons.Default.Menu,
+                    contentDescription = stringResource(id = R.string.navigation_menu)
+                )
+            }
+        )
         destinations.forEach { destination ->
             NavigationRailItem(
                 selected = currentScreen == destination,
@@ -81,7 +93,7 @@ fun AppNavigationRail(
 @Composable
 fun AppNavigationDrawer(
     modifier: Modifier = Modifier,
-    onMenuDrawerClicked: () -> Unit =  {},
+    onMenuDrawerClicked: () -> Unit = {},
     onTabSelected: (AppDestination) -> Unit = {},
     destinations: List<AppDestination> = navTabScreens,
     currentScreen: AppDestination = Characters

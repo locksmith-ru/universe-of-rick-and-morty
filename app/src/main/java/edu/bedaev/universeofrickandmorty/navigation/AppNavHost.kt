@@ -9,11 +9,14 @@ import androidx.navigation.compose.composable
 import edu.bedaev.universeofrickandmorty.ui.screen.characters.CharactersScreen
 import edu.bedaev.universeofrickandmorty.ui.screen.episodes.EpisodesScreen
 import edu.bedaev.universeofrickandmorty.ui.screen.locations.LocationsScreen
+import edu.bedaev.universeofrickandmorty.ui.utils.ContentType
+import edu.bedaev.universeofrickandmorty.ui.utils.NavigationType
 
 @Composable
 fun AppNavHost(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    navController: NavHostController,
+    adaptiveParams: Pair<NavigationType, ContentType>
 ) {
     NavHost(
         navController = navController,
@@ -21,13 +24,13 @@ fun AppNavHost(
         modifier = modifier
     ) {
         composable(route = Characters.route) {
-            CharactersScreen(navController = navController)
+            CharactersScreen(navController = navController, adaptiveParams = adaptiveParams)
         }
         composable(route = Locations.route) {
-            LocationsScreen(navController = navController)
+            LocationsScreen(navController = navController, adaptiveParams = adaptiveParams)
         }
         composable(route = Episodes.route) {
-            EpisodesScreen(navController = navController)
+            EpisodesScreen(navController = navController, adaptiveParams = adaptiveParams)
         }
     }
 }
