@@ -2,6 +2,7 @@ package edu.bedaev.universeofrickandmorty.ui.components
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -23,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import edu.bedaev.universeofrickandmorty.R
+import edu.bedaev.universeofrickandmorty.domain.model.ListItem
 import edu.bedaev.universeofrickandmorty.domain.model.Person
 import edu.bedaev.universeofrickandmorty.network.model.Location
 import edu.bedaev.universeofrickandmorty.network.model.Origin
@@ -32,11 +34,13 @@ import edu.bedaev.universeofrickandmorty.ui.utils.GlideImageWithPreview
 @Composable
 fun CharacterItem(
     modifier: Modifier = Modifier,
-    person: Person
+    person: Person,
+    onItemClicked: (ListItem) -> Unit = {}
 ) {
     Card(
         modifier = modifier
             .padding(horizontal = 8.dp, vertical = 4.dp)
+            .clickable { onItemClicked(person) }
     ) {
         Row(
             modifier = Modifier

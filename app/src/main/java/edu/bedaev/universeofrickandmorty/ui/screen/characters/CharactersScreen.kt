@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import edu.bedaev.universeofrickandmorty.domain.model.ListItem
 import edu.bedaev.universeofrickandmorty.domain.model.Person
 import edu.bedaev.universeofrickandmorty.navigation.Characters
 import edu.bedaev.universeofrickandmorty.navigation.navigateSingleTopTo
@@ -28,7 +29,12 @@ fun CharactersScreen(
         modifier = modifier,
         loadingState = viewModel.loadingState,
         listItem = { item ->
-            CharacterItem(person = item as Person)
+            CharacterItem(
+                person = item as Person,
+                onItemClicked = { listItem ->
+                    Log.d(TAG, "onPersonClicked: ${listItem.id}")
+                }
+            )
         },
         adaptiveParams = adaptiveParams,
         currentDestination = Characters,
@@ -36,6 +42,7 @@ fun CharactersScreen(
         onTabSelected = { dst ->
             navController.navigateSingleTopTo(dst.route)
         },
+        // todo удалить
         onItemClicked = { item ->
             onItemClicked(item = item)
         }

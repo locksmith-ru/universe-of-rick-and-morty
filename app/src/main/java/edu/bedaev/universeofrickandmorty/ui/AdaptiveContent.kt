@@ -231,7 +231,7 @@ private fun AppContent(
                             listItem?.let {
                                 it(item as ListItem)
                             } ?: Text(text = item.toString(),
-                                modifier = Modifier.clickable { onItemClicked(item.toString()) })
+                                modifier = Modifier.clickable { })
                         }
                     }
                 }
