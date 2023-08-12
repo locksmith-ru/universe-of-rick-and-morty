@@ -12,9 +12,9 @@
     <string name="skip">Skip</string>
     <string name="next">Next</string>
 
-<!--    loading screen-->
+    <!--    loading screen-->
     <string name="loading">Loading</string>
-<!--    error screen-->
+    <!--    error screen-->
     <string name="error">Error</string>
     <string name="loading_failed">Failed to load</string>
     <string name="retry">Retry</string>
@@ -30,5 +30,8 @@
 
     <!--    icon button navigation menu-->
     <string name="navigation_menu">Navigation menu</string>
+
+    <!--    character card-->
+    <string name="last_location">Last known location:</string>
 
 </resources>

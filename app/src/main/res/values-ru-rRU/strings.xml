@@ -32,4 +32,7 @@
     <!--    icon button navigation menu-->
     <string name="navigation_menu">Меню навигации</string>
 
+    <!--    character card-->
+    <string name="last_location">Последняя известная локация:</string>
+
 </resources>

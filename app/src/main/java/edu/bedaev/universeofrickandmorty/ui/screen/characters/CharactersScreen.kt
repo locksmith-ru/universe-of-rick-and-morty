@@ -5,9 +5,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import edu.bedaev.universeofrickandmorty.domain.model.Person
 import edu.bedaev.universeofrickandmorty.navigation.Characters
 import edu.bedaev.universeofrickandmorty.navigation.navigateSingleTopTo
 import edu.bedaev.universeofrickandmorty.ui.AdaptiveScreenContent
+import edu.bedaev.universeofrickandmorty.ui.components.CharacterItem
 import edu.bedaev.universeofrickandmorty.ui.utils.ContentType
 import edu.bedaev.universeofrickandmorty.ui.utils.NavigationType
 
@@ -25,6 +27,9 @@ fun CharactersScreen(
     AdaptiveScreenContent(
         modifier = modifier,
         loadingState = viewModel.loadingState,
+        listItem = { item ->
+            CharacterItem(person = item as Person)
+        },
         adaptiveParams = adaptiveParams,
         currentDestination = Characters,
         onError = { viewModel.loadContent() },
@@ -37,6 +42,6 @@ fun CharactersScreen(
     )
 }
 
-private fun onItemClicked(item: String){
+private fun onItemClicked(item: String) {
     Log.d(TAG, "onItemClicked: $item")
 }

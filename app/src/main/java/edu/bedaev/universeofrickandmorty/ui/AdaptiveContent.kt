@@ -40,6 +40,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import edu.bedaev.universeofrickandmorty.domain.model.ListItem
 import edu.bedaev.universeofrickandmorty.navigation.AppDestination
 import edu.bedaev.universeofrickandmorty.navigation.Characters
 import edu.bedaev.universeofrickandmorty.ui.components.AppBottomNavigationBar
@@ -58,8 +59,11 @@ import kotlinx.coroutines.launch
 fun AdaptiveScreenContent(
     modifier: Modifier = Modifier,
     loadingState: AppLoadingState,
-    adaptiveParams: Pair<NavigationType, ContentType> =
-        Pair(NavigationType.BOTTOM_NAVIGATION, ContentType.LIST_ONLY),
+    listItem: @Composable ((ListItem) -> Unit)? = null,
+    adaptiveParams: Pair<NavigationType, ContentType> = Pair(
+        NavigationType.BOTTOM_NAVIGATION,
+        ContentType.LIST_ONLY
+    ),
     currentDestination: AppDestination = Characters,
     onError: () -> Unit = {},
     onTabSelected: (AppDestination) -> Unit = {},
@@ -72,6 +76,7 @@ fun AdaptiveScreenContent(
             AdaptiveScreenContent(
                 modifier = modifier,
                 loadingState = loadingState,
+                listItem = listItem,
                 adaptiveParams = adaptiveParams,
                 currentDestination = currentDestination,
                 onTabSelected = onTabSelected,
@@ -87,8 +92,11 @@ fun AdaptiveScreenContent(
 private fun AdaptiveScreenContent(
     modifier: Modifier = Modifier,
     loadingState: AppLoadingState.Success,
-    adaptiveParams: Pair<NavigationType, ContentType> =
-        Pair(NavigationType.BOTTOM_NAVIGATION, ContentType.LIST_ONLY),
+    listItem: @Composable ((ListItem) -> Unit)? = null,
+    adaptiveParams: Pair<NavigationType, ContentType> = Pair(
+        NavigationType.BOTTOM_NAVIGATION,
+        ContentType.LIST_ONLY
+    ),
     currentDestination: AppDestination = Characters,
     onTabSelected: (AppDestination) -> Unit = {},
     onItemClicked: (String) -> Unit = {}
@@ -102,23 +110,21 @@ private fun AdaptiveScreenContent(
     val scope = rememberCoroutineScope()
 
     if (navType == NavigationType.PERMANENT_NAVIGATION_DRAWER) {
-        PermanentNavigationDrawer(
-            modifier = modifier,
-            drawerContent = {
-                PermanentDrawerSheet {
-                    AppNavigationDrawer(
-                        modifier = Modifier,
-                        onMenuDrawerClicked = { /*todo click on menu button */ },
-                        onTabSelected = onTabSelected,
-                        currentScreen = currentDestination,
-                    )
-                }
+        PermanentNavigationDrawer(modifier = modifier, drawerContent = {
+            PermanentDrawerSheet {
+                AppNavigationDrawer(
+                    modifier = Modifier,
+                    onMenuDrawerClicked = { /*todo click on menu button */ },
+                    onTabSelected = onTabSelected,
+                    currentScreen = currentDestination,
+                )
             }
-        ) {
+        }) {
             AppContent(
                 navType = navType,
                 listType = listType,
                 loadingState = loadingState,
+                listItem = listItem,
                 currentScreen = currentDestination,
                 onTabSelected = onTabSelected,
                 onItemClicked = onItemClicked
@@ -126,8 +132,7 @@ private fun AdaptiveScreenContent(
         }
     } else {
         ModalNavigationDrawer(
-            modifier = modifier,
-            drawerContent = {
+            modifier = modifier, drawerContent = {
                 ModalDrawerSheet {
                     AppNavigationDrawer(
                         modifier = Modifier,
@@ -140,13 +145,12 @@ private fun AdaptiveScreenContent(
                         currentScreen = currentDestination,
                     )
                 }
-            },
-            drawerState = drawerState
+            }, drawerState = drawerState
         ) {
-            AppContent(
-                navType = navType,
+            AppContent(navType = navType,
                 listType = listType,
                 loadingState = loadingState,
+                listItem = listItem,
                 currentScreen = currentDestination,
                 onTabSelected = onTabSelected,
                 onItemClicked = onItemClicked,
@@ -154,8 +158,7 @@ private fun AdaptiveScreenContent(
                     scope.launch {
                         drawerState.open()
                     }
-                }
-            )
+                })
         }
     }
 }
@@ -164,6 +167,7 @@ private fun AdaptiveScreenContent(
 private fun AppContent(
     modifier: Modifier = Modifier,
     loadingState: AppLoadingState.Success,
+    listItem: @Composable ((ListItem) -> Unit)? = null,
     currentScreen: AppDestination = Characters,
     navType: NavigationType = NavigationType.BOTTOM_NAVIGATION,
     listType: ContentType = ContentType.LIST_ONLY,
@@ -185,9 +189,11 @@ private fun AppContent(
                 .fillMaxSize()
                 .background(color = MaterialTheme.colorScheme.inverseOnSurface)
         ) {
-            Box(modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            ) {
                 val scrollState: ScrollableState
                 val showFab: Boolean
                 if (listType == ContentType.LIST_ONLY) {
@@ -203,10 +209,10 @@ private fun AppContent(
                     ) {
                         item { Spacer(modifier = Modifier.height(16.dp)) }
                         items(loadingState.data) { item ->
-                            Text(
-                                text = item.toString(),
-                                modifier = Modifier.clickable { onItemClicked(item.toString()) }
-                            )
+                            listItem?.let {
+                                it(item as ListItem)
+                            } ?: Text(text = item.toString(),
+                                modifier = Modifier.clickable { onItemClicked(item.toString()) })
                         }
                     }
                 } else {
@@ -222,10 +228,10 @@ private fun AppContent(
                         state = lazyGridState
                     ) {
                         items(loadingState.data) { item ->
-                            Text(
-                                text = item.toString(),
-                                modifier = Modifier.clickable { onItemClicked(item.toString()) }
-                            )
+                            listItem?.let {
+                                it(item as ListItem)
+                            } ?: Text(text = item.toString(),
+                                modifier = Modifier.clickable { onItemClicked(item.toString()) })
                         }
                     }
                 }
@@ -234,7 +240,8 @@ private fun AppContent(
                     modifier = Modifier
                         .align(Alignment.BottomEnd)
                         .padding(bottom = 16.dp, end = 16.dp),
-                    state = scrollState, showButton = showFab
+                    state = scrollState,
+                    showButton = showFab
                 )
             }
             AnimatedVisibility(
@@ -253,24 +260,19 @@ private fun AppContent(
 
 @Composable
 private fun SetFab(
-    modifier: Modifier,
-    showButton: Boolean = true,
-    state: ScrollableState
+    modifier: Modifier, showButton: Boolean = true, state: ScrollableState
 ) {
     if (showButton) {
         val scope = rememberCoroutineScope()
-        AppFloatingActionButton(
-            modifier = modifier,
-            onClick = {
-                scope.launch {
-                    when (state) {
-                        is LazyListState -> state.animateScrollToItem(0)
-                        is LazyGridState -> state.animateScrollToItem(0)
-                        else -> {}
-                    }
+        AppFloatingActionButton(modifier = modifier, onClick = {
+            scope.launch {
+                when (state) {
+                    is LazyListState -> state.animateScrollToItem(0)
+                    is LazyGridState -> state.animateScrollToItem(0)
+                    else -> {}
                 }
             }
-        )
+        })
     }
 }
 
@@ -279,14 +281,9 @@ private fun SetFab(
 fun PreviewNormal() {
     AppTheme {
         Surface {
-            AdaptiveScreenContent(
-                loadingState = AppLoadingState.Success(
-                    data = (1..100)
-                        .map { i ->
-                            "Test element #${i}"
-                        }
-                )
-            )
+            AdaptiveScreenContent(loadingState = AppLoadingState.Success(data = (1..100).map { i ->
+                "Test element #${i}"
+            }))
         }
     }
 }
@@ -297,13 +294,9 @@ fun PreviewMedium() {
     AppTheme {
         Surface {
             AdaptiveScreenContent(
-                loadingState = AppLoadingState.Success(
-                    data =
-                    (1..101)
-                        .map { i ->
-                            "Element on medium device #${i}"
-                        }
-                ),
+                loadingState = AppLoadingState.Success(data = (1..101).map { i ->
+                    "Element on medium device #${i}"
+                }),
                 adaptiveParams = NavigationType.NAVIGATION_RAIL to ContentType.LIST_AND_DETAIL
             )
         }
@@ -316,14 +309,10 @@ fun PreviewDesktop() {
     AppTheme {
         Surface {
             AdaptiveScreenContent(
-                loadingState = AppLoadingState.Success(
-                    data = (1..100)
-                        .map { i ->
-                            "Element on desktop #${i}"
-                        }
-                ),
-                adaptiveParams =
-                NavigationType.PERMANENT_NAVIGATION_DRAWER to ContentType.LIST_AND_DETAIL
+                loadingState = AppLoadingState.Success(data = (1..100).map { i ->
+                    "Element on desktop #${i}"
+                }),
+                adaptiveParams = NavigationType.PERMANENT_NAVIGATION_DRAWER to ContentType.LIST_AND_DETAIL
             )
         }
     }
