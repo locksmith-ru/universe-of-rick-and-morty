@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import edu.bedaev.universeofrickandmorty.domain.model.ListItem
 import edu.bedaev.universeofrickandmorty.domain.model.Location
 import edu.bedaev.universeofrickandmorty.navigation.Locations
 import edu.bedaev.universeofrickandmorty.navigation.navigateSingleTopTo
@@ -30,9 +31,7 @@ fun LocationsScreen(
         listItem = { item ->
             LocationItem(
                 location = item as Location,
-                onItemClicked = { listItem ->
-                    Log.d(TAG, "onLocationClicked: ${listItem.id}")
-                }
+                onItemClicked = { listItem -> onItemClicked(item = listItem) }
             )
         },
         adaptiveParams = adaptiveParams,
@@ -40,14 +39,10 @@ fun LocationsScreen(
         onError = { viewModel.loadContent() },
         onTabSelected = { dst ->
             navController.navigateSingleTopTo(dst.route)
-        },
-        // todo удалить
-        onItemClicked = { item ->
-            onItemClicked(item = item)
         }
     )
 }
 
-private fun onItemClicked(item: String) {
-    Log.d(TAG, "onItemClicked: $item")
+private fun onItemClicked(item: ListItem) {
+    Log.d(TAG, "onItemClicked: ${item.id}")
 }

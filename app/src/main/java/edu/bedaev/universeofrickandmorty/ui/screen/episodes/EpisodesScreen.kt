@@ -5,9 +5,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
+import edu.bedaev.universeofrickandmorty.domain.model.Episode
+import edu.bedaev.universeofrickandmorty.domain.model.ListItem
 import edu.bedaev.universeofrickandmorty.navigation.Episodes
 import edu.bedaev.universeofrickandmorty.navigation.navigateSingleTopTo
 import edu.bedaev.universeofrickandmorty.ui.AdaptiveScreenContent
+import edu.bedaev.universeofrickandmorty.ui.components.EpisodeItem
 import edu.bedaev.universeofrickandmorty.ui.utils.ContentType
 import edu.bedaev.universeofrickandmorty.ui.utils.NavigationType
 
@@ -25,18 +28,21 @@ fun EpisodesScreen(
     AdaptiveScreenContent(
         modifier = modifier,
         loadingState = viewModel.loadingState,
+        listItem = { listItem ->
+            EpisodeItem(
+                episode = listItem as Episode,
+                onItemClicked = { listItem -> onItemClicked(item = listItem) }
+            )
+        },
         adaptiveParams = adaptiveParams,
         currentDestination = Episodes,
         onError = { viewModel.loadContent() },
         onTabSelected = { dst ->
             navController.navigateSingleTopTo(dst.route)
-        },
-        onItemClicked = { item ->
-            onItemClicked(item = item)
         }
     )
 }
 
-private fun onItemClicked(item: String){
-    Log.d(TAG, "onItemClicked: $item")
+private fun onItemClicked(item: ListItem) {
+    Log.d(TAG, "onItemClicked: ${item.id}")
 }

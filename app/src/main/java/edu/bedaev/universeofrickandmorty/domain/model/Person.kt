@@ -6,7 +6,7 @@ import edu.bedaev.universeofrickandmorty.network.model.PersonDto
 
 data class Person(
     override val id: Int,
-    val name: String?,
+    override val name: String?,
     val status: String?,
     val species: String?,
     val type: String?,
@@ -15,8 +15,8 @@ data class Person(
     val location: Location?,
     val image: String?,
     val episodeList: List<String>,
-    var url: String?,
-    var created: String?
+    override val url: String?,
+    override val created: String?
 ) : ListItem {
     constructor(dto: PersonDto) : this(
         id = dto.id,

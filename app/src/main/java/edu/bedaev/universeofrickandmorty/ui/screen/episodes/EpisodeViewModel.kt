@@ -1,6 +1,8 @@
 package edu.bedaev.universeofrickandmorty.ui.screen.episodes
 
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import edu.bedaev.universeofrickandmorty.domain.model.Episode
 import edu.bedaev.universeofrickandmorty.ui.screen.AppLoadingState
 import edu.bedaev.universeofrickandmorty.ui.screen.BaseViewModel
 import kotlinx.coroutines.delay
@@ -13,6 +15,7 @@ class EpisodeViewModel : BaseViewModel() {
     init {
         loadContent()
     }
+
     override fun loadContent() {
         viewModelScope.launch {
             loadingState = AppLoadingState.Loading
@@ -20,10 +23,10 @@ class EpisodeViewModel : BaseViewModel() {
             delay(3000)
             loadingState = try {
                 // todo Здесь загрузка данных из сети
-                AppLoadingState.Success(data = List(100) { i -> "Episode_${i}" })
-            }catch (e: IOException){
+                AppLoadingState.Success(data = (1..100).map { Episode.fakeEpisode() })
+            } catch (e: IOException) {
                 AppLoadingState.Error
-            } catch (e: HttpException){
+            } catch (e: HttpException) {
                 AppLoadingState.Error
             }
         }

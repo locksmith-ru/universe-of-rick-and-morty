@@ -31,9 +31,7 @@ fun CharactersScreen(
         listItem = { item ->
             CharacterItem(
                 person = item as Person,
-                onItemClicked = { listItem ->
-                    Log.d(TAG, "onPersonClicked: ${listItem.id}")
-                }
+                onItemClicked = { listItem -> onItemClicked(item = listItem) }
             )
         },
         adaptiveParams = adaptiveParams,
@@ -41,14 +39,10 @@ fun CharactersScreen(
         onError = { viewModel.loadContent() },
         onTabSelected = { dst ->
             navController.navigateSingleTopTo(dst.route)
-        },
-        // todo удалить
-        onItemClicked = { item ->
-            onItemClicked(item = item)
         }
     )
 }
 
-private fun onItemClicked(item: String) {
-    Log.d(TAG, "onItemClicked: $item")
+private fun onItemClicked(item: ListItem) {
+    Log.d(TAG, "onItemClicked: ${item.id}")
 }

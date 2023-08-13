@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -66,8 +67,7 @@ fun AdaptiveScreenContent(
     ),
     currentDestination: AppDestination = Characters,
     onError: () -> Unit = {},
-    onTabSelected: (AppDestination) -> Unit = {},
-    onItemClicked: (String) -> Unit = {}
+    onTabSelected: (AppDestination) -> Unit = {}
 ) {
     when (loadingState) {
         AppLoadingState.Loading -> LoadingScreen()
@@ -79,8 +79,7 @@ fun AdaptiveScreenContent(
                 listItem = listItem,
                 adaptiveParams = adaptiveParams,
                 currentDestination = currentDestination,
-                onTabSelected = onTabSelected,
-                onItemClicked = onItemClicked
+                onTabSelected = onTabSelected
             )
         }
 
@@ -98,8 +97,7 @@ private fun AdaptiveScreenContent(
         ContentType.LIST_ONLY
     ),
     currentDestination: AppDestination = Characters,
-    onTabSelected: (AppDestination) -> Unit = {},
-    onItemClicked: (String) -> Unit = {}
+    onTabSelected: (AppDestination) -> Unit = {}
 ) {
     // тип навигационного меню: нижнее, слева или выдвижная шторка
     val navType: NavigationType = adaptiveParams.first
@@ -126,8 +124,7 @@ private fun AdaptiveScreenContent(
                 loadingState = loadingState,
                 listItem = listItem,
                 currentScreen = currentDestination,
-                onTabSelected = onTabSelected,
-                onItemClicked = onItemClicked
+                onTabSelected = onTabSelected
             )
         }
     } else {
@@ -153,7 +150,6 @@ private fun AdaptiveScreenContent(
                 listItem = listItem,
                 currentScreen = currentDestination,
                 onTabSelected = onTabSelected,
-                onItemClicked = onItemClicked,
                 onDrawerMenuClicked = {
                     scope.launch {
                         drawerState.open()
@@ -173,7 +169,6 @@ private fun AppContent(
     listType: ContentType = ContentType.LIST_ONLY,
     onDrawerMenuClicked: () -> Unit = {},
     onTabSelected: (AppDestination) -> Unit = {},
-    onItemClicked: (String) -> Unit = {}
 ) {
 
     Row(modifier = modifier.fillMaxSize()) {
@@ -211,8 +206,7 @@ private fun AppContent(
                         items(loadingState.data) { item ->
                             listItem?.let {
                                 it(item as ListItem)
-                            } ?: Text(text = item.toString(),
-                                modifier = Modifier.clickable { onItemClicked(item.toString()) })
+                            }
                         }
                     }
                 } else {
@@ -264,15 +258,17 @@ private fun SetFab(
 ) {
     if (showButton) {
         val scope = rememberCoroutineScope()
-        AppFloatingActionButton(modifier = modifier, onClick = {
-            scope.launch {
-                when (state) {
-                    is LazyListState -> state.animateScrollToItem(0)
-                    is LazyGridState -> state.animateScrollToItem(0)
-                    else -> {}
+        AppFloatingActionButton(
+            modifier = modifier.navigationBarsPadding(),
+            onClick = {
+                scope.launch {
+                    when (state) {
+                        is LazyListState -> state.animateScrollToItem(0)
+                        is LazyGridState -> state.animateScrollToItem(0)
+                        else -> {}
+                    }
                 }
-            }
-        })
+            })
     }
 }
 

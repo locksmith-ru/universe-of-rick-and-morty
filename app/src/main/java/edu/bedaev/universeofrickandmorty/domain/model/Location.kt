@@ -5,12 +5,12 @@ import edu.bedaev.universeofrickandmorty.network.model.Origin
 
 data class Location(
     override val id: Int,
-    val name: String? = null,
+    override val name: String? = null,
     val type: String? = null,
     val dimension: String? = null,
     val residents: List<String> = emptyList(),
-    val url: String? = null,
-    val created: String? = null
+    override val url: String? = null,
+    override val created: String? = null
 ): ListItem{
     constructor(dto: LocationDto): this(
         id = dto.id,
