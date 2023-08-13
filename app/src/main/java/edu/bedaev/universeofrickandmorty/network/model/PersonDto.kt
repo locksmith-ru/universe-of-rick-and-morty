@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 data class PersonDto(
     //The id of the character.
-    var id: Int? = null,
+    var id: Int,
     // The name of the character.
     var name: String? = null,
     // The status of the character ('Alive', 'Dead' or 'unknown').

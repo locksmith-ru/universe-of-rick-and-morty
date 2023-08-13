@@ -26,8 +26,6 @@ import androidx.compose.ui.unit.dp
 import edu.bedaev.universeofrickandmorty.R
 import edu.bedaev.universeofrickandmorty.domain.model.ListItem
 import edu.bedaev.universeofrickandmorty.domain.model.Person
-import edu.bedaev.universeofrickandmorty.network.model.Location
-import edu.bedaev.universeofrickandmorty.network.model.Origin
 import edu.bedaev.universeofrickandmorty.ui.theme.AppTheme
 import edu.bedaev.universeofrickandmorty.ui.utils.GlideImageWithPreview
 
@@ -124,23 +122,7 @@ fun PreviewCharacterItem() {
     AppTheme {
         Surface {
             CharacterItem(
-                person = Person(
-                    id = 1, name = "Rick Sanchez", status = "Alive",
-                    species = "Human", type = null, gender = "Male",
-                    origin = Origin(
-                        name = "Earth (C-137)",
-                        url = "https://rickandmortyapi.com/api/location/1"
-                    ),
-                    location = Location(
-                        name = "Citadel of Ricks",
-                        url = "https://rickandmortyapi.com/api/location/3"
-                    ),
-                    image = null,
-//                    image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
-                    episodeList = emptyList(),
-                    url = "https://rickandmortyapi.com/api/character/1",
-                    created = "2017-11-04T18:48:46.250Z"
-                )
+                person = Person.fakePerson()
             )
         }
     }
