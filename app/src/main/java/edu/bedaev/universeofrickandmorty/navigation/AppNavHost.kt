@@ -1,7 +1,15 @@
 package edu.bedaev.universeofrickandmorty.navigation
 
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideIn
+import androidx.compose.animation.slideOut
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.IntOffset
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -23,13 +31,20 @@ fun AppNavHost(
         startDestination = Characters.route,
         modifier = modifier
     ) {
-        composable(route = Characters.route) {
+
+        composable(
+            route = Characters.route
+        ) {
             CharactersScreen(navController = navController, adaptiveParams = adaptiveParams)
         }
-        composable(route = Locations.route) {
+        composable(
+            route = Locations.route
+        ) {
             LocationsScreen(navController = navController, adaptiveParams = adaptiveParams)
         }
-        composable(route = Episodes.route) {
+        composable(
+            route = Episodes.route
+        ) {
             EpisodesScreen(navController = navController, adaptiveParams = adaptiveParams)
         }
     }
@@ -51,3 +66,23 @@ fun NavHostController.navigateSingleTopTo(route: String) =
         // Restore state when reselecting a previously selected item
         restoreState = true
     }
+
+/*
+enterTransition = {
+                slideIn(
+                    animationSpec = tween(
+                        durationMillis = slideDuration,
+                        easing = LinearEasing
+                    )
+                ) { IntOffset(it.width / 4, 100) } +
+                        fadeIn(animationSpec = tween(teenDuration))
+            }, exitTransition = {
+                slideOut(
+                    animationSpec = tween(
+                        durationMillis = slideDuration,
+                        easing = LinearEasing
+                    )
+                ) { IntOffset(-180, 50) } +
+                        fadeOut(animationSpec = tween(teenDuration))
+            }
+ */

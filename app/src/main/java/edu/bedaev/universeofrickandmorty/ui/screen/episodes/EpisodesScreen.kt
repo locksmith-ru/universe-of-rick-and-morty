@@ -31,7 +31,7 @@ fun EpisodesScreen(
         listItem = { listItem ->
             EpisodeItem(
                 episode = listItem as Episode,
-                onItemClicked = { listItem -> onItemClicked(item = listItem) }
+                onItemClicked = { item -> onItemClicked(item = item) }
             )
         },
         adaptiveParams = adaptiveParams,
