@@ -57,7 +57,7 @@ fun CharacterItem(
             ) {
                 Text(
                     modifier = Modifier,
-                    text = person.name.orEmpty(),
+                    text = person.name,
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.surface
                 )

@@ -1,6 +1,6 @@
 package edu.bedaev.universeofrickandmorty.network.model
 
 data class Location(
-    var name: String? = null,
-    var url: String? = null
+    val name: String? = null,
+    val url: String? = null
 )

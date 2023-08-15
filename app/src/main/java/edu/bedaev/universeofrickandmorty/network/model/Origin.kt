@@ -4,8 +4,8 @@ import edu.bedaev.universeofrickandmorty.domain.model.Person
 import kotlin.random.Random
 
 data class Origin(
-    var name: String? = null,
-    var url: String? = null
+    val name: String? = null,
+    val url: String? = null
 ){
 
     companion object{

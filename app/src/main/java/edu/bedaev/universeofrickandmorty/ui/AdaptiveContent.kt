@@ -41,13 +41,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import edu.bedaev.universeofrickandmorty.domain.model.Episode
 import edu.bedaev.universeofrickandmorty.domain.model.ListItem
+import edu.bedaev.universeofrickandmorty.domain.model.Location
+import edu.bedaev.universeofrickandmorty.domain.model.Person
 import edu.bedaev.universeofrickandmorty.navigation.AppDestination
 import edu.bedaev.universeofrickandmorty.navigation.Characters
+import edu.bedaev.universeofrickandmorty.navigation.Episodes
+import edu.bedaev.universeofrickandmorty.navigation.Locations
 import edu.bedaev.universeofrickandmorty.ui.components.AppBottomNavigationBar
 import edu.bedaev.universeofrickandmorty.ui.components.AppFloatingActionButton
 import edu.bedaev.universeofrickandmorty.ui.components.AppNavigationDrawer
 import edu.bedaev.universeofrickandmorty.ui.components.AppNavigationRail
+import edu.bedaev.universeofrickandmorty.ui.components.CharacterItem
+import edu.bedaev.universeofrickandmorty.ui.components.EpisodeItem
+import edu.bedaev.universeofrickandmorty.ui.components.LocationItem
 import edu.bedaev.universeofrickandmorty.ui.screen.AppLoadingState
 import edu.bedaev.universeofrickandmorty.ui.screen.ErrorScreen
 import edu.bedaev.universeofrickandmorty.ui.screen.LoadingScreen
@@ -277,9 +285,17 @@ private fun SetFab(
 fun PreviewNormal() {
     AppTheme {
         Surface {
-            AdaptiveScreenContent(loadingState = AppLoadingState.Success(data = (1..100).map { i ->
-                "Test element #${i}"
-            }))
+            AdaptiveScreenContent(
+                loadingState = AppLoadingState.Success(data = (1..100)
+                    .map { Episode.fakeEpisode() }),
+                listItem = { listItem ->
+                    EpisodeItem(
+                        episode = listItem as Episode
+                    )
+                },
+                adaptiveParams = NavigationType.BOTTOM_NAVIGATION to ContentType.LIST_ONLY,
+                currentDestination = Episodes
+            )
         }
     }
 }
@@ -290,10 +306,15 @@ fun PreviewMedium() {
     AppTheme {
         Surface {
             AdaptiveScreenContent(
-                loadingState = AppLoadingState.Success(data = (1..101).map { i ->
-                    "Element on medium device #${i}"
-                }),
-                adaptiveParams = NavigationType.NAVIGATION_RAIL to ContentType.LIST_AND_DETAIL
+                loadingState = AppLoadingState.Success(data = (1..100)
+                    .map { Location.fakeLocation() }),
+                listItem = { listItem ->
+                    LocationItem(
+                        location = listItem as Location
+                    )
+                },
+                adaptiveParams = NavigationType.NAVIGATION_RAIL to ContentType.LIST_AND_DETAIL,
+                currentDestination = Locations
             )
         }
     }
@@ -305,10 +326,21 @@ fun PreviewDesktop() {
     AppTheme {
         Surface {
             AdaptiveScreenContent(
-                loadingState = AppLoadingState.Success(data = (1..100).map { i ->
-                    "Element on desktop #${i}"
-                }),
+                loadingState = AppLoadingState.Success(data = (1..100)
+                    .map { CharacterItem(person = Person.fakePerson()) }),
                 adaptiveParams = NavigationType.PERMANENT_NAVIGATION_DRAWER to ContentType.LIST_AND_DETAIL
+            )
+
+            AdaptiveScreenContent(
+                loadingState = AppLoadingState.Success(data = (1..100)
+                    .map { Person.fakePerson() }),
+                listItem = { listItem ->
+                    CharacterItem(
+                        person = listItem as Person
+                    )
+                },
+                adaptiveParams = NavigationType.PERMANENT_NAVIGATION_DRAWER to ContentType.LIST_AND_DETAIL,
+                currentDestination = Characters
             )
         }
     }

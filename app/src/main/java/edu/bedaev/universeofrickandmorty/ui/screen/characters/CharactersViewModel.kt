@@ -1,16 +1,32 @@
 package edu.bedaev.universeofrickandmorty.ui.screen.characters
 
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import dagger.hilt.android.lifecycle.HiltViewModel
+import edu.bedaev.universeofrickandmorty.data.CharacterRepository
+import edu.bedaev.universeofrickandmorty.domain.model.ListItem
 import edu.bedaev.universeofrickandmorty.domain.model.Person
 import edu.bedaev.universeofrickandmorty.ui.screen.AppLoadingState
 import edu.bedaev.universeofrickandmorty.ui.screen.BaseViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import okio.IOException
 import retrofit2.HttpException
+import javax.inject.Inject
 
-class CharactersViewModel : BaseViewModel() {
+@HiltViewModel
+class CharactersViewModel
+@Inject constructor(
+    private val repository: CharacterRepository
+) : BaseViewModel() {
+
+    val listItemFlow: Flow<PagingData<ListItem>> =
+        repository.getCharacters()
+            .cachedIn(CoroutineScope(Dispatchers.Default))
 
     init {
         loadContent()
@@ -36,4 +52,15 @@ class CharactersViewModel : BaseViewModel() {
         }
     }
 
+    override fun loadPagingData() {
+        viewModelScope.launch {
+            loadingState = AppLoadingState.Loading
+            kotlin.runCatching {
+
+            }.fold(
+                onSuccess = {},
+                onFailure = {}
+            )
+        }
+    }
 }

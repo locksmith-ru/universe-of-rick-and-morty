@@ -6,7 +6,7 @@ data class PersonDto(
     //The id of the character.
     var id: Int,
     // The name of the character.
-    var name: String? = null,
+    var name: String,
     // The status of the character ('Alive', 'Dead' or 'unknown').
     var status: String? = null,
     // The species of the character.

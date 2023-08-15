@@ -9,12 +9,16 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import okio.IOException
 import retrofit2.HttpException
+import javax.inject.Inject
 
-class LocationViewModel : BaseViewModel() {
+@HiltViewModel
+class LocationViewModel
+@Inject constructor() : BaseViewModel() {
 
     init {
         loadContent()
     }
+
     override fun loadContent() {
         viewModelScope.launch {
             loadingState = AppLoadingState.Loading
@@ -25,11 +29,15 @@ class LocationViewModel : BaseViewModel() {
                 AppLoadingState.Success(
                     data = (1..100).map { Location.fakeLocation() }
                 )
-            }catch (e: IOException){
+            } catch (e: IOException) {
                 AppLoadingState.Error
-            } catch (e: HttpException){
+            } catch (e: HttpException) {
                 AppLoadingState.Error
             }
         }
+    }
+
+    override fun loadPagingData() {
+        TODO("Not yet implemented")
     }
 }

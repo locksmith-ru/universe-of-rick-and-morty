@@ -9,8 +9,11 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import okio.IOException
 import retrofit2.HttpException
+import javax.inject.Inject
 
-class EpisodeViewModel : BaseViewModel() {
+@HiltViewModel
+class EpisodeViewModel
+@Inject constructor() : BaseViewModel() {
 
     init {
         loadContent()
@@ -32,4 +35,7 @@ class EpisodeViewModel : BaseViewModel() {
         }
     }
 
+    override fun loadPagingData() {
+        TODO("Not yet implemented")
+    }
 }
