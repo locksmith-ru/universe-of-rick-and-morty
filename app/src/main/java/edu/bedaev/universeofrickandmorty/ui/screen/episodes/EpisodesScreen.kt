@@ -28,7 +28,7 @@ fun EpisodesScreen(
     AdaptiveScreenContent(
         modifier = modifier,
         loadingState = viewModel.loadingState,
-        listItem = { listItem ->
+        listItemView  = { listItem ->
             EpisodeItem(
                 episode = listItem as Episode,
                 onItemClicked = { item -> onItemClicked(item = item) }

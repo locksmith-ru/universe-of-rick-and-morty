@@ -28,7 +28,7 @@ fun LocationsScreen(
     AdaptiveScreenContent(
         modifier = modifier,
         loadingState = viewModel.loadingState,
-        listItem = { item ->
+        listItemView = { item ->
             LocationItem(
                 location = item as Location,
                 onItemClicked = { listItem -> onItemClicked(item = listItem) }

@@ -13,6 +13,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import okio.IOException
 import retrofit2.HttpException
@@ -40,9 +42,11 @@ class CharactersViewModel
             loadingState = try {
                 // todo Здесь загрузка данных из сети
                 AppLoadingState.Success(
-                    data = (1..100).map {
-                        Person.fakePerson()
-                    }
+                    data = MutableStateFlow(
+                        PagingData.from(
+                            (1..100).map { Person.fakePerson() }
+                        )
+                    )
                 )
             } catch (e: IOException) {
                 AppLoadingState.Error

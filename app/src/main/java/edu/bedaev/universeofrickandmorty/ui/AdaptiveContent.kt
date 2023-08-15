@@ -2,7 +2,6 @@ package edu.bedaev.universeofrickandmorty.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,10 +18,9 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.Divider
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
@@ -30,7 +28,6 @@ import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.PermanentDrawerSheet
 import androidx.compose.material3.PermanentNavigationDrawer
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -41,6 +38,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.paging.PagingData
+import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.itemContentType
+import androidx.paging.compose.itemKey
 import edu.bedaev.universeofrickandmorty.domain.model.Episode
 import edu.bedaev.universeofrickandmorty.domain.model.ListItem
 import edu.bedaev.universeofrickandmorty.domain.model.Location
@@ -62,13 +63,14 @@ import edu.bedaev.universeofrickandmorty.ui.screen.LoadingScreen
 import edu.bedaev.universeofrickandmorty.ui.theme.AppTheme
 import edu.bedaev.universeofrickandmorty.ui.utils.ContentType
 import edu.bedaev.universeofrickandmorty.ui.utils.NavigationType
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 @Composable
 fun AdaptiveScreenContent(
     modifier: Modifier = Modifier,
     loadingState: AppLoadingState,
-    listItem: @Composable ((ListItem) -> Unit)? = null,
+    listItemView: @Composable ((ListItem) -> Unit)? = null,
     adaptiveParams: Pair<NavigationType, ContentType> = Pair(
         NavigationType.BOTTOM_NAVIGATION,
         ContentType.LIST_ONLY
@@ -84,14 +86,12 @@ fun AdaptiveScreenContent(
             AdaptiveScreenContent(
                 modifier = modifier,
                 loadingState = loadingState,
-                listItem = listItem,
+                listItemView = listItemView,
                 adaptiveParams = adaptiveParams,
                 currentDestination = currentDestination,
                 onTabSelected = onTabSelected
             )
         }
-
-        else -> ErrorScreen(onRetry = { onError() })
     }
 }
 
@@ -99,7 +99,7 @@ fun AdaptiveScreenContent(
 private fun AdaptiveScreenContent(
     modifier: Modifier = Modifier,
     loadingState: AppLoadingState.Success,
-    listItem: @Composable ((ListItem) -> Unit)? = null,
+    listItemView: @Composable ((ListItem) -> Unit)? = null,
     adaptiveParams: Pair<NavigationType, ContentType> = Pair(
         NavigationType.BOTTOM_NAVIGATION,
         ContentType.LIST_ONLY
@@ -130,7 +130,7 @@ private fun AdaptiveScreenContent(
                 navType = navType,
                 listType = listType,
                 loadingState = loadingState,
-                listItem = listItem,
+                listItemView = listItemView,
                 currentScreen = currentDestination,
                 onTabSelected = onTabSelected
             )
@@ -155,7 +155,7 @@ private fun AdaptiveScreenContent(
             AppContent(navType = navType,
                 listType = listType,
                 loadingState = loadingState,
-                listItem = listItem,
+                listItemView = listItemView,
                 currentScreen = currentDestination,
                 onTabSelected = onTabSelected,
                 onDrawerMenuClicked = {
@@ -171,7 +171,7 @@ private fun AdaptiveScreenContent(
 private fun AppContent(
     modifier: Modifier = Modifier,
     loadingState: AppLoadingState.Success,
-    listItem: @Composable ((ListItem) -> Unit)? = null,
+    listItemView: @Composable ((ListItem) -> Unit)? = null,
     currentScreen: AppDestination = Characters,
     navType: NavigationType = NavigationType.BOTTOM_NAVIGATION,
     listType: ContentType = ContentType.LIST_ONLY,
@@ -199,6 +199,7 @@ private fun AppContent(
             ) {
                 val scrollState: ScrollableState
                 val showFab: Boolean
+                val data = loadingState.data.collectAsLazyPagingItems()
                 if (listType == ContentType.LIST_ONLY) {
                     val lazyState = rememberLazyListState()
                     scrollState = lazyState
@@ -211,8 +212,13 @@ private fun AppContent(
                         state = lazyState,
                     ) {
                         item { Spacer(modifier = Modifier.height(16.dp)) }
-                        items(loadingState.data) { item ->
-                            listItem?.let {
+                        items(
+                            count = data.itemCount,
+                            key = data.itemKey(),
+                            contentType = data.itemContentType()
+                        ) { index ->
+                            val item = data[index]
+                            listItemView?.let {
                                 it(item as ListItem)
                             }
                         }
@@ -229,11 +235,15 @@ private fun AppContent(
                         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 32.dp),
                         state = lazyGridState
                     ) {
-                        items(loadingState.data) { item ->
-                            listItem?.let {
+                        items(
+                            count = data.itemCount,
+                            key = data.itemKey(),
+                            contentType = data.itemContentType()
+                        ) { index ->
+                            val item = data[index]
+                            listItemView?.let {
                                 it(item as ListItem)
-                            } ?: Text(text = item.toString(),
-                                modifier = Modifier.clickable { })
+                            }
                         }
                     }
                 }
@@ -286,9 +296,14 @@ fun PreviewNormal() {
     AppTheme {
         Surface {
             AdaptiveScreenContent(
-                loadingState = AppLoadingState.Success(data = (1..100)
-                    .map { Episode.fakeEpisode() }),
-                listItem = { listItem ->
+                loadingState = AppLoadingState.Success(
+                    data = MutableStateFlow(
+                        PagingData.from(
+                            (1..100).map { Episode.fakeEpisode() }
+                        )
+                    )
+                ),
+                listItemView = { listItem ->
                     EpisodeItem(
                         episode = listItem as Episode
                     )
@@ -306,9 +321,14 @@ fun PreviewMedium() {
     AppTheme {
         Surface {
             AdaptiveScreenContent(
-                loadingState = AppLoadingState.Success(data = (1..100)
-                    .map { Location.fakeLocation() }),
-                listItem = { listItem ->
+                loadingState = AppLoadingState.Success(
+                    data = MutableStateFlow(
+                        PagingData.from(
+                            (1..100).map { Location.fakeLocation() }
+                        )
+                    )
+                ),
+                listItemView = { listItem ->
                     LocationItem(
                         location = listItem as Location
                     )
@@ -326,15 +346,15 @@ fun PreviewDesktop() {
     AppTheme {
         Surface {
             AdaptiveScreenContent(
-                loadingState = AppLoadingState.Success(data = (1..100)
-                    .map { CharacterItem(person = Person.fakePerson()) }),
-                adaptiveParams = NavigationType.PERMANENT_NAVIGATION_DRAWER to ContentType.LIST_AND_DETAIL
-            )
-
-            AdaptiveScreenContent(
-                loadingState = AppLoadingState.Success(data = (1..100)
-                    .map { Person.fakePerson() }),
-                listItem = { listItem ->
+                loadingState = AppLoadingState.Success(
+                    data = MutableStateFlow(
+                        PagingData.from(
+                            (1..100)
+                                .map { Person.fakePerson() }
+                        )
+                    )
+                ),
+                listItemView = { listItem ->
                     CharacterItem(
                         person = listItem as Person
                     )
