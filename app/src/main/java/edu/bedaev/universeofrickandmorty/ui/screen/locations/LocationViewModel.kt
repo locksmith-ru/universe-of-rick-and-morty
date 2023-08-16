@@ -42,8 +42,4 @@ class LocationViewModel
             }
         }
     }
-
-    override fun loadPagingData() {
-        TODO("Not yet implemented")
-    }
 }

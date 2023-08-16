@@ -41,8 +41,4 @@ class EpisodeViewModel
             }
         }
     }
-
-    override fun loadPagingData() {
-        TODO("Not yet implemented")
-    }
 }

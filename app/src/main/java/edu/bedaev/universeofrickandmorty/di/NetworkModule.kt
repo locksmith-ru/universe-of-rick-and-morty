@@ -13,7 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import javax.inject.Singleton
 
-private const val BASE_URL = "https://rickandmortyapi.com/api/"
+private const val BASE_URL = "https://rickandmortyapi.com"
 
 @Module
 @InstallIn(SingletonComponent::class)

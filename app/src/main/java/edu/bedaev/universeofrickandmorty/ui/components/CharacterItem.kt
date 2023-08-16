@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -48,7 +49,8 @@ fun CharacterItem(
         ) {
             GlideImageWithPreview(
                 modifier = Modifier.weight(2f),
-                model = person.image
+                model = person.image,
+                contentScale = ContentScale.Crop
             )
             Column(
                 modifier = Modifier

@@ -15,6 +15,7 @@
 
     <!--    loading screen-->
     <string name="loading">Загрузка</string>
+    <string name="please_wait">Паташти шушуть</string>
     <!--    error screen-->
     <string name="error">Ошибка</string>
     <string name="loading_failed">Ошибка загрузки</string>

@@ -11,6 +11,4 @@ abstract class BaseViewModel : ViewModel() {
         protected set
 
     abstract fun loadContent()
-
-    abstract fun loadPagingData()
 }

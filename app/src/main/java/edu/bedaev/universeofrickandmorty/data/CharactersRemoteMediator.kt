@@ -1,5 +1,6 @@
 package edu.bedaev.universeofrickandmorty.data
 
+import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -12,6 +13,8 @@ import edu.bedaev.universeofrickandmorty.domain.model.Person
 import okio.IOException
 import retrofit2.HttpException
 import java.util.concurrent.TimeUnit
+
+private const val TAG = "_CharactersRemoteMediato"
 
 @OptIn(ExperimentalPagingApi::class)
 class CharactersRemoteMediator(
@@ -48,6 +51,7 @@ class CharactersRemoteMediator(
                 nextKey ?: return MediatorResult.Success(endOfPaginationReached = remoteKeys != null)
             }
         }
+        Log.e(TAG, "load: page=$page", )
 
         return try {
             // todo добавить фильтры name, species, gender etc.
@@ -73,9 +77,11 @@ class CharactersRemoteMediator(
                 if (loadType == LoadType.REFRESH){
                     database.remoteKeysDao().refresh(remoteKeys)
                     database.charactersDao().refresh(entityList)
+                    Log.e(TAG, "load: refresh database", )
                 }else{
                     database.remoteKeysDao().saveAll(keys = remoteKeys)
                     database.charactersDao().saveAll(characters = entityList)
+                    Log.e(TAG, "load: append database", )
                 }
             }
 
