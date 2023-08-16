@@ -215,7 +215,8 @@ private fun AppContent(
                         items(count = data.itemCount) { index ->
                             val item = data[index]
                             listItemView?.let {
-                                it(item as ListItem)
+                                if (item != null)
+                                    it(item)
                             }
                             Divider()
                         }
