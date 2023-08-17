@@ -2,19 +2,17 @@ package edu.bedaev.universeofrickandmorty.ui.screen.characters
 
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import edu.bedaev.universeofrickandmorty.data.CharacterRepository
+import edu.bedaev.universeofrickandmorty.data.ListItemRepository
 import edu.bedaev.universeofrickandmorty.ui.screen.AppLoadingState
 import edu.bedaev.universeofrickandmorty.ui.screen.BaseViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import okio.IOException
-import retrofit2.HttpException
 import javax.inject.Inject
 
 @HiltViewModel
 class CharactersViewModel
 @Inject constructor(
-    private val repository: CharacterRepository
+    private val repo: ListItemRepository
 ) : BaseViewModel() {
 
     init {
@@ -25,15 +23,35 @@ class CharactersViewModel
         viewModelScope.launch {
             loadingState = AppLoadingState.Loading
             delay(1000)
-            loadingState = try {
-                AppLoadingState.Success(
-                    data = repository.getCharacters()
-                )
-            } catch (e: IOException) {
-                AppLoadingState.Error
-            } catch (e: HttpException) {
-                AppLoadingState.Error
-            }
+            loadingState = AppLoadingState.Success(
+                data = repo.fetchItems()
+            )
         }
     }
 }
+
+/*
+    @OptIn(ExperimentalPagingApi::class)
+    override fun loadContent() {
+        viewModelScope.launch {
+            val config = PagingConfig(pageSize = CharactersApi.DEFAULT_PAGE_SIZE)
+            val mediator =
+                ListItemRemoterMediator<PersonEnt, Person>(
+                    service = characterService,
+                    database = database
+                )
+            val pager = Pager(
+                config = config,
+                remoteMediator = mediator,
+                pagingSourceFactory = { database.charactersDao().getEntities() }
+            )
+            loadingState = AppLoadingState.Loading
+            delay(1000)
+            loadingState = AppLoadingState.Success(
+                data = pager.flow.map { pagingData ->
+                    pagingData.map { entity -> Person(entity = entity) }
+                }
+            )
+        }
+    }
+ */

@@ -4,7 +4,7 @@ import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import edu.bedaev.universeofrickandmorty.domain.model.ListItem
 import javax.inject.Inject
-
+// todo удалить
 class CharacterPagingSource @Inject constructor(
     private val service: CharacterService
 ) : PagingSource<Int, ListItem>() {

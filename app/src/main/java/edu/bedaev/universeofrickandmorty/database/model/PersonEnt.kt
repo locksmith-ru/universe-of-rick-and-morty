@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import edu.bedaev.universeofrickandmorty.domain.model.ListItem
 import edu.bedaev.universeofrickandmorty.domain.model.Person
 import edu.bedaev.universeofrickandmorty.network.model.Location
 import edu.bedaev.universeofrickandmorty.network.model.Origin
@@ -11,8 +12,8 @@ import edu.bedaev.universeofrickandmorty.network.model.Origin
 @Entity(tableName = "characters")
 data class PersonEnt(
     @PrimaryKey(autoGenerate = false)
-    val id: Int,
-    val name: String,
+    override val id: Int,
+    override val name: String,
     val status: String?,
     val species: String?,
     val type: String?,
@@ -23,8 +24,8 @@ data class PersonEnt(
     @ColumnInfo("episode_list") val episodeList: List<String>,
     val url: String?,
     val created: String?,
-    val page: Int
-) {
+    override val page: Int
+) : DbEntity {
     constructor(person: Person, page: Int = 1) : this(
         id = person.id,
         name = person.name,

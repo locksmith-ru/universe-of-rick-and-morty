@@ -12,17 +12,17 @@ import edu.bedaev.universeofrickandmorty.database.model.PersonEnt
 interface CharactersDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun saveAll(characters: List<PersonEnt>)
+    suspend fun saveAll(entityList: List<PersonEnt>)
 
     @Query("SELECT * FROM characters ORDER BY page")
-    fun getCharacters(): PagingSource<Int, PersonEnt>
+    fun getEntities(): PagingSource<Int, PersonEnt>
 
     @Query("DELETE FROM characters")
     suspend fun deleteAll()
 
     @Transaction
-    suspend fun refresh(characters: List<PersonEnt>) {
+    suspend fun refresh(newEntityList: List<PersonEnt>) {
         deleteAll()
-        saveAll(characters = characters)
+        saveAll(entityList = newEntityList)
     }
 }

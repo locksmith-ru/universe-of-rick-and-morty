@@ -16,9 +16,10 @@ import java.util.concurrent.TimeUnit
 
 private const val TAG = "_CharactersRemoteMediato"
 
+// TODO: Remove
 @OptIn(ExperimentalPagingApi::class)
 class CharactersRemoteMediator(
-    private val characterService: CharacterService,
+    private val service: NetworkService,
     private val database: RickAndMortyDatabase
 ) : RemoteMediator<Int, PersonEnt>(){
 
@@ -55,7 +56,7 @@ class CharactersRemoteMediator(
 
         return try {
             // todo добавить фильтры name, species, gender etc.
-            val persons: List<Person> = characterService.fetchData(page)
+            val persons: List<Person> = service.fetchData(page)
                 .map { item -> item as Person }
 
 
@@ -80,7 +81,7 @@ class CharactersRemoteMediator(
                     Log.e(TAG, "load: refresh database", )
                 }else{
                     database.remoteKeysDao().saveAll(keys = remoteKeys)
-                    database.charactersDao().saveAll(characters = entityList)
+                    database.charactersDao().saveAll(entityList = entityList)
                     Log.e(TAG, "load: append database", )
                 }
             }
