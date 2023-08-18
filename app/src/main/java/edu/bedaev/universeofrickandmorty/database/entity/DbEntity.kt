@@ -1,4 +1,4 @@
-package edu.bedaev.universeofrickandmorty.database.model
+package edu.bedaev.universeofrickandmorty.database.entity
 
 interface DbEntity {
     val id: Int

@@ -5,7 +5,7 @@ data class LocationDto(
     // The id of the location.
     var id: Int,
     // The name of the location.
-    var name: String? = null,
+    var name: String,
     // The type of the location.
     var type: String? = null,
     // The dimension in which the location is located.

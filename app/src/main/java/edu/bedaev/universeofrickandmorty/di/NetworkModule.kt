@@ -5,7 +5,11 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import edu.bedaev.universeofrickandmorty.data.CharacterService
+import edu.bedaev.universeofrickandmorty.data.EpisodeService
+import edu.bedaev.universeofrickandmorty.data.LocationService
 import edu.bedaev.universeofrickandmorty.network.api.CharactersApi
+import edu.bedaev.universeofrickandmorty.network.api.EpisodeApi
+import edu.bedaev.universeofrickandmorty.network.api.LocationApi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -45,5 +49,13 @@ class NetworkModule {
     @Provides
     fun provideCharacterNetworkService(characterApi: CharactersApi): CharacterService =
         CharacterService(api = characterApi)
+
+    @Provides
+    fun provideLocationNetworkService(locationApi: LocationApi): LocationService =
+        LocationService(api = locationApi)
+
+    @Provides
+    fun provideEpisodesNetworkService(episodeApi: EpisodeApi): EpisodeService =
+        EpisodeService(api = episodeApi)
 
 }

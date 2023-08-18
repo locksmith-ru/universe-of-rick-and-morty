@@ -1,11 +1,12 @@
 package edu.bedaev.universeofrickandmorty.domain.model
 
+import edu.bedaev.universeofrickandmorty.database.entity.LocationEnt
 import edu.bedaev.universeofrickandmorty.network.model.LocationDto
 import edu.bedaev.universeofrickandmorty.network.model.Origin
 
 data class Location(
     override val id: Int,
-    override val name: String? = null,
+    override val name: String,
     val type: String? = null,
     val dimension: String? = null,
     val residents: List<String> = emptyList(),
@@ -20,6 +21,16 @@ data class Location(
         residents = dto.residents,
         url = dto.url,
         created = dto.created
+    )
+
+    constructor(entity: LocationEnt): this(
+        id = entity.id,
+        name = entity.name,
+        type = entity.type,
+        dimension = entity.dimension,
+        residents = entity.residents,
+        url = entity.url,
+        created = entity.created
     )
 
     companion object{

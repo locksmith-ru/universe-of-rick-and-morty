@@ -14,8 +14,4 @@ interface CharactersApi {
         @Query("species") filterBySpecies: String? = null,
         @Query("gender") filterByGender: String? = null
     ): CharactersDto
-
-    companion object {
-        const val DEFAULT_PAGE_SIZE = 20
-    }
 }

@@ -11,4 +11,8 @@ interface NetworkService {
         species: String? = null,
         gender: String? = null
     ): List<ListItem>
+
+    companion object {
+        const val DEFAULT_PAGE_SIZE = 20
+    }
 }

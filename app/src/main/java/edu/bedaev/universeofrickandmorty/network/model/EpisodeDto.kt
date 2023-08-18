@@ -6,7 +6,7 @@ data class EpisodeDto(
     // The id of the episode.
     var id: Int,
     // The name of the episode.
-    var name: String? = null,
+    var name: String,
     // The air date of the episode.
     @SerializedName("air_date") var airDate: String? = null,
     // The code of the episode.

@@ -5,7 +5,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import edu.bedaev.universeofrickandmorty.data.ListItemRepository
-import edu.bedaev.universeofrickandmorty.data.CharacterService
 import edu.bedaev.universeofrickandmorty.database.RickAndMortyDatabase
 import javax.inject.Singleton
 
@@ -15,12 +14,8 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideCharacterRepository(
-        service: CharacterService,
+    fun provideListItemRepository(
         database: RickAndMortyDatabase
     ): ListItemRepository =
-        ListItemRepository(
-            service = service,
-            database = database
-        )
+        ListItemRepository(database = database)
 }

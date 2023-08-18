@@ -1,6 +1,6 @@
 package edu.bedaev.universeofrickandmorty.domain.model
 
-import edu.bedaev.universeofrickandmorty.database.model.PersonEnt
+import edu.bedaev.universeofrickandmorty.database.entity.PersonEnt
 import edu.bedaev.universeofrickandmorty.network.model.Location
 import edu.bedaev.universeofrickandmorty.network.model.Origin
 import edu.bedaev.universeofrickandmorty.network.model.PersonDto

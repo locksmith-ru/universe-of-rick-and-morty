@@ -6,7 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import edu.bedaev.universeofrickandmorty.database.model.PersonEnt
+import edu.bedaev.universeofrickandmorty.database.entity.PersonEnt
 
 @Dao
 interface CharactersDao {
@@ -21,8 +21,9 @@ interface CharactersDao {
     suspend fun deleteAll()
 
     @Transaction
-    suspend fun refresh(newEntityList: List<PersonEnt>) {
+    suspend fun refresh(newEntities: List<PersonEnt>){
         deleteAll()
-        saveAll(entityList = newEntityList)
+        saveAll(entityList = newEntities)
     }
+
 }

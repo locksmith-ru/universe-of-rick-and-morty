@@ -7,13 +7,17 @@ import edu.bedaev.universeofrickandmorty.database.dao.CharactersDao
 import edu.bedaev.universeofrickandmorty.database.dao.EpisodesDao
 import edu.bedaev.universeofrickandmorty.database.dao.LocationsDao
 import edu.bedaev.universeofrickandmorty.database.dao.RemoteKeysDao
-import edu.bedaev.universeofrickandmorty.database.model.PersonEnt
-import edu.bedaev.universeofrickandmorty.database.model.RemoteKeys
+import edu.bedaev.universeofrickandmorty.database.entity.EpisodeEnt
+import edu.bedaev.universeofrickandmorty.database.entity.LocationEnt
+import edu.bedaev.universeofrickandmorty.database.entity.PersonEnt
+import edu.bedaev.universeofrickandmorty.database.entity.RemoteKeys
 import edu.bedaev.universeofrickandmorty.database.typeconverter.StringListTypeConverter
 
 @Database(
     entities = [
         PersonEnt::class,
+        LocationEnt::class,
+        EpisodeEnt::class,
         RemoteKeys::class
     ],
     version = 1,

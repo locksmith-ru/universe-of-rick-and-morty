@@ -5,7 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
-import edu.bedaev.universeofrickandmorty.database.model.RemoteKeys
+import edu.bedaev.universeofrickandmorty.database.entity.RemoteKeys
 
 @Dao
 interface RemoteKeysDao {

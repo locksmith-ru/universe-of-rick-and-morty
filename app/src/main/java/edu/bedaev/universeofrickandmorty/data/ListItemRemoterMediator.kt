@@ -6,10 +6,15 @@ import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import edu.bedaev.universeofrickandmorty.database.RickAndMortyDatabase
-import edu.bedaev.universeofrickandmorty.database.model.DbEntity
-import edu.bedaev.universeofrickandmorty.database.model.PersonEnt
-import edu.bedaev.universeofrickandmorty.database.model.RemoteKeys
+import edu.bedaev.universeofrickandmorty.database.dao.CharactersDao
+import edu.bedaev.universeofrickandmorty.database.entity.DbEntity
+import edu.bedaev.universeofrickandmorty.database.entity.EpisodeEnt
+import edu.bedaev.universeofrickandmorty.database.entity.LocationEnt
+import edu.bedaev.universeofrickandmorty.database.entity.PersonEnt
+import edu.bedaev.universeofrickandmorty.database.entity.RemoteKeys
+import edu.bedaev.universeofrickandmorty.domain.model.Episode
 import edu.bedaev.universeofrickandmorty.domain.model.ListItem
+import edu.bedaev.universeofrickandmorty.domain.model.Location
 import edu.bedaev.universeofrickandmorty.domain.model.Person
 import retrofit2.HttpException
 import java.io.IOException
@@ -97,7 +102,7 @@ class ListItemRemoterMediator<E: DbEntity, L: ListItem>(
 
                 if (loadType == LoadType.REFRESH){
                     database.remoteKeysDao().refresh(keys = remoteKeys)
-                    dao.refresh(newEntityList = entities)
+                    dao.refresh(newEntities = entities)
                 }else{
                     database.remoteKeysDao().saveAll(keys = remoteKeys)
                     dao.saveAll(entityList = entities)
@@ -158,3 +163,21 @@ class ListItemRemoterMediator<E: DbEntity, L: ListItem>(
         }
     }
 }
+
+/*
+val entities = items.map { klass ->
+                    when(klass){
+                        is Person -> PersonEnt(person = klass as Person, page = page) as E
+                        is Location -> LocationEnt(location = klass as Location, page = page) as E
+                        is Episode -> EpisodeEnt(model = klass as Episode, page = page) as E
+                        else ->  error("unreachable")
+                    }
+                }
+
+                val dao = when(entities.first()){
+                    is PersonEnt -> database.charactersDao()
+                    is LocationEnt -> database.locationsDao()
+                    is EpisodeEnt -> database.episodesDao()
+                    else -> { error("unreachable") }
+                }
+ */

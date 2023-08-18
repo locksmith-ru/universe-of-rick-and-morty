@@ -1,11 +1,12 @@
 package edu.bedaev.universeofrickandmorty.domain.model
 
+import edu.bedaev.universeofrickandmorty.database.entity.EpisodeEnt
 import edu.bedaev.universeofrickandmorty.network.model.EpisodeDto
 import edu.bedaev.universeofrickandmorty.network.model.Origin
 
 data class Episode(
     override val id: Int,
-    override val name: String? = null,
+    override val name: String,
     val airDate: String? = null,
     val episode: String? = null,
     val characters: List<String> = emptyList(),
@@ -20,6 +21,16 @@ data class Episode(
         characters = dto.characters,
         url = dto.url,
         created = dto.created
+    )
+
+    constructor(entity: EpisodeEnt): this(
+        id = entity.id,
+        name = entity.name,
+        airDate = entity.airDate,
+        episode = entity.episode,
+        characters = entity.characters,
+        url = entity.url,
+        created = entity.created
     )
 
     companion object {

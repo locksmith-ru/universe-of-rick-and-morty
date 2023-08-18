@@ -3,6 +3,7 @@ package edu.bedaev.universeofrickandmorty.ui.screen.locations
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.paging.compose.LazyPagingItems
@@ -28,7 +29,7 @@ fun LocationsScreen(
     adaptiveParams: Pair<NavigationType, ContentType> =
         Pair(NavigationType.BOTTOM_NAVIGATION, ContentType.LIST_ONLY)
 ) {
-    val viewModel: LocationViewModel = viewModel()
+    val viewModel: LocationViewModel = hiltViewModel()
 
     when(viewModel.loadingState){
         is AppLoadingState.Loading -> LoadingScreen()

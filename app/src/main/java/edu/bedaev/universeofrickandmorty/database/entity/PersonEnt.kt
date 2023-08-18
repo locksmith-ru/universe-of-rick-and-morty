@@ -1,10 +1,9 @@
-package edu.bedaev.universeofrickandmorty.database.model
+package edu.bedaev.universeofrickandmorty.database.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import edu.bedaev.universeofrickandmorty.domain.model.ListItem
 import edu.bedaev.universeofrickandmorty.domain.model.Person
 import edu.bedaev.universeofrickandmorty.network.model.Location
 import edu.bedaev.universeofrickandmorty.network.model.Origin
