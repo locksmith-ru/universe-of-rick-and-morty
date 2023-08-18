@@ -29,7 +29,7 @@ class ListItemRemoterMediator<E: DbEntity, L: ListItem>(
     override suspend fun initialize(): InitializeAction {
         val cacheTimeout = TimeUnit.MILLISECONDS.convert(1, TimeUnit.HOURS)
 
-        return if (System.currentTimeMillis() - (database.remoteKeysDao().getCreationTime() ?: 0) < cacheTimeout) {
+        return if (System.currentTimeMillis() - (database.characterKeysDao().getCreationTime() ?: 0) < cacheTimeout) {
             // кешированные данные актуальны
             InitializeAction.SKIP_INITIAL_REFRESH
         } else {
@@ -93,7 +93,7 @@ class ListItemRemoterMediator<E: DbEntity, L: ListItem>(
                 }
 
                 if (loadType == LoadType.REFRESH){
-                    database.remoteKeysDao().refresh(keys = characterRemoteKeys)
+                    database.characterKeysDao().refresh(keys = characterRemoteKeys)
                     when(entities.first()){
                         is PersonEnt -> {
                             database.charactersDao().deleteAll()
@@ -110,7 +110,7 @@ class ListItemRemoterMediator<E: DbEntity, L: ListItem>(
                     }
 
                 }else{
-                    database.remoteKeysDao().saveAll(keys = characterRemoteKeys)
+                    database.characterKeysDao().saveAll(keys = characterRemoteKeys)
                     when(entities.first()){
                         is PersonEnt ->
                             database.charactersDao().saveAll(list = represent<PersonEnt>(entities))
@@ -150,7 +150,7 @@ class ListItemRemoterMediator<E: DbEntity, L: ListItem>(
         //Найдите элемент, расположенный ближе всего к позиции привязки
         return state.anchorPosition?.let { position ->
             state.closestItemToPosition(position)?.id?.let { id ->
-                database.remoteKeysDao().getKeyByListItemId(listItemId = id)
+                database.characterKeysDao().getKeyByListItemId(listItemId = id)
             }
         }
     }
@@ -165,7 +165,7 @@ class ListItemRemoterMediator<E: DbEntity, L: ListItem>(
         return state.pages.firstOrNull{
             it.data.isNotEmpty()
         }?.data?.firstOrNull()?.let { entity ->
-            database.remoteKeysDao().getKeyByListItemId(listItemId = entity.id)
+            database.characterKeysDao().getKeyByListItemId(listItemId = entity.id)
         }
     }
 
@@ -179,7 +179,7 @@ class ListItemRemoterMediator<E: DbEntity, L: ListItem>(
         return state.pages.lastOrNull {
             it.data.isNotEmpty()
         }?.data?.lastOrNull()?.let { entity ->
-            database.remoteKeysDao().getKeyByListItemId(listItemId = entity.id)
+            database.characterKeysDao().getKeyByListItemId(listItemId = entity.id)
         }
     }
 }
