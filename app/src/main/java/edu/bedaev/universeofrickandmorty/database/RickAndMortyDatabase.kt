@@ -10,7 +10,7 @@ import edu.bedaev.universeofrickandmorty.database.dao.RemoteKeysDao
 import edu.bedaev.universeofrickandmorty.database.entity.EpisodeEnt
 import edu.bedaev.universeofrickandmorty.database.entity.LocationEnt
 import edu.bedaev.universeofrickandmorty.database.entity.PersonEnt
-import edu.bedaev.universeofrickandmorty.database.entity.RemoteKeys
+import edu.bedaev.universeofrickandmorty.database.entity.CharacterRemoteKeys
 import edu.bedaev.universeofrickandmorty.database.typeconverter.StringListTypeConverter
 
 @Database(
@@ -18,7 +18,7 @@ import edu.bedaev.universeofrickandmorty.database.typeconverter.StringListTypeCo
         PersonEnt::class,
         LocationEnt::class,
         EpisodeEnt::class,
-        RemoteKeys::class
+        CharacterRemoteKeys::class
     ],
     version = 1,
     exportSchema = false

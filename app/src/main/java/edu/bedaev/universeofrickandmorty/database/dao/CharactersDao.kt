@@ -2,12 +2,21 @@ package edu.bedaev.universeofrickandmorty.database.dao
 
 import androidx.paging.PagingSource
 import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Transaction
 import edu.bedaev.universeofrickandmorty.database.entity.PersonEnt
 
+@Dao
+abstract class CharactersDao : BaseDao<PersonEnt>{
+
+    @Query("SELECT * FROM characters ORDER BY page")
+    abstract fun getEntities(): PagingSource<Int, PersonEnt>
+
+    @Query("DELETE FROM characters")
+    abstract fun deleteAll()
+
+}
+
+/*
 @Dao
 interface CharactersDao {
 
@@ -26,4 +35,4 @@ interface CharactersDao {
         saveAll(entityList = newEntities)
     }
 
-}
+}*/

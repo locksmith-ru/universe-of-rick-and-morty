@@ -2,13 +2,20 @@ package edu.bedaev.universeofrickandmorty.database.dao
 
 import androidx.paging.PagingSource
 import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import androidx.room.Transaction
 import edu.bedaev.universeofrickandmorty.database.entity.LocationEnt
 
 @Dao
+abstract class LocationsDao : BaseDao<LocationEnt>{
+    @Query("SELECT * FROM locations ORDER BY page")
+    abstract fun getEntities(): PagingSource<Int, LocationEnt>
+
+    @Query("DELETE FROM locations")
+    abstract fun deleteAll()
+
+}
+
+/*@Dao
 interface LocationsDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -26,7 +33,7 @@ interface LocationsDao {
         saveAll(entityList = newEntities)
     }
 
-}
+}*/
 
 /*
 @Dao
