@@ -29,12 +29,12 @@ class LocationViewModel
     override fun loadContent() {
         viewModelScope.launch {
             loadingState = AppLoadingState.Loading
-            // иммитация загрузки
             delay(1000)
             loadingState = AppLoadingState.Success(
                 data = repository.fetchItems(
                     service = locationService,
                     keysDao = { db -> db.locationKeysDao() },
+                    listItemDaoFactory = { db -> db.locationsDao() },
                     pagingSource = { database ->
                         database.locationsDao().getEntities()
                     }

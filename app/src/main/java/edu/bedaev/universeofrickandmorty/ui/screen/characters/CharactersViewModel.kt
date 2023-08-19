@@ -35,6 +35,7 @@ class CharactersViewModel
                 data = repo.fetchItems<CharacterRemoteKeys, PersonEnt>(
                     service = characterService,
                     keysDao = { db -> db.characterKeysDao() },
+                    listItemDaoFactory = { db -> db.charactersDao() },
                     pagingSource = { db -> db.charactersDao().getEntities() }
                 ).map { pagingData ->
                     pagingData.map { Person(entity = it ) }
@@ -42,25 +43,4 @@ class CharactersViewModel
             )
         }
     }
-
-    /*    @OptIn(ExperimentalPagingApi::class)
-        private fun fetchItems(): Flow<PagingData<ListItem>> {
-            val config = PagingConfig(pageSize = CharactersApi.DEFAULT_PAGE_SIZE)
-            val mediator =
-                ListItemRemoterMediator<PersonEnt, Person>(
-                    service = service,
-                    database = database
-                )
-            val pager = Pager(
-                config = config,
-                remoteMediator = mediator,
-                pagingSourceFactory = { database.charactersDao().getEntities() }
-            )
-
-            return pager.flow.map { pagingData ->
-                pagingData.map { entity ->
-                    Person(entity = entity)
-                }
-            }
-        }*/
 }

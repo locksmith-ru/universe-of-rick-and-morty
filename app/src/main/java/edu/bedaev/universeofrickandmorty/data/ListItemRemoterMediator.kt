@@ -7,9 +7,9 @@ import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import androidx.room.withTransaction
 import edu.bedaev.universeofrickandmorty.database.RickAndMortyDatabase
+import edu.bedaev.universeofrickandmorty.database.dao.BaseDao
 import edu.bedaev.universeofrickandmorty.database.dao.BaseKeyDao
 import edu.bedaev.universeofrickandmorty.database.dao.CharacterKeysDao
-import edu.bedaev.universeofrickandmorty.database.dao.EpisodeKeysDao
 import edu.bedaev.universeofrickandmorty.database.dao.LocationKeysDao
 import edu.bedaev.universeofrickandmorty.database.entity.DbEntity
 import edu.bedaev.universeofrickandmorty.database.entity.EpisodeEnt
@@ -31,6 +31,7 @@ import java.util.concurrent.TimeUnit
 class ListItemRemoterMediator<K : RemoteKey, E : DbEntity, L : ListItem>(
     private val service: NetworkService,
     private val database: RickAndMortyDatabase,
+    private val listItemDao: BaseDao<E>,
     private val keysDao: BaseKeyDao<K>
 ) : RemoteMediator<Int, E>() {
 
@@ -89,26 +90,8 @@ class ListItemRemoterMediator<K : RemoteKey, E : DbEntity, L : ListItem>(
                 val prevKey = if (page > 1) page - 1 else null
                 val nextKey = if (endOfPaginationReached) null else page + 1
                 val remoteKeys = items.map { listItem ->
-                    when (keysDao) {
-                        is CharacterKeysDao -> CharacterRemoteKeys(
-                            listItemId = listItem.id,
-                            prevKey = prevKey,
-                            currentPage = page,
-                            nextKey = nextKey
-                        )
-                        is LocationKeysDao -> LocationRemoteKeys(
-                            listItemId = listItem.id,
-                            prevKey = prevKey,
-                            currentPage = page,
-                            nextKey = nextKey
-                        )
-                        else -> EpisodeRemoteKeys(
-                            listItemId = listItem.id,
-                            prevKey = prevKey,
-                            currentPage = page,
-                            nextKey = nextKey
-                        )
-                    }
+                    getRemoteKey(listItem = listItem, prevKey = prevKey,
+                        page = page, nextKey = nextKey)
                 }
                 val entities: List<E> = items.map { klass ->
                     when (klass) {
@@ -122,35 +105,11 @@ class ListItemRemoterMediator<K : RemoteKey, E : DbEntity, L : ListItem>(
                 if (loadType == LoadType.REFRESH) {
                     keysDao.deleteAll()
                     keysDao.saveAll(keys = remoteKeys as List<K>)
-                    when (entities.first()) {
-                        is PersonEnt -> {
-                            database.charactersDao().deleteAll()
-                            database.charactersDao().saveAll(list = represent<PersonEnt>(entities))
-                        }
-
-                        is LocationEnt -> {
-                            database.locationsDao().deleteAll()
-                            database.locationsDao().saveAll(list = represent<LocationEnt>(entities))
-                        }
-
-                        is EpisodeEnt -> {
-                            database.episodesDao().deleteAll()
-                            database.episodesDao().saveAll(list = represent<EpisodeEnt>(entities))
-                        }
-                    }
-
+                    listItemDao.deleteAll()
+                    listItemDao.saveAll(list = entities)
                 } else {
                     keysDao.saveAll(keys = remoteKeys as List<K>)
-                    when (entities.first()) {
-                        is PersonEnt ->
-                            database.charactersDao().saveAll(list = represent<PersonEnt>(entities))
-
-                        is LocationEnt ->
-                            database.locationsDao().saveAll(list = represent<LocationEnt>(entities))
-
-                        is EpisodeEnt ->
-                            database.episodesDao().saveAll(list = represent<EpisodeEnt>(entities))
-                    }
+                    listItemDao.saveAll(list = entities)
                 }
             }
 
@@ -164,9 +123,32 @@ class ListItemRemoterMediator<K : RemoteKey, E : DbEntity, L : ListItem>(
         }
     }
 
-    @Suppress("UNCHECKED_CAST")
-    private inline fun <reified T : DbEntity> represent(source: List<DbEntity>): List<T> {
-        return source as List<T>
+    private fun getRemoteKey(
+        listItem: L,
+        prevKey: Int?,
+        page: Int,
+        nextKey: Int?
+    ) = when (keysDao) {
+        is CharacterKeysDao -> CharacterRemoteKeys(
+            listItemId = listItem.id,
+            prevKey = prevKey,
+            currentPage = page,
+            nextKey = nextKey
+        )
+
+        is LocationKeysDao -> LocationRemoteKeys(
+            listItemId = listItem.id,
+            prevKey = prevKey,
+            currentPage = page,
+            nextKey = nextKey
+        )
+
+        else -> EpisodeRemoteKeys(
+            listItemId = listItem.id,
+            prevKey = prevKey,
+            currentPage = page,
+            nextKey = nextKey
+        )
     }
 
     /**

@@ -33,13 +33,13 @@ class EpisodeViewModel
     override fun loadContent() {
         viewModelScope.launch {
             loadingState = AppLoadingState.Loading
-            // иммитация загрузки
             delay(1000)
             loadingState = AppLoadingState.Success(
                 data = repository
                     .fetchItems(
                         service = episodeService,
                         keysDao = { db -> db.episodeKeysDao() },
+                        listItemDaoFactory = { db -> db.episodesDao() },
                         pagingSource = { db ->
                             db.episodesDao().getEntities()
                         }

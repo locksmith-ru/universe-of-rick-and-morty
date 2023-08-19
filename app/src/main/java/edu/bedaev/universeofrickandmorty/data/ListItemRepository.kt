@@ -6,6 +6,7 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.PagingSource
 import edu.bedaev.universeofrickandmorty.database.RickAndMortyDatabase
+import edu.bedaev.universeofrickandmorty.database.dao.BaseDao
 import edu.bedaev.universeofrickandmorty.database.dao.BaseKeyDao
 import edu.bedaev.universeofrickandmorty.database.entity.DbEntity
 import edu.bedaev.universeofrickandmorty.database.entity.RemoteKey
@@ -20,6 +21,7 @@ class ListItemRepository(
     inline fun <reified K: RemoteKey, reified E: DbEntity> fetchItems(
         service: NetworkService,
         crossinline pagingSource: (RickAndMortyDatabase) -> PagingSource<Int, E>,
+        listItemDaoFactory: (RickAndMortyDatabase) -> BaseDao<E>,
         keysDao: (RickAndMortyDatabase) -> BaseKeyDao<K>
     ): Flow<PagingData<E>> {
         val config = PagingConfig(pageSize = NetworkService.DEFAULT_PAGE_SIZE)
@@ -27,6 +29,7 @@ class ListItemRepository(
             ListItemRemoterMediator<K,E, ListItem>(
                 service = service,
                 database = database,
+                listItemDao = listItemDaoFactory(database),
                 keysDao =  keysDao(database)
             )
         val pager = Pager(

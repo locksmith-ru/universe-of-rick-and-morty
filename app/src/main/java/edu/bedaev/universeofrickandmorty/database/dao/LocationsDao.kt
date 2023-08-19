@@ -8,50 +8,13 @@ import edu.bedaev.universeofrickandmorty.database.entity.LocationEnt
 @Dao
 abstract class LocationsDao : BaseDao<LocationEnt>{
     @Query("SELECT * FROM locations ORDER BY page")
-    abstract fun getEntities(): PagingSource<Int, LocationEnt>
+    abstract override fun getEntities(): PagingSource<Int, LocationEnt>
 
     @Query("DELETE FROM locations")
-    abstract fun deleteAll()
+    abstract override suspend fun deleteAll()
 
-}
-
-/*@Dao
-interface LocationsDao {
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun saveAll(entityList: List<LocationEnt>)
-
-    @Query("SELECT * FROM locations ORDER BY page")
-    fun getEntities(): PagingSource<Int, LocationEnt>
-
-    @Query("DELETE FROM locations")
-    suspend fun deleteAll()
-
-    @Transaction
-    suspend fun refresh(newEntities: List<LocationEnt>){
+    open suspend fun refresh(newEntities: List<LocationEnt>){
         deleteAll()
-        saveAll(entityList = newEntities)
+        saveAll(list = newEntities)
     }
-
-}*/
-
-/*
-@Dao
-interface LocationsDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun saveAll(entityList: List<LocationEnt>)
-
-    @Query("SELECT * FROM locations ORDER BY page")
-    fun getEntities(): PagingSource<Int, LocationEnt>
-
-    @Query("DELETE FROM locations")
-    suspend fun deleteAll()
-
-    @Transaction
-    suspend fun refresh(newEntityList: List<LocationEnt>) {
-        deleteAll()
-        saveAll(entityList = newEntityList)
-    }
-
 }
- */
