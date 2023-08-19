@@ -1,4 +1,4 @@
-package edu.bedaev.universeofrickandmorty.database.dao
+package edu.bedaev.universeofrickandmorty.database.entity
 
 interface RemoteKey {
     val listItemId: Int

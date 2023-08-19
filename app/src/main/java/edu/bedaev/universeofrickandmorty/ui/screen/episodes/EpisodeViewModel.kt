@@ -6,6 +6,8 @@ import androidx.paging.map
 import dagger.hilt.android.lifecycle.HiltViewModel
 import edu.bedaev.universeofrickandmorty.data.EpisodeService
 import edu.bedaev.universeofrickandmorty.data.ListItemRepository
+import edu.bedaev.universeofrickandmorty.database.entity.EpisodeEnt
+import edu.bedaev.universeofrickandmorty.database.entity.EpisodeRemoteKeys
 import edu.bedaev.universeofrickandmorty.domain.model.Episode
 import edu.bedaev.universeofrickandmorty.ui.screen.AppLoadingState
 import edu.bedaev.universeofrickandmorty.ui.screen.BaseViewModel
@@ -35,9 +37,13 @@ class EpisodeViewModel
             delay(1000)
             loadingState = AppLoadingState.Success(
                 data = repository
-                    .fetchItems(service = episodeService) { db ->
-                        db.episodesDao().getEntities()
-                    }.map { pagingData ->
+                    .fetchItems(
+                        service = episodeService,
+                        keysDao = { db -> db.episodeKeysDao() },
+                        pagingSource = { db ->
+                            db.episodesDao().getEntities()
+                        }
+                    ) .map { pagingData ->
                         pagingData.map { Episode(entity = it) }
                     }
             )

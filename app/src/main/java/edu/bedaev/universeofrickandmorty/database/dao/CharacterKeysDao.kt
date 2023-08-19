@@ -9,13 +9,13 @@ import edu.bedaev.universeofrickandmorty.database.entity.CharacterRemoteKeys
 abstract class CharacterKeysDao : BaseKeyDao<CharacterRemoteKeys> {
 
     @Query("SELECT * FROM character_remote_keys WHERE list_item_id = :listItemId")
-    abstract suspend fun getKeyByListItemId(listItemId: Int): CharacterRemoteKeys?
+    abstract override suspend fun getKeyByListItemId(listItemId: Int): CharacterRemoteKeys?
 
     @Query("SELECT created_at FROM character_remote_keys ORDER BY created_at DESC LIMIT 1")
-    abstract suspend fun getCreationTime(): Long?
+    abstract override suspend fun getCreationTime(): Long?
 
     @Query("DELETE FROM character_remote_keys")
-    abstract suspend fun deleteAll()
+    abstract override suspend fun deleteAll()
 
     @Transaction
     open suspend fun refresh(keys: List<CharacterRemoteKeys>) {

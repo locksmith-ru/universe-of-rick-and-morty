@@ -5,6 +5,8 @@ import androidx.paging.map
 import dagger.hilt.android.lifecycle.HiltViewModel
 import edu.bedaev.universeofrickandmorty.data.ListItemRepository
 import edu.bedaev.universeofrickandmorty.data.LocationService
+import edu.bedaev.universeofrickandmorty.database.entity.LocationEnt
+import edu.bedaev.universeofrickandmorty.database.entity.LocationRemoteKeys
 import edu.bedaev.universeofrickandmorty.domain.model.Location
 import edu.bedaev.universeofrickandmorty.ui.screen.AppLoadingState
 import edu.bedaev.universeofrickandmorty.ui.screen.BaseViewModel
@@ -30,10 +32,14 @@ class LocationViewModel
             // иммитация загрузки
             delay(1000)
             loadingState = AppLoadingState.Success(
-                data = repository.fetchItems(service = locationService)
-                { database ->
-                    database.locationsDao().getEntities()
-                }.map { pagingData ->
+                data = repository.fetchItems(
+                    service = locationService,
+                    keysDao = { db -> db.locationKeysDao() },
+                    pagingSource = { database ->
+                        database.locationsDao().getEntities()
+                    }
+                )
+                .map { pagingData ->
                     pagingData.map { Location(entity = it) }
                 }
             )

@@ -3,7 +3,6 @@ package edu.bedaev.universeofrickandmorty.database.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import edu.bedaev.universeofrickandmorty.database.dao.RemoteKey
 
 @Entity(tableName = "location_remote_keys")
 data class LocationRemoteKeys(

@@ -7,7 +7,7 @@ import retrofit2.http.Query
 interface EpisodeApi {
 
     @GET("/api/episode")
-    fun getEpisodes(
+    suspend fun getEpisodes(
         @Query("page") page: Int,
         @Query("name") filterByName: String? = null
     ): EpisodesDto

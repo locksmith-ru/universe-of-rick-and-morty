@@ -5,6 +5,8 @@ import androidx.paging.map
 import dagger.hilt.android.lifecycle.HiltViewModel
 import edu.bedaev.universeofrickandmorty.data.CharacterService
 import edu.bedaev.universeofrickandmorty.data.ListItemRepository
+import edu.bedaev.universeofrickandmorty.database.dao.CharacterKeysDao
+import edu.bedaev.universeofrickandmorty.database.entity.CharacterRemoteKeys
 import edu.bedaev.universeofrickandmorty.database.entity.PersonEnt
 import edu.bedaev.universeofrickandmorty.domain.model.Person
 import edu.bedaev.universeofrickandmorty.ui.screen.AppLoadingState
@@ -30,8 +32,9 @@ class CharactersViewModel
             loadingState = AppLoadingState.Loading
             delay(1000)
             loadingState = AppLoadingState.Success(
-                data = repo.fetchItems(
+                data = repo.fetchItems<CharacterRemoteKeys, PersonEnt>(
                     service = characterService,
+                    keysDao = { db -> db.characterKeysDao() },
                     pagingSource = { db -> db.charactersDao().getEntities() }
                 ).map { pagingData ->
                     pagingData.map { Person(entity = it ) }
