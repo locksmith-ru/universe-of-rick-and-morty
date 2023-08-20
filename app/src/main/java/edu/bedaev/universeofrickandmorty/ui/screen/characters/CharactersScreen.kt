@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import edu.bedaev.universeofrickandmorty.domain.model.ListItem
@@ -19,9 +20,11 @@ import edu.bedaev.universeofrickandmorty.ui.screen.ErrorScreen
 import edu.bedaev.universeofrickandmorty.ui.screen.LoadingScreen
 import edu.bedaev.universeofrickandmorty.ui.utils.ContentType
 import edu.bedaev.universeofrickandmorty.ui.utils.NavigationType
+import kotlinx.coroutines.flow.Flow
 
 private const val TAG = "_CharactersScreen"
 
+@Suppress("UNCHECKED_CAST")
 @Composable
 fun CharactersScreen(
     modifier: Modifier = Modifier,
@@ -34,10 +37,11 @@ fun CharactersScreen(
     when(viewModel.loadingState){
         is AppLoadingState.Loading -> LoadingScreen()
         is AppLoadingState.Error -> ErrorScreen()
-        is AppLoadingState.Success -> {
+        is AppLoadingState.Success<*> -> {
 
             val lazyPagingItems: LazyPagingItems<ListItem> =
-                (viewModel.loadingState as AppLoadingState.Success).data.collectAsLazyPagingItems()
+                (viewModel.loadingState as AppLoadingState.Success<Flow<PagingData<ListItem>>>)
+                                .data!!.collectAsLazyPagingItems()
 
             AdaptiveScreenContent(
                 modifier = modifier,

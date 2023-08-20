@@ -20,8 +20,7 @@ class ListItemRepository(
     @OptIn(ExperimentalPagingApi::class)
     inline fun <reified K: RemoteKey, reified E: DbEntity> fetchItems(
         service: NetworkService,
-        crossinline pagingSource: (RickAndMortyDatabase) -> PagingSource<Int, E>,
-        listItemDaoFactory: (RickAndMortyDatabase) -> BaseDao<E>,
+        crossinline listItemDaoFactory: (RickAndMortyDatabase) -> BaseDao<E>,
         keysDao: (RickAndMortyDatabase) -> BaseKeyDao<K>
     ): Flow<PagingData<E>> {
         val config = PagingConfig(pageSize = NetworkService.DEFAULT_PAGE_SIZE)
@@ -35,7 +34,7 @@ class ListItemRepository(
         val pager = Pager(
             config = config,
             remoteMediator = mediator,
-            pagingSourceFactory = { pagingSource(database) }
+            pagingSourceFactory = { listItemDaoFactory(database).getEntities() }
         )
 
         return pager.flow

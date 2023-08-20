@@ -1,20 +1,23 @@
 package edu.bedaev.universeofrickandmorty.ui.screen.characters
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
 import androidx.paging.map
 import dagger.hilt.android.lifecycle.HiltViewModel
 import edu.bedaev.universeofrickandmorty.data.CharacterService
 import edu.bedaev.universeofrickandmorty.data.ListItemRepository
-import edu.bedaev.universeofrickandmorty.database.dao.CharacterKeysDao
 import edu.bedaev.universeofrickandmorty.database.entity.CharacterRemoteKeys
 import edu.bedaev.universeofrickandmorty.database.entity.PersonEnt
 import edu.bedaev.universeofrickandmorty.domain.model.Person
 import edu.bedaev.universeofrickandmorty.ui.screen.AppLoadingState
 import edu.bedaev.universeofrickandmorty.ui.screen.BaseViewModel
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+private const val TAG = "_CharactersViewModel"
 
 @HiltViewModel
 class CharactersViewModel
@@ -28,17 +31,24 @@ class CharactersViewModel
     }
 
     override fun loadContent() {
+        loadingState = AppLoadingState.Loading
         viewModelScope.launch {
-            loadingState = AppLoadingState.Loading
-            delay(1000)
-            loadingState = AppLoadingState.Success(
-                data = repo.fetchItems<CharacterRemoteKeys, PersonEnt>(
+            kotlin.runCatching {
+                repo.fetchItems<CharacterRemoteKeys, PersonEnt>(
                     service = characterService,
                     keysDao = { db -> db.characterKeysDao() },
-                    listItemDaoFactory = { db -> db.charactersDao() },
-                    pagingSource = { db -> db.charactersDao().getEntities() }
+                    listItemDaoFactory = { db -> db.charactersDao() }
                 ).map { pagingData ->
                     pagingData.map { Person(entity = it ) }
+                }
+            }.fold(
+                onSuccess = { flowPagingData ->
+                    loadingState =
+                        AppLoadingState.Success<Flow<PagingData<Person>>>(data = flowPagingData)
+                },
+                onFailure = {
+                    Log.e(TAG, "loadContent an error has occurred: ${it.message}", it)
+                    loadingState = AppLoadingState.Error(message = it.message ?: "")
                 }
             )
         }

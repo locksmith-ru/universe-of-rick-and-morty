@@ -1,5 +1,6 @@
 package edu.bedaev.universeofrickandmorty.ui.screen.episodes
 
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.map
@@ -11,13 +12,12 @@ import edu.bedaev.universeofrickandmorty.database.entity.EpisodeRemoteKeys
 import edu.bedaev.universeofrickandmorty.domain.model.Episode
 import edu.bedaev.universeofrickandmorty.ui.screen.AppLoadingState
 import edu.bedaev.universeofrickandmorty.ui.screen.BaseViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import okio.IOException
-import retrofit2.HttpException
 import javax.inject.Inject
+
+private const val TAG = "_EpisodeViewModel"
 
 @HiltViewModel
 class EpisodeViewModel
@@ -31,21 +31,25 @@ class EpisodeViewModel
     }
 
     override fun loadContent() {
+        loadingState = AppLoadingState.Loading
         viewModelScope.launch {
-            loadingState = AppLoadingState.Loading
-            delay(1000)
-            loadingState = AppLoadingState.Success(
-                data = repository
-                    .fetchItems(
-                        service = episodeService,
-                        keysDao = { db -> db.episodeKeysDao() },
-                        listItemDaoFactory = { db -> db.episodesDao() },
-                        pagingSource = { db ->
-                            db.episodesDao().getEntities()
-                        }
-                    ) .map { pagingData ->
-                        pagingData.map { Episode(entity = it) }
-                    }
+            kotlin.runCatching {
+                repository.fetchItems<EpisodeRemoteKeys, EpisodeEnt>(
+                    service = episodeService,
+                    keysDao = { db -> db.episodeKeysDao() },
+                    listItemDaoFactory = { db -> db.episodesDao() }
+                ).map { pagingData ->
+                    pagingData.map { Episode(entity = it ) }
+                }
+            }.fold(
+                onSuccess = { flowPagingData ->
+                    loadingState =
+                        AppLoadingState.Success<Flow<PagingData<Episode>>>(data = flowPagingData)
+                },
+                onFailure = {
+                    Log.e(TAG, "loadContent an error has occurred: ${it.message}", it)
+                    loadingState = AppLoadingState.Error(message = it.message ?: "")
+                }
             )
         }
     }
