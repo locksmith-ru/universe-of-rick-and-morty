@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
@@ -43,22 +42,24 @@ fun LocationsScreen(
                 (viewModel.loadingState as AppLoadingState.Success<Flow<PagingData<ListItem>>>)
                     .data!!.collectAsLazyPagingItems()
 
-            AdaptiveScreenContent(
-                modifier = modifier,
-                pagingData = lazyPagingItems,
-                listItemView = { item ->
-                    LocationItem(
-                        location = item as Location,
-                        onItemClicked = { listItem -> onItemClicked(item = listItem) }
-                    )
-                },
-                adaptiveParams = adaptiveParams,
-                currentDestination = Locations,
-                onError = { viewModel.loadContent() },
-                onTabSelected = { dst ->
-                    navController.navigateSingleTopTo(dst.route)
-                }
-            )
+            if (lazyPagingItems.itemCount > 0) {
+                AdaptiveScreenContent(
+                    modifier = modifier,
+                    pagingData = lazyPagingItems,
+                    listItemView = { item ->
+                        LocationItem(
+                            location = item as Location,
+                            onItemClicked = { listItem -> onItemClicked(item = listItem) }
+                        )
+                    },
+                    adaptiveParams = adaptiveParams,
+                    currentDestination = Locations,
+                    onError = { viewModel.loadContent() },
+                    onTabSelected = { dst ->
+                        navController.navigateSingleTopTo(dst.route)
+                    }
+                )
+            }
         }
     }
 }

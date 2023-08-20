@@ -30,8 +30,8 @@ import androidx.compose.material3.PermanentNavigationDrawer
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -62,29 +62,7 @@ fun AdaptiveScreenContent(
         ContentType.LIST_ONLY
     ),
     currentDestination: AppDestination = Characters,
-    onError: () -> Unit = { /*todo*/ },
-    onTabSelected: (AppDestination) -> Unit = {}
-) {
-    AdaptiveScreenContent(
-        modifier = modifier,
-        pagingData = pagingData,
-        listItemView = listItemView,
-        adaptiveParams = adaptiveParams,
-        currentDestination = currentDestination,
-        onTabSelected = onTabSelected
-    )
-}
-
-@Composable
-private fun AdaptiveScreenContent(
-    modifier: Modifier = Modifier,
-    pagingData: LazyPagingItems<ListItem>,
-    listItemView: @Composable ((ListItem) -> Unit)? = null,
-    adaptiveParams: Pair<NavigationType, ContentType> = Pair(
-        NavigationType.BOTTOM_NAVIGATION,
-        ContentType.LIST_ONLY
-    ),
-    currentDestination: AppDestination = Characters,
+    onError: () -> Unit = {  },
     onTabSelected: (AppDestination) -> Unit = {}
 ) {
     // тип навигационного меню: нижнее, слева или выдвижная шторка
@@ -178,17 +156,15 @@ private fun AppContent(
                     .weight(1f)
             ) {
                 val scrollState: ScrollableState
-                val showFab: Boolean
+                val showFab: State<Boolean>
                 if (listType == ContentType.LIST_ONLY) {
-                    val lazyState = rememberLazyListState()
-                    scrollState = lazyState
-                    val showButton by remember { derivedStateOf { lazyState.firstVisibleItemIndex > 0 } }
-                    showFab = showButton
+                    scrollState = rememberLazyListState()
+                    showFab = remember { derivedStateOf { scrollState.firstVisibleItemIndex > 0 } }
                     // одноколоночный список
                     LazyColumn(
                         modifier = Modifier.fillMaxWidth(),
                         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 32.dp),
-                        state = lazyState,
+                        state = scrollState,
                     ) {
                         // Загрузка элементов в методе refresh. Отображение надписи
                         if (data.loadState.refresh == LoadState.Loading) {
@@ -222,16 +198,14 @@ private fun AppContent(
                         }
                     }
                 } else {
-                    val lazyGridState = rememberLazyGridState()
-                    scrollState = lazyGridState
-                    val showButton by remember { derivedStateOf { lazyGridState.firstVisibleItemIndex > 0 } }
-                    showFab = showButton
+                    scrollState = rememberLazyGridState()
+                    showFab = remember { derivedStateOf { scrollState.firstVisibleItemIndex > 0 } }
                     // двух колоночный список
                     LazyVerticalGrid(
                         modifier = Modifier.fillMaxWidth(),
                         columns = GridCells.Fixed(2),
                         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 32.dp),
-                        state = lazyGridState
+                        state = scrollState
                     ) {
                         // Загрузка элементов в методе refresh. Отображение надписи
                         if (data.loadState.refresh == LoadState.Loading) {
@@ -269,7 +243,7 @@ private fun AppContent(
                         .align(Alignment.BottomEnd)
                         .padding(bottom = 16.dp, end = 16.dp),
                     state = scrollState,
-                    showButton = showFab
+                    showButton = showFab.value
                 )
             }
             AnimatedVisibility(

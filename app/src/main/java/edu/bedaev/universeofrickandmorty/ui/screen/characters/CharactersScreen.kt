@@ -43,23 +43,25 @@ fun CharactersScreen(
                 (viewModel.loadingState as AppLoadingState.Success<Flow<PagingData<ListItem>>>)
                                 .data!!.collectAsLazyPagingItems()
 
-            AdaptiveScreenContent(
-                modifier = modifier,
-                pagingData = lazyPagingItems,
-                listItemView = { item ->
-                    CharacterItem(
-                        person = item as Person,
-                        onItemClicked = { listItem -> onItemClicked(item = listItem) }
-                    )
-                    Divider()
-                },
-                adaptiveParams = adaptiveParams,
-                currentDestination = Characters,
-                onError = { viewModel.loadContent() },
-                onTabSelected = { dst ->
-                    navController.navigateSingleTopTo(dst.route)
-                }
-            )
+            if (lazyPagingItems.itemCount > 0){
+                AdaptiveScreenContent(
+                    modifier = modifier,
+                    pagingData = lazyPagingItems,
+                    listItemView = { item ->
+                        CharacterItem(
+                            person = item as Person,
+                            onItemClicked = { listItem -> onItemClicked(item = listItem) }
+                        )
+                        Divider()
+                    },
+                    adaptiveParams = adaptiveParams,
+                    currentDestination = Characters,
+                    onError = { viewModel.loadContent() },
+                    onTabSelected = { dst ->
+                        navController.navigateSingleTopTo(dst.route)
+                    }
+                )
+            }
         }
     }
 }
