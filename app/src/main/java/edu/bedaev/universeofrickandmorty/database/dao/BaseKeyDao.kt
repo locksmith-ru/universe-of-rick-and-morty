@@ -14,5 +14,7 @@ interface BaseKeyDao<T: RemoteKey> {
 
     suspend fun getCreationTime(): Long?
 
+    suspend fun getPreviousQuery(): String?
+
     suspend fun deleteAll()
 }

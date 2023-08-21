@@ -53,9 +53,10 @@ fun EpisodesScreen(
                 },
                 onCloseClicked = {
                     viewModel.updateSearchWidgetState(newStateValue = SearchWidgetState.CLOSED)
+                    viewModel.loadContent()
                 },
                 onSearchClicked = { query ->
-                    // todo create function
+                    viewModel.loadContent(name = query.ifEmpty { null })
                 },
                 onSearchTriggered = {
                     viewModel.updateSearchWidgetState(newStateValue = SearchWidgetState.OPENED)

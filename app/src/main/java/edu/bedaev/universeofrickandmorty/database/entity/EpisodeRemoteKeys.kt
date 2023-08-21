@@ -12,5 +12,7 @@ data class EpisodeRemoteKeys(
     @ColumnInfo(name = "current_page") override val currentPage: Int,
     @ColumnInfo(name = "next_key") override val nextKey: Int?,
     @ColumnInfo(name = "created_at")
-    override val createdAt: Long = System.currentTimeMillis()
+    override val createdAt: Long = System.currentTimeMillis(),
+    @ColumnInfo(name = "prev_query") override val prevQuery: String?
+
 ): RemoteKey

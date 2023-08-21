@@ -11,13 +11,13 @@ import edu.bedaev.universeofrickandmorty.database.dao.BaseDao
 import edu.bedaev.universeofrickandmorty.database.dao.BaseKeyDao
 import edu.bedaev.universeofrickandmorty.database.dao.CharacterKeysDao
 import edu.bedaev.universeofrickandmorty.database.dao.LocationKeysDao
+import edu.bedaev.universeofrickandmorty.database.entity.CharacterRemoteKeys
 import edu.bedaev.universeofrickandmorty.database.entity.DbEntity
 import edu.bedaev.universeofrickandmorty.database.entity.EpisodeEnt
-import edu.bedaev.universeofrickandmorty.database.entity.LocationEnt
-import edu.bedaev.universeofrickandmorty.database.entity.PersonEnt
-import edu.bedaev.universeofrickandmorty.database.entity.CharacterRemoteKeys
 import edu.bedaev.universeofrickandmorty.database.entity.EpisodeRemoteKeys
+import edu.bedaev.universeofrickandmorty.database.entity.LocationEnt
 import edu.bedaev.universeofrickandmorty.database.entity.LocationRemoteKeys
+import edu.bedaev.universeofrickandmorty.database.entity.PersonEnt
 import edu.bedaev.universeofrickandmorty.database.entity.RemoteKey
 import edu.bedaev.universeofrickandmorty.domain.model.Episode
 import edu.bedaev.universeofrickandmorty.domain.model.ListItem
@@ -32,13 +32,16 @@ class ListItemRemoterMediator<K : RemoteKey, E : DbEntity, L : ListItem>(
     private val service: NetworkService,
     private val database: RickAndMortyDatabase,
     private val listItemDao: BaseDao<E>,
-    private val keysDao: BaseKeyDao<K>
+    private val keysDao: BaseKeyDao<K>,
+    private val name: String? = null
 ) : RemoteMediator<Int, E>() {
 
     override suspend fun initialize(): InitializeAction {
         val cacheTimeout = TimeUnit.MILLISECONDS.convert(1, TimeUnit.HOURS)
+        val elapsedTime: Long = System.currentTimeMillis() - (keysDao.getCreationTime() ?: 0)
+        val isEqualsQuery: Boolean = keysDao.getPreviousQuery() == name
 
-        return if (System.currentTimeMillis() - (keysDao.getCreationTime() ?: 0) < cacheTimeout) {
+        return if (elapsedTime < cacheTimeout && isEqualsQuery) {
             // кешированные данные актуальны
             InitializeAction.SKIP_INITIAL_REFRESH
         } else {
@@ -82,7 +85,7 @@ class ListItemRemoterMediator<K : RemoteKey, E : DbEntity, L : ListItem>(
         }
 
         return try {
-            val items: List<L> = service.fetchData(page = page)
+            val items: List<L> = service.fetchData(page = page, name = name)
                 .map { listItem -> listItem as L }
             val endOfPaginationReached = items.isEmpty()
 
@@ -90,8 +93,10 @@ class ListItemRemoterMediator<K : RemoteKey, E : DbEntity, L : ListItem>(
                 val prevKey = if (page > 1) page - 1 else null
                 val nextKey = if (endOfPaginationReached) null else page + 1
                 val remoteKeys = items.map { listItem ->
-                    getRemoteKey(listItem = listItem, prevKey = prevKey,
-                        page = page, nextKey = nextKey)
+                    getRemoteKey(
+                        listItem = listItem, prevKey = prevKey,
+                        page = page, nextKey = nextKey
+                    )
                 }
                 val entities: List<E> = items.map { klass ->
                     when (klass) {
@@ -133,21 +138,24 @@ class ListItemRemoterMediator<K : RemoteKey, E : DbEntity, L : ListItem>(
             listItemId = listItem.id,
             prevKey = prevKey,
             currentPage = page,
-            nextKey = nextKey
+            nextKey = nextKey,
+            prevQuery = name
         )
 
         is LocationKeysDao -> LocationRemoteKeys(
             listItemId = listItem.id,
             prevKey = prevKey,
             currentPage = page,
-            nextKey = nextKey
+            nextKey = nextKey,
+            prevQuery = name
         )
 
         else -> EpisodeRemoteKeys(
             listItemId = listItem.id,
             prevKey = prevKey,
             currentPage = page,
-            nextKey = nextKey
+            nextKey = nextKey,
+            prevQuery = name
         )
     }
 

@@ -14,6 +14,9 @@ abstract class LocationKeysDao : BaseKeyDao<LocationRemoteKeys> {
     @Query("SELECT created_at FROM location_remote_keys ORDER BY created_at DESC LIMIT 1")
     abstract override suspend fun getCreationTime(): Long?
 
+    @Query("SELECT prev_query FROM location_remote_keys ORDER BY created_at DESC LIMIT 1")
+    abstract override suspend fun getPreviousQuery(): String?
+
     @Query("DELETE FROM location_remote_keys")
     abstract override suspend fun deleteAll()
 

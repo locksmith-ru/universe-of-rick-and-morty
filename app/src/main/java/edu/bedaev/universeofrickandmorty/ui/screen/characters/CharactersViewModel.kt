@@ -30,16 +30,17 @@ class CharactersViewModel
         loadContent()
     }
 
-    override fun loadContent() {
+    override fun loadContent(name: String?) {
         loadingState = AppLoadingState.Loading
         viewModelScope.launch {
             kotlin.runCatching {
                 repo.fetchItems<CharacterRemoteKeys, PersonEnt>(
                     service = characterService,
                     keysDao = { db -> db.characterKeysDao() },
-                    listItemDaoFactory = { db -> db.charactersDao() }
+                    listItemDaoFactory = { db -> db.charactersDao() },
+                    name = name
                 ).map { pagingData ->
-                    pagingData.map { Person(entity = it ) }
+                    pagingData.map { Person(entity = it) }
                 }
             }.fold(
                 onSuccess = { flowPagingData ->

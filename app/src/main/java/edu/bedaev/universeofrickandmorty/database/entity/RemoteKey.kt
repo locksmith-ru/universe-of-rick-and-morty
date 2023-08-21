@@ -6,4 +6,5 @@ interface RemoteKey {
     val currentPage: Int
     val nextKey: Int?
     val createdAt: Long
+    val prevQuery: String?
 }

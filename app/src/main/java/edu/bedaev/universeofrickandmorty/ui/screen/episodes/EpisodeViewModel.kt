@@ -30,16 +30,17 @@ class EpisodeViewModel
         loadContent()
     }
 
-    override fun loadContent() {
+    override fun loadContent(name: String?) {
         loadingState = AppLoadingState.Loading
         viewModelScope.launch {
             kotlin.runCatching {
                 repository.fetchItems<EpisodeRemoteKeys, EpisodeEnt>(
                     service = episodeService,
                     keysDao = { db -> db.episodeKeysDao() },
-                    listItemDaoFactory = { db -> db.episodesDao() }
+                    listItemDaoFactory = { db -> db.episodesDao() },
+                    name = name,
                 ).map { pagingData ->
-                    pagingData.map { Episode(entity = it ) }
+                    pagingData.map { Episode(entity = it) }
                 }
             }.fold(
                 onSuccess = { flowPagingData ->

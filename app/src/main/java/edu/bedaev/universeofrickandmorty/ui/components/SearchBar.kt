@@ -38,7 +38,7 @@ fun SearchBar(
     title: String = stringResource(id = R.string.app_name),
     hint: String = "",
     searchWidgetState: SearchWidgetState,
-    searchTextState: String,
+    searchTextState: String = "",
     onTextChange: (String) -> Unit,
     onCloseClicked: () -> Unit,
     onSearchClicked: (String) -> Unit,
@@ -117,7 +117,7 @@ fun OpenedBar(
                 )
             },
             textStyle = TextStyle(
-                fontSize = MaterialTheme.typography.labelMedium.fontSize
+                fontSize = MaterialTheme.typography.bodyMedium.fontSize
             ),
             singleLine = true,
             leadingIcon = {

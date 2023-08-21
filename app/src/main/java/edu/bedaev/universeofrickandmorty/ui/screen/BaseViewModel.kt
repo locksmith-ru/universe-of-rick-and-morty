@@ -13,20 +13,20 @@ abstract class BaseViewModel : ViewModel() {
     var loadingState: AppLoadingState by mutableStateOf(AppLoadingState.Loading)
         protected set
 
-    private val  _searchViewWidgetState : MutableState<SearchWidgetState> =
+    private val _searchViewWidgetState: MutableState<SearchWidgetState> =
         mutableStateOf(SearchWidgetState.CLOSED)
     val searchViewWidgetState: State<SearchWidgetState> = _searchViewWidgetState
 
     private val _searchTextState: MutableState<String> = mutableStateOf("")
     val searchTextState: State<String> = _searchTextState
 
-    abstract fun loadContent()
+    abstract fun loadContent(name: String? = null)
 
-    fun updateSearchWidgetState(newStateValue: SearchWidgetState){
+    fun updateSearchWidgetState(newStateValue: SearchWidgetState) {
         _searchViewWidgetState.value = newStateValue
     }
 
-    fun updateSearchTextState(newTextValue: String){
+    fun updateSearchTextState(newTextValue: String) {
         _searchTextState.value = newTextValue
     }
 }
