@@ -1,7 +1,5 @@
 package edu.bedaev.universeofrickandmorty.ui
 
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -9,13 +7,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import edu.bedaev.universeofrickandmorty.navigation.AppNavHost
-import edu.bedaev.universeofrickandmorty.navigation.Characters
-import edu.bedaev.universeofrickandmorty.navigation.navTabScreens
-import edu.bedaev.universeofrickandmorty.ui.components.ApplicationTopBar
 import edu.bedaev.universeofrickandmorty.ui.screen.onboarding.OnBoardingScreen
 import edu.bedaev.universeofrickandmorty.ui.utils.ContentType
 import edu.bedaev.universeofrickandmorty.ui.utils.DevicePosture
@@ -36,31 +29,22 @@ fun MainApp(
         )
     } else {
         val navController = rememberNavController()
-        val currentBackStack by navController.currentBackStackEntryAsState()
-        val currentDestination = currentBackStack?.destination
-        val currentScreen =
-            navTabScreens.find { it.route == currentDestination?.route } ?: Characters
 
-        Scaffold(
-            topBar = { ApplicationTopBar(title = stringResource(id = currentScreen.titleResId)) },
-        ) { padding ->
-            AppNavHost(
-                modifier = Modifier.padding(padding),
-                navController = navController,
-                adaptiveParams = defineScreenParameters(
-                    windowSize = windowSize,
-                    foldingDevicePosture = foldingDevicePosture
-                )
+        AppNavHost(
+            modifier = Modifier,
+            navController = navController,
+            adaptiveParams = defineScreenParameters(
+                windowSize = windowSize,
+                foldingDevicePosture = foldingDevicePosture
             )
-        }
+        )
     }
 }
 
 private fun defineScreenParameters(
     windowSize: WindowWidthSizeClass,
     foldingDevicePosture: DevicePosture
-): Pair<NavigationType, ContentType>
-{
+): Pair<NavigationType, ContentType> {
     val navigationType: NavigationType
     val contentType: ContentType
     when (windowSize) {
@@ -68,6 +52,7 @@ private fun defineScreenParameters(
             navigationType = NavigationType.BOTTOM_NAVIGATION
             contentType = ContentType.LIST_ONLY
         }
+
         WindowWidthSizeClass.Medium -> {
             navigationType = NavigationType.NAVIGATION_RAIL
             contentType = if (foldingDevicePosture != DevicePosture.NormalPosture) {
@@ -76,6 +61,7 @@ private fun defineScreenParameters(
                 ContentType.LIST_ONLY
             }
         }
+
         WindowWidthSizeClass.Expanded -> {
             navigationType = if (foldingDevicePosture is DevicePosture.BookPosture) {
                 NavigationType.NAVIGATION_RAIL
@@ -84,6 +70,7 @@ private fun defineScreenParameters(
             }
             contentType = ContentType.LIST_AND_DETAIL
         }
+
         else -> {
             navigationType = NavigationType.BOTTOM_NAVIGATION
             contentType = ContentType.LIST_ONLY

@@ -1,11 +1,13 @@
 package edu.bedaev.universeofrickandmorty.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import edu.bedaev.universeofrickandmorty.ui.screen.characters.CharactersScreen
 import edu.bedaev.universeofrickandmorty.ui.screen.episodes.EpisodesScreen
 import edu.bedaev.universeofrickandmorty.ui.screen.locations.LocationsScreen
@@ -18,6 +20,10 @@ fun AppNavHost(
     navController: NavHostController,
     adaptiveParams: Pair<NavigationType, ContentType>
 ) {
+    val currentBackStack by navController.currentBackStackEntryAsState()
+    val currentDestination = currentBackStack?.destination
+    val currentScreen =
+        navTabScreens.find { it.route == currentDestination?.route } ?: Characters
     NavHost(
         navController = navController,
         startDestination = Characters.route,
@@ -27,17 +33,29 @@ fun AppNavHost(
         composable(
             route = Characters.route
         ) {
-            CharactersScreen(navController = navController, adaptiveParams = adaptiveParams)
+            CharactersScreen(
+                navController = navController,
+                currentScreen = currentScreen,
+                adaptiveParams = adaptiveParams
+            )
         }
         composable(
             route = Locations.route
         ) {
-            LocationsScreen(navController = navController, adaptiveParams = adaptiveParams)
+            LocationsScreen(
+                navController = navController,
+                currentScreen = currentScreen,
+                adaptiveParams = adaptiveParams
+            )
         }
         composable(
             route = Episodes.route
         ) {
-            EpisodesScreen(navController = navController, adaptiveParams = adaptiveParams)
+            EpisodesScreen(
+                navController = navController,
+                currentScreen = currentScreen,
+                adaptiveParams = adaptiveParams
+            )
         }
     }
 }

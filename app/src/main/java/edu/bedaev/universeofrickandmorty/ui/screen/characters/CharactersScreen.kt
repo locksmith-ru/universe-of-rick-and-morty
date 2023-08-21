@@ -1,20 +1,27 @@
 package edu.bedaev.universeofrickandmorty.ui.screen.characters
 
 import android.util.Log
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Divider
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import edu.bedaev.universeofrickandmorty.R
 import edu.bedaev.universeofrickandmorty.domain.model.ListItem
 import edu.bedaev.universeofrickandmorty.domain.model.Person
+import edu.bedaev.universeofrickandmorty.navigation.AppDestination
 import edu.bedaev.universeofrickandmorty.navigation.Characters
 import edu.bedaev.universeofrickandmorty.navigation.navigateSingleTopTo
 import edu.bedaev.universeofrickandmorty.ui.AdaptiveScreenContent
 import edu.bedaev.universeofrickandmorty.ui.components.CharacterItem
+import edu.bedaev.universeofrickandmorty.ui.components.SearchBar
+import edu.bedaev.universeofrickandmorty.ui.components.SearchWidgetState
 import edu.bedaev.universeofrickandmorty.ui.screen.AppLoadingState
 import edu.bedaev.universeofrickandmorty.ui.screen.ErrorScreen
 import edu.bedaev.universeofrickandmorty.ui.screen.LoadingScreen
@@ -29,38 +36,65 @@ private const val TAG = "_CharactersScreen"
 fun CharactersScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
+    currentScreen: AppDestination = Characters,
     adaptiveParams: Pair<NavigationType, ContentType> =
         Pair(NavigationType.BOTTOM_NAVIGATION, ContentType.LIST_ONLY)
 ) {
     val viewModel: CharactersViewModel = hiltViewModel()
 
-    when(viewModel.loadingState){
-        is AppLoadingState.Loading -> LoadingScreen()
-        is AppLoadingState.Error -> ErrorScreen()
-        is AppLoadingState.Success<*> -> {
+    val searchWidgetState = viewModel.searchViewWidgetState
+    val searchTextState = viewModel.searchTextState
 
-            val lazyPagingItems: LazyPagingItems<ListItem> =
-                (viewModel.loadingState as AppLoadingState.Success<Flow<PagingData<ListItem>>>)
-                                .data!!.collectAsLazyPagingItems()
+    Scaffold(
+        topBar = {
+            SearchBar(
+                title = stringResource(id = currentScreen.titleResId),
+                hint = stringResource(id = R.string.character_search_hint),
+                searchWidgetState = searchWidgetState.value,
+                searchTextState = searchTextState.value,
+                onTextChange = { newQuery ->
+                    viewModel.updateSearchTextState(newTextValue = newQuery)
+                },
+                onCloseClicked = {
+                    viewModel.updateSearchWidgetState(newStateValue = SearchWidgetState.CLOSED)
+                },
+                onSearchClicked = { query ->
+                    // todo create function
+                },
+                onSearchTriggered = {
+                    viewModel.updateSearchWidgetState(newStateValue = SearchWidgetState.OPENED)
+                }
+            )
+        }
+    ) { padValues ->
+        when (viewModel.loadingState) {
+            is AppLoadingState.Loading -> LoadingScreen(modifier = modifier.padding(padValues))
+            is AppLoadingState.Error -> ErrorScreen(modifier = modifier.padding(padValues))
+            is AppLoadingState.Success<*> -> {
 
-            if (lazyPagingItems.itemCount > 0){
-                AdaptiveScreenContent(
-                    modifier = modifier,
-                    pagingData = lazyPagingItems,
-                    listItemView = { item ->
-                        CharacterItem(
-                            person = item as Person,
-                            onItemClicked = { listItem -> onItemClicked(item = listItem) }
-                        )
-                        Divider()
-                    },
-                    adaptiveParams = adaptiveParams,
-                    currentDestination = Characters,
-                    onError = { viewModel.loadContent() },
-                    onTabSelected = { dst ->
-                        navController.navigateSingleTopTo(dst.route)
-                    }
-                )
+                val lazyPagingItems: LazyPagingItems<ListItem> =
+                    (viewModel.loadingState as AppLoadingState.Success<Flow<PagingData<ListItem>>>)
+                        .data!!.collectAsLazyPagingItems()
+
+                if (lazyPagingItems.itemCount > 0) {
+                    AdaptiveScreenContent(
+                        modifier = modifier.padding(padValues),
+                        pagingData = lazyPagingItems,
+                        listItemView = { item ->
+                            CharacterItem(
+                                person = item as Person,
+                                onItemClicked = { listItem -> onItemClicked(item = listItem) }
+                            )
+                            Divider()
+                        },
+                        adaptiveParams = adaptiveParams,
+                        currentDestination = currentScreen,
+                        onError = { viewModel.loadContent() },
+                        onTabSelected = { dst ->
+                            navController.navigateSingleTopTo(dst.route)
+                        }
+                    )
+                }
             }
         }
     }

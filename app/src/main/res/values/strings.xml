@@ -35,4 +35,9 @@
     <!--    character card-->
     <string name="last_location">Last known location:</string>
 
+    <!--    поисковая панель-->
+    <string name="location_search_hint">location name…</string>
+    <string name="episodes_search_hint">episode name…</string>
+    <string name="character_search_hint">character name…</string>
+
 </resources>
