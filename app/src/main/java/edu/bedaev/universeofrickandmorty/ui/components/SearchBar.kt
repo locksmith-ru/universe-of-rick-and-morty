@@ -1,10 +1,14 @@
 package edu.bedaev.universeofrickandmorty.ui.components
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.SearchOff
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -20,6 +24,8 @@ import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
@@ -76,6 +82,13 @@ fun ClosedBar(
 ) {
     TopAppBar(
         modifier = modifier,
+        navigationIcon = {
+            Image(
+                modifier = Modifier.size(42.dp),
+                painter = painterResource(id = R.drawable.icon),
+                contentDescription = "navigation icon"
+            )
+        },
         title = { Text(text = title) },
         actions = {
             IconButton(onClick = { onSearchClicked() }) {

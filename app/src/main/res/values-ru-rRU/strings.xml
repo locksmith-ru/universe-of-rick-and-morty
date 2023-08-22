@@ -41,4 +41,7 @@
     <string name="episodes_search_hint">название эпизода…</string>
     <string name="character_search_hint">имя персонажа…</string>
 
+    <!--    экран о персонаже-->
+    <string name="about_title">О</string>
+
 </resources>

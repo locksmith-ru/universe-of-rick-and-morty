@@ -3,11 +3,13 @@ package edu.bedaev.universeofrickandmorty.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import edu.bedaev.universeofrickandmorty.ui.screen.characters.CharacterDetailsScreen
 import edu.bedaev.universeofrickandmorty.ui.screen.characters.CharactersScreen
 import edu.bedaev.universeofrickandmorty.ui.screen.episodes.EpisodesScreen
 import edu.bedaev.universeofrickandmorty.ui.screen.locations.LocationsScreen
@@ -18,7 +20,7 @@ import edu.bedaev.universeofrickandmorty.ui.utils.NavigationType
 fun AppNavHost(
     modifier: Modifier = Modifier,
     navController: NavHostController,
-    adaptiveParams: Pair<NavigationType, ContentType>
+    screenParams: Pair<NavigationType, ContentType>
 ) {
     val currentBackStack by navController.currentBackStackEntryAsState()
     val currentDestination = currentBackStack?.destination
@@ -36,7 +38,7 @@ fun AppNavHost(
             CharactersScreen(
                 navController = navController,
                 currentScreen = currentScreen,
-                adaptiveParams = adaptiveParams
+                screenParams = screenParams
             )
         }
         composable(
@@ -45,7 +47,7 @@ fun AppNavHost(
             LocationsScreen(
                 navController = navController,
                 currentScreen = currentScreen,
-                adaptiveParams = adaptiveParams
+                screenParams = screenParams
             )
         }
         composable(
@@ -54,7 +56,23 @@ fun AppNavHost(
             EpisodesScreen(
                 navController = navController,
                 currentScreen = currentScreen,
-                adaptiveParams = adaptiveParams
+                screenParams = screenParams
+            )
+        }
+
+        composable(
+            route = CharacterDetails.routeWithArgs,
+            arguments = CharacterDetails.arguments
+        ){ navBackStackEntry ->
+            val characterId =
+                navBackStackEntry.arguments?.getInt(CharacterDetails.idArgKey)
+            val name =
+                navBackStackEntry.arguments?.getString(CharacterDetails.titleArgKey)
+
+            CharacterDetailsScreen(
+                characterId = characterId,
+                title = "${stringResource(id = CharacterDetails.titleResId)} $name",
+                onBackPressed = { navController.popBackStack() }
             )
         }
     }
@@ -76,23 +94,3 @@ fun NavHostController.navigateSingleTopTo(route: String) =
         // Restore state when reselecting a previously selected item
         restoreState = true
     }
-
-/*
-enterTransition = {
-                slideIn(
-                    animationSpec = tween(
-                        durationMillis = slideDuration,
-                        easing = LinearEasing
-                    )
-                ) { IntOffset(it.width / 4, 100) } +
-                        fadeIn(animationSpec = tween(teenDuration))
-            }, exitTransition = {
-                slideOut(
-                    animationSpec = tween(
-                        durationMillis = slideDuration,
-                        easing = LinearEasing
-                    )
-                ) { IntOffset(-180, 50) } +
-                        fadeOut(animationSpec = tween(teenDuration))
-            }
- */

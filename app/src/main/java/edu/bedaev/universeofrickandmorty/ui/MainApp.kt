@@ -33,7 +33,7 @@ fun MainApp(
         AppNavHost(
             modifier = Modifier,
             navController = navController,
-            adaptiveParams = defineScreenParameters(
+            screenParams = defineScreenParameters(
                 windowSize = windowSize,
                 foldingDevicePosture = foldingDevicePosture
             )

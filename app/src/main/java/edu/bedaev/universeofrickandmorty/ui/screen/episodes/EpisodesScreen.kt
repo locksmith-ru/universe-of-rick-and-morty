@@ -36,7 +36,7 @@ fun EpisodesScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     currentScreen: AppDestination = Episodes,
-    adaptiveParams: Pair<NavigationType, ContentType> =
+    screenParams: Pair<NavigationType, ContentType> =
         Pair(NavigationType.BOTTOM_NAVIGATION, ContentType.LIST_ONLY)
 ) {
     val viewModel: EpisodeViewModel = hiltViewModel()
@@ -83,7 +83,7 @@ fun EpisodesScreen(
                                 onItemClicked = { item -> onItemClicked(item = item) }
                             )
                         },
-                        adaptiveParams = adaptiveParams,
+                        adaptiveParams = screenParams,
                         currentDestination = currentScreen,
                         onError = { viewModel.loadContent() },
                         onTabSelected = { dst ->

@@ -36,7 +36,7 @@ fun LocationsScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     currentScreen: AppDestination = Locations,
-    adaptiveParams: Pair<NavigationType, ContentType> =
+    screenParams: Pair<NavigationType, ContentType> =
         Pair(NavigationType.BOTTOM_NAVIGATION, ContentType.LIST_ONLY)
 ) {
     val viewModel: LocationViewModel = hiltViewModel()
@@ -83,7 +83,7 @@ fun LocationsScreen(
                                 onItemClicked = { listItem -> onItemClicked(item = listItem) }
                             )
                         },
-                        adaptiveParams = adaptiveParams,
+                        adaptiveParams = screenParams,
                         currentDestination = currentScreen,
                         onError = { viewModel.loadContent() },
                         onTabSelected = { dst ->

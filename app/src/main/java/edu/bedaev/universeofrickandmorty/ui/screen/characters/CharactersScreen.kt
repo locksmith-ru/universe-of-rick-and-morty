@@ -1,6 +1,5 @@
 package edu.bedaev.universeofrickandmorty.ui.screen.characters
 
-import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Scaffold
@@ -16,6 +15,7 @@ import edu.bedaev.universeofrickandmorty.R
 import edu.bedaev.universeofrickandmorty.domain.model.ListItem
 import edu.bedaev.universeofrickandmorty.domain.model.Person
 import edu.bedaev.universeofrickandmorty.navigation.AppDestination
+import edu.bedaev.universeofrickandmorty.navigation.CharacterDetails
 import edu.bedaev.universeofrickandmorty.navigation.Characters
 import edu.bedaev.universeofrickandmorty.navigation.navigateSingleTopTo
 import edu.bedaev.universeofrickandmorty.ui.AdaptiveScreenContent
@@ -37,7 +37,7 @@ fun CharactersScreen(
     modifier: Modifier = Modifier,
     navController: NavHostController,
     currentScreen: AppDestination = Characters,
-    adaptiveParams: Pair<NavigationType, ContentType> =
+    screenParams: Pair<NavigationType, ContentType> =
         Pair(NavigationType.BOTTOM_NAVIGATION, ContentType.LIST_ONLY)
 ) {
     val viewModel: CharactersViewModel = hiltViewModel()
@@ -84,11 +84,16 @@ fun CharactersScreen(
                         listItemView = { item ->
                             CharacterItem(
                                 person = item as Person,
-                                onItemClicked = { listItem -> onItemClicked(item = listItem) }
+                                onItemClicked = { listItem ->
+                                    onItemClicked(
+                                        navHostController = navController,
+                                        item = listItem
+                                    )
+                                }
                             )
                             Divider()
                         },
-                        adaptiveParams = adaptiveParams,
+                        adaptiveParams = screenParams,
                         currentDestination = currentScreen,
                         onError = { viewModel.loadContent() },
                         onTabSelected = { dst ->
@@ -101,6 +106,10 @@ fun CharactersScreen(
     }
 }
 
-private fun onItemClicked(item: ListItem) {
-    Log.d(TAG, "onItemClicked: ${item.id}")
+private fun onItemClicked(
+    navHostController: NavHostController,
+    item: ListItem
+) {
+    navHostController
+        .navigateSingleTopTo("${CharacterDetails.route}/${item.id}/${item.name}")
 }
