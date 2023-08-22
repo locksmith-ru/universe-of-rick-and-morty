@@ -9,6 +9,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import edu.bedaev.universeofrickandmorty.domain.model.Person
 import edu.bedaev.universeofrickandmorty.ui.screen.characters.CharacterDetailsScreen
 import edu.bedaev.universeofrickandmorty.ui.screen.characters.CharactersScreen
 import edu.bedaev.universeofrickandmorty.ui.screen.episodes.EpisodesScreen
@@ -61,19 +62,17 @@ fun AppNavHost(
         }
 
         composable(
-            route = CharacterDetails.routeWithArgs,
-            arguments = CharacterDetails.arguments
-        ){ navBackStackEntry ->
-            val characterId =
-                navBackStackEntry.arguments?.getInt(CharacterDetails.idArgKey)
-            val name =
-                navBackStackEntry.arguments?.getString(CharacterDetails.titleArgKey)
-
-            CharacterDetailsScreen(
-                characterId = characterId,
-                title = "${stringResource(id = CharacterDetails.titleResId)} $name",
-                onBackPressed = { navController.popBackStack() }
-            )
+            route = CharacterDetails.route
+        ) {
+            val result = navController
+                .previousBackStackEntry?.savedStateHandle
+                ?.get<Person>(key = CharacterDetails.personArgKey)
+            result?.let{ person ->
+                CharacterDetailsScreen(
+                    person = person,
+                    onBackPressed = { navController.popBackStack() }
+                )
+            }
         }
     }
 }

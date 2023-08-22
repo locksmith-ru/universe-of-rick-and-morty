@@ -1,12 +1,15 @@
 package edu.bedaev.universeofrickandmorty.network.model
 
+import android.os.Parcelable
 import edu.bedaev.universeofrickandmorty.domain.model.Person
+import kotlinx.parcelize.Parcelize
 import kotlin.random.Random
 
+@Parcelize
 data class Origin(
     val name: String? = null,
     val url: String? = null
-){
+): Parcelable{
 
     companion object{
         fun fakeOrigin(): Origin{

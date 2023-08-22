@@ -1,10 +1,14 @@
 package edu.bedaev.universeofrickandmorty.domain.model
 
+import android.os.Parcelable
 import edu.bedaev.universeofrickandmorty.database.entity.PersonEnt
 import edu.bedaev.universeofrickandmorty.network.model.Location
 import edu.bedaev.universeofrickandmorty.network.model.Origin
 import edu.bedaev.universeofrickandmorty.network.model.PersonDto
+import kotlinx.parcelize.Parcelize
+import kotlin.random.Random
 
+@Parcelize
 data class Person(
     override val id: Int,
     override val name: String,
@@ -18,7 +22,7 @@ data class Person(
     val episodeList: List<String>,
     override val url: String?,
     override val created: String?
-) : ListItem {
+) : ListItem, Parcelable {
     constructor(dto: PersonDto) : this(
         id                  = dto.id,
         name                = dto.name,
@@ -68,7 +72,7 @@ data class Person(
             origin = origin,
             location = Location(origin.name, origin.url),
             image = null,
-            episodeList = emptyList(),
+            episodeList = generateStringList(),
             url = Origin.generateUrl(pathLength = 5),
             created = generateDateStamp()
         )
@@ -81,6 +85,13 @@ data class Person(
                     if (startCapitalLetter && idx == 1) char = char.uppercaseChar()
                     char
                 }.joinToString(separator = "")
+        }
+
+        private fun generateStringList(): List<String>{
+            return (1..(Random.nextInt(1,50)))
+                .map { id ->
+                    "${Origin.generateUrl(3)}$id"
+                }
         }
 
         fun generateDateStamp(): String {

@@ -42,5 +42,11 @@
 
     <!--    экран о персонаже-->
     <string name="about_title">About</string>
+    <string name="life_status">Life status:</string>
+    <string name="alive">Alive</string>
+    <string name="dead">Dead</string>
+    <string name="unknown">Unknown</string>
+    <string name="species_gender">Species and gender:</string>
+    <string name="first_seen">First seen in:</string>
 
 </resources>

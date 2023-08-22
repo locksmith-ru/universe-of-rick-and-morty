@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="character_detail_start_padding">48dp</dimen>
+    <dimen name="vertical_space_between_text_small">4dp</dimen>
+    <dimen name="vertical_space_between_text_medium">8dp</dimen>
+    <dimen name="vertical_space_between_text_big">16dp</dimen>
+</resources>

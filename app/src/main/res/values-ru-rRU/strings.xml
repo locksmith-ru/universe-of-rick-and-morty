@@ -43,5 +43,11 @@
 
     <!--    экран о персонаже-->
     <string name="about_title">О</string>
+    <string name="life_status">Жизненный статус:</string>
+    <string name="alive">Жив</string>
+    <string name="dead">Мёртв</string>
+    <string name="unknown">Неизвестно</string>
+    <string name="species_gender">Вид и пол:</string>
+    <string name="first_seen">Впервые замечен в:</string>
 
 </resources>

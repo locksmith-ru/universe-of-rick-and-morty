@@ -110,6 +110,10 @@ private fun onItemClicked(
     navHostController: NavHostController,
     item: ListItem
 ) {
-    navHostController
-        .navigateSingleTopTo("${CharacterDetails.route}/${item.id}/${item.name}")
+    val person = item as Person
+    navHostController.currentBackStackEntry?.savedStateHandle?.set(
+        key = CharacterDetails.personArgKey,
+        value = person
+    )
+    navHostController.navigateSingleTopTo(CharacterDetails.route)
 }

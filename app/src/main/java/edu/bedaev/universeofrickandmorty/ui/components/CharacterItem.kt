@@ -38,7 +38,7 @@ fun CharacterItem(
 ) {
     Card(
         modifier = modifier
-            .padding(horizontal = 8.dp, vertical = 4.dp)
+            .padding(vertical = 4.dp)
             .clickable { onItemClicked(person) }
     ) {
         Row(
