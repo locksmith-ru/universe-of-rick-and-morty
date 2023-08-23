@@ -10,10 +10,14 @@ import edu.bedaev.universeofrickandmorty.data.ListItemRepository
 import edu.bedaev.universeofrickandmorty.database.entity.EpisodeEnt
 import edu.bedaev.universeofrickandmorty.database.entity.EpisodeRemoteKeys
 import edu.bedaev.universeofrickandmorty.domain.model.Episode
+import edu.bedaev.universeofrickandmorty.domain.model.ListItem
 import edu.bedaev.universeofrickandmorty.ui.screen.AppLoadingState
 import edu.bedaev.universeofrickandmorty.ui.screen.BaseViewModel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.trySendBlocking
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,6 +29,9 @@ class EpisodeViewModel
     private val repository: ListItemRepository,
     private val episodeService: EpisodeService
 ) : BaseViewModel() {
+
+    private val multipleEpisodesChannel: Channel<List<ListItem>> = Channel()
+    val multipleEpisodesFlow: Flow<List<ListItem>> = multipleEpisodesChannel.receiveAsFlow()
 
     init {
         loadContent()
@@ -50,6 +57,34 @@ class EpisodeViewModel
                 onFailure = {
                     Log.e(TAG, "loadContent an error has occurred: ${it.message}", it)
                     loadingState = AppLoadingState.Error(message = it.message ?: "")
+                }
+            )
+        }
+    }
+
+    override fun loadMultipleItems(urlList: List<String>) {
+        viewModelScope.launch {
+
+            val ids = if (urlList.size == 1) {
+                val url = urlList.first()
+                url.substring(url.lastIndexOf("/") + 1, url.length)
+            } else {
+                urlList.joinToString(separator = ",") { url ->
+                    url.substring(url.lastIndexOf("/") + 1, url.length)
+                }
+            }
+            kotlin.runCatching {
+                if (urlList.size == 1)
+                    episodeService.fetchSingleData(id = ids)
+                else
+                    episodeService.fetchMultipleData(ids = ids)
+            }.fold(
+                onSuccess = { list ->
+                    multipleEpisodesChannel.trySendBlocking(list)
+                },
+                onFailure = {
+                    Log.e(TAG, "loadMultipleItems error occurred: ${it.message}", it)
+                    multipleEpisodesChannel.trySendBlocking(emptyList())
                 }
             )
         }

@@ -1,7 +1,7 @@
 package edu.bedaev.universeofrickandmorty.ui.screen.characters
 
 import android.annotation.SuppressLint
-import android.content.res.Configuration
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,15 +14,17 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.Circle
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -36,12 +38,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import edu.bedaev.universeofrickandmorty.R
+import edu.bedaev.universeofrickandmorty.domain.model.Episode
 import edu.bedaev.universeofrickandmorty.domain.model.Person
+import edu.bedaev.universeofrickandmorty.ui.components.EpisodeItem
 import edu.bedaev.universeofrickandmorty.ui.components.GradientDivider
-import edu.bedaev.universeofrickandmorty.ui.theme.AppTheme
+import edu.bedaev.universeofrickandmorty.ui.screen.episodes.EpisodeViewModel
 import edu.bedaev.universeofrickandmorty.ui.utils.GlideImageWithPreview
 
 private const val TAG = "_CharacterDetailsScreen"
@@ -55,8 +59,17 @@ private const val TAG = "_CharacterDetailsScreen"
 fun CharacterDetailsScreen(
     modifier: Modifier = Modifier,
     person: Person,
-    onBackPressed: () -> Unit = {}
+    onBackPressed: () -> Unit = {},
+    onEpisodeClicked: (Int) -> Unit
 ) {
+
+    val viewModel: EpisodeViewModel = hiltViewModel()
+    LaunchedEffect(viewModel) {
+        viewModel.loadMultipleItems(urlList = person.episodeList)
+    }
+
+    val episodes by viewModel.multipleEpisodesFlow.collectAsState(initial = emptyList())
+
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -164,7 +177,6 @@ fun CharacterDetailsScreen(
                     textColor = textColor,
                     person = person
                 )
-                GradientDivider(dividerHeight = 3.dp)
             }
             // episodes title
             item {
@@ -180,21 +192,18 @@ fun CharacterDetailsScreen(
                     color = textColor,
                     style = MaterialTheme.typography.titleLarge
                 )
+                GradientDivider(dividerHeight = 3.dp)
             }
             // episodes items
-            items(person.episodeList.size) { index ->
-                val episode = person.episodeList[index]
-                Text(
-                    modifier = Modifier
-                        .fillParentMaxWidth()
-                        .padding(
-                            start = paddingStart,
-                            bottom = dimensionResource(id = R.dimen.vertical_space_between_text_medium)
-                        ),
-                    text = episode,
-                    color = textColor,
-                    style = MaterialTheme.typography.bodyMedium
+            items(episodes.size) { index ->
+                val episode = episodes[index]
+                EpisodeItem(
+                    episode = episode as Episode,
+                    onItemClicked = { listItem ->
+                        onEpisodeClicked(listItem.id)
+                    }
                 )
+                Divider()
             }
         }
 
@@ -313,20 +322,6 @@ private fun Status(
                 text = statusTitle,
                 color = textColor
             )
-        }
-    }
-}
-
-@Preview(showBackground = true, name = "Light")
-@Preview(
-    showBackground = true, name = "Dark",
-    uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL,
-)
-@Composable
-fun PreviewCharacterDetailsScreen() {
-    AppTheme {
-        Surface {
-            CharacterDetailsScreen(person = Person.fakePerson())
         }
     }
 }

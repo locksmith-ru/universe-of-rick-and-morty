@@ -50,4 +50,8 @@ class LocationViewModel
             )
         }
     }
+
+    override fun loadMultipleItems(urlList: List<String>) {
+        TODO("Not yet implemented")
+    }
 }

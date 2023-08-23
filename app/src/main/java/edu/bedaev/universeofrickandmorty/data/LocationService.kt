@@ -25,4 +25,12 @@ class LocationService @Inject constructor(
             }
     }
 
+    override suspend fun fetchSingleData(id: String): List<ListItem> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun fetchMultipleData(ids: String): List<ListItem> {
+        TODO("Not yet implemented")
+    }
+
 }

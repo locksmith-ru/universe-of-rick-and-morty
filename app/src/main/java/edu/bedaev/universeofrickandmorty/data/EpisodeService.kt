@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class EpisodeService @Inject constructor(
     private val api: EpisodeApi
-) : NetworkService{
+) : NetworkService {
     override suspend fun fetchData(
         page: Int,
         name: String?,
@@ -22,5 +22,14 @@ class EpisodeService @Inject constructor(
             .map { dto ->
                 Episode(dto = dto)
             }
+    }
+
+    override suspend fun fetchSingleData(id: String): List<ListItem> {
+        return listOf(Episode(dto = api.getSingleEpisode(id = id)))
+    }
+
+    override suspend fun fetchMultipleData(ids: String): List<ListItem> {
+        return api.getMultipleEpisodes(ids = ids)
+            .map { dto -> Episode(dto = dto) }
     }
 }

@@ -22,6 +22,8 @@ abstract class BaseViewModel : ViewModel() {
 
     abstract fun loadContent(name: String? = null)
 
+    abstract fun loadMultipleItems(urlList: List<String>)
+
     fun updateSearchWidgetState(newStateValue: SearchWidgetState) {
         _searchViewWidgetState.value = newStateValue
     }

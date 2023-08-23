@@ -12,7 +12,11 @@ interface NetworkService {
         gender: String? = null
     ): List<ListItem>
 
+    suspend fun fetchMultipleData(ids: String): List<ListItem>
+
+    suspend fun fetchSingleData(id: String): List<ListItem>
+
     companion object {
-        const val DEFAULT_PAGE_SIZE = 20
+        const val DEFAULT_PAGE_SIZE = 10
     }
 }

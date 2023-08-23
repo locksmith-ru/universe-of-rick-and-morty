@@ -62,7 +62,7 @@ fun AdaptiveScreenContent(
         ContentType.LIST_ONLY
     ),
     currentDestination: AppDestination = Characters,
-    onError: () -> Unit = {  },
+    onError: () -> Unit = { },
     onTabSelected: (AppDestination) -> Unit = {}
 ) {
     // тип навигационного меню: нижнее, слева или выдвижная шторка

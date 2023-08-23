@@ -1,9 +1,9 @@
 package edu.bedaev.universeofrickandmorty.navigation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -70,7 +70,11 @@ fun AppNavHost(
             result?.let{ person ->
                 CharacterDetailsScreen(
                     person = person,
-                    onBackPressed = { navController.popBackStack() }
+                    onBackPressed = { navController.popBackStack() },
+                    onEpisodeClicked = { id ->
+                        // todo need transition to single episode screen
+                        Log.d("_NavHost", "onEpisode clicked=$id")
+                    }
                 )
             }
         }
