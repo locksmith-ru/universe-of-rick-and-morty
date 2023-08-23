@@ -5,6 +5,7 @@ import androidx.compose.material.icons.filled.Details
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.PersonPin
 import androidx.compose.material.icons.filled.Screenshot
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 import edu.bedaev.universeofrickandmorty.R
 
@@ -38,6 +39,14 @@ object CharacterDetails : AppDestination {
     override val route: String = "character_details"
 
     const val personArgKey = "person_arg"
+}
+
+object EpisodeDetails : AppDestination {
+    override val titleResId: Int = 0
+    override val icon: ImageVector = Icons.Default.Settings
+    override val route: String = "episode_details"
+
+    const val episodeArgKey: String = "episode_arg_key"
 }
 
 val navTabScreens = listOf(Characters, Locations, Episodes)

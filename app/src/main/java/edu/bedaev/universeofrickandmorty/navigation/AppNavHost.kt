@@ -11,9 +11,11 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
+import edu.bedaev.universeofrickandmorty.domain.model.Episode
 import edu.bedaev.universeofrickandmorty.domain.model.Person
 import edu.bedaev.universeofrickandmorty.ui.screen.characters.CharacterDetailsScreen
 import edu.bedaev.universeofrickandmorty.ui.screen.characters.CharactersScreen
+import edu.bedaev.universeofrickandmorty.ui.screen.episodes.EpisodeDetailsScreen
 import edu.bedaev.universeofrickandmorty.ui.screen.episodes.EpisodesScreen
 import edu.bedaev.universeofrickandmorty.ui.screen.locations.LocationsScreen
 import edu.bedaev.universeofrickandmorty.ui.utils.ContentType
@@ -81,6 +83,25 @@ fun AppNavHost(
                 )
             }
         }
+
+        composable(
+            route = EpisodeDetails.route
+        ) {
+            val result = navController
+                .previousBackStackEntry?.savedStateHandle
+                ?.get<Episode>(key = EpisodeDetails.episodeArgKey)
+            result?.let { episode ->
+                EpisodeDetailsScreen(
+                    episode = episode,
+                    onBackPressed = { navController.popBackStack() },
+                    onCharacterClicked = { id ->
+                        // todo need transition to character details screen
+                        Log.d("_NavHost", "onCharacter clicked=$id")
+                    }
+                )
+            }
+        }
+
     }
 }
 

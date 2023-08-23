@@ -116,6 +116,6 @@ private fun onItemClicked(
         key = CharacterDetails.personArgKey,
         value = person
     )
-    navHostController.navigateSingleTopTo(CharacterDetails.route)
+    navHostController.navigate(CharacterDetails.route)
     Log.d(TAG, "onItemClicked: ${item.id}")
 }

@@ -1,6 +1,5 @@
 package edu.bedaev.universeofrickandmorty.ui.screen.episodes
 
-import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -9,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material3.Divider
@@ -17,24 +17,28 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import edu.bedaev.universeofrickandmorty.R
 import edu.bedaev.universeofrickandmorty.domain.model.Episode
+import edu.bedaev.universeofrickandmorty.domain.model.Person
+import edu.bedaev.universeofrickandmorty.ui.components.CharacterItem
 import edu.bedaev.universeofrickandmorty.ui.components.HorizontalGradientDivider
+import edu.bedaev.universeofrickandmorty.ui.screen.characters.CharactersViewModel
 import edu.bedaev.universeofrickandmorty.ui.screen.characters.TextBlock
-import edu.bedaev.universeofrickandmorty.ui.theme.AppTheme
 
 @Composable
 fun EpisodeDetailsScreen(
@@ -54,6 +58,13 @@ fun EpisodeDetailsScreen(
     onBackPressed: () -> Unit = {},
     onCharacterClicked: (Int) -> Unit = {}
 ) {
+    val viewModel: CharactersViewModel = hiltViewModel()
+    LaunchedEffect(viewModel) {
+        viewModel.loadMultipleItems(episode.characters)
+    }
+
+    val characters by viewModel.multipleListItemFlow.collectAsState(initial = emptyList())
+
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -100,7 +111,7 @@ fun EpisodeDetailsScreen(
                 )
             }
 
-            item{
+            item {
                 Column(
                     modifier = Modifier.padding(
                         top = dimensionResource(id = R.dimen.vertical_space_between_text_big),
@@ -119,7 +130,8 @@ fun EpisodeDetailsScreen(
                     TextBlock(
                         textColor = textColor,
                         subtitle = stringResource(id = R.string.episode_code),
-                        title = episode.episode ?: stringResource(id = R.string.unknown))
+                        title = episode.episode ?: stringResource(id = R.string.unknown)
+                    )
                     Divider(modifier = Modifier.padding(end = paddingStart))
                 }
             }
@@ -129,15 +141,29 @@ fun EpisodeDetailsScreen(
                 HeaderWithDivider(
                     modifier = Modifier
                         .fillParentMaxWidth()
-                        .padding(top = 48.dp),
+                        .padding(
+                            top = dimensionResource(id = R.dimen.padding_huge),
+                            bottom = dimensionResource(id = R.dimen.padding_large)
+                        ),
                     textColor = textColor,
                     text = stringResource(id = R.string.characters).uppercase()
                 )
             }
 
-            items(episode.characters.size){ index ->
-                val item = episode.characters[index]
-                Text(text = item, color = textColor)
+            items(characters.size) { index ->
+                val item = characters[index]
+                Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.padding_medium)))
+                CharacterItem(
+                    modifier = Modifier
+                        .padding(horizontal = dimensionResource(id = R.dimen.padding_small)),
+                    person = item as Person,
+                    imageShape = CircleShape,
+                    imageBorderWidth = 4.dp,
+                    onItemClicked = { listItem ->
+                        onCharacterClicked(listItem.id)
+                    }
+                )
+                Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.padding_small)))
                 Divider()
             }
         }
@@ -150,7 +176,7 @@ private fun HeaderWithDivider(
     text: String = "",
     textColor: Color,
     dividerHeight: Dp = 2.dp
-){
+) {
     Text(
         modifier = modifier,
         text = text,
@@ -173,6 +199,7 @@ private fun HeaderWithDivider(
     )
 }
 
+/*
 @Preview(showBackground = true, name = "Light", group = "screens")
 @Preview(
     showBackground = true, name = "Dark", group = "screens",
@@ -185,4 +212,4 @@ fun PreviewEpisodeDetailsScreen() {
             EpisodeDetailsScreen(episode = Episode.fakeEpisode())
         }
     }
-}
+}*/
