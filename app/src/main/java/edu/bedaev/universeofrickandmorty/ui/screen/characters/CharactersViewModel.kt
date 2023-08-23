@@ -23,8 +23,8 @@ private const val TAG = "_CharactersViewModel"
 class CharactersViewModel
 @Inject constructor(
     private val repo: ListItemRepository,
-    private val characterService: CharacterService
-) : BaseViewModel() {
+    characterService: CharacterService
+) : BaseViewModel(networkService = characterService) {
 
     init {
         loadContent()
@@ -35,7 +35,7 @@ class CharactersViewModel
         viewModelScope.launch {
             kotlin.runCatching {
                 repo.fetchItems<CharacterRemoteKeys, PersonEnt>(
-                    service = characterService,
+                    service = networkService,
                     keysDao = { db -> db.characterKeysDao() },
                     listItemDaoFactory = { db -> db.charactersDao() },
                     name = name
@@ -53,9 +53,5 @@ class CharactersViewModel
                 }
             )
         }
-    }
-
-    override fun loadMultipleItems(urlList: List<String>) {
-        TODO("Not yet implemented")
     }
 }

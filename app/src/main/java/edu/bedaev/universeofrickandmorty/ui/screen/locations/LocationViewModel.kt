@@ -19,8 +19,8 @@ private const val TAG = "_LocationViewModel"
 class LocationViewModel
 @Inject constructor(
     private val repository: ListItemRepository,
-    private val locationService: LocationService
-) : BaseViewModel() {
+    locationService: LocationService
+) : BaseViewModel(networkService = locationService) {
 
     init {
         loadContent()
@@ -31,7 +31,7 @@ class LocationViewModel
         viewModelScope.launch {
             kotlin.runCatching {
                 repository.fetchItems(
-                    service = locationService,
+                    service = networkService,
                     keysDao = { db -> db.locationKeysDao() },
                     listItemDaoFactory = { db -> db.locationsDao() },
                     name = name
@@ -49,9 +49,5 @@ class LocationViewModel
                 }
             )
         }
-    }
-
-    override fun loadMultipleItems(urlList: List<String>) {
-        TODO("Not yet implemented")
     }
 }

@@ -26,11 +26,12 @@ class LocationService @Inject constructor(
     }
 
     override suspend fun fetchSingleData(id: String): List<ListItem> {
-        TODO("Not yet implemented")
+        return listOf(Location(dto = api.getSingleLocation(id = id)))
     }
 
     override suspend fun fetchMultipleData(ids: String): List<ListItem> {
-        TODO("Not yet implemented")
+        return api.getMultipleLocations(ids = ids)
+            .map { dto -> Location(dto = dto) }
     }
 
 }

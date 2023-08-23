@@ -1,7 +1,6 @@
 package edu.bedaev.universeofrickandmorty.ui.screen.characters
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -48,8 +47,6 @@ import edu.bedaev.universeofrickandmorty.ui.components.GradientDivider
 import edu.bedaev.universeofrickandmorty.ui.screen.episodes.EpisodeViewModel
 import edu.bedaev.universeofrickandmorty.ui.utils.GlideImageWithPreview
 
-private const val TAG = "_CharacterDetailsScreen"
-
 /**
  * Экран с деталями выбранного персонажа
  */
@@ -68,7 +65,7 @@ fun CharacterDetailsScreen(
         viewModel.loadMultipleItems(urlList = person.episodeList)
     }
 
-    val episodes by viewModel.multipleEpisodesFlow.collectAsState(initial = emptyList())
+    val episodes by viewModel.multipleListItemFlow.collectAsState(initial = emptyList())
 
     Scaffold(
         modifier = modifier,

@@ -27,11 +27,8 @@ private const val TAG = "_EpisodeViewModel"
 class EpisodeViewModel
 @Inject constructor(
     private val repository: ListItemRepository,
-    private val episodeService: EpisodeService
-) : BaseViewModel() {
-
-    private val multipleEpisodesChannel: Channel<List<ListItem>> = Channel()
-    val multipleEpisodesFlow: Flow<List<ListItem>> = multipleEpisodesChannel.receiveAsFlow()
+    episodeService: EpisodeService
+) : BaseViewModel(networkService = episodeService) {
 
     init {
         loadContent()
@@ -42,7 +39,7 @@ class EpisodeViewModel
         viewModelScope.launch {
             kotlin.runCatching {
                 repository.fetchItems<EpisodeRemoteKeys, EpisodeEnt>(
-                    service = episodeService,
+                    service = networkService,
                     keysDao = { db -> db.episodeKeysDao() },
                     listItemDaoFactory = { db -> db.episodesDao() },
                     name = name,
@@ -57,34 +54,6 @@ class EpisodeViewModel
                 onFailure = {
                     Log.e(TAG, "loadContent an error has occurred: ${it.message}", it)
                     loadingState = AppLoadingState.Error(message = it.message ?: "")
-                }
-            )
-        }
-    }
-
-    override fun loadMultipleItems(urlList: List<String>) {
-        viewModelScope.launch {
-
-            val ids = if (urlList.size == 1) {
-                val url = urlList.first()
-                url.substring(url.lastIndexOf("/") + 1, url.length)
-            } else {
-                urlList.joinToString(separator = ",") { url ->
-                    url.substring(url.lastIndexOf("/") + 1, url.length)
-                }
-            }
-            kotlin.runCatching {
-                if (urlList.size == 1)
-                    episodeService.fetchSingleData(id = ids)
-                else
-                    episodeService.fetchMultipleData(ids = ids)
-            }.fold(
-                onSuccess = { list ->
-                    multipleEpisodesChannel.trySendBlocking(list)
-                },
-                onFailure = {
-                    Log.e(TAG, "loadMultipleItems error occurred: ${it.message}", it)
-                    multipleEpisodesChannel.trySendBlocking(emptyList())
                 }
             )
         }

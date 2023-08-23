@@ -29,10 +29,11 @@ class CharacterService @Inject constructor(
     }
 
     override suspend fun fetchSingleData(id: String): List<ListItem> {
-        TODO("Not yet implemented")
+        return listOf(Person(dto = api.getSingleCharacter(id = id)))
     }
 
     override suspend fun fetchMultipleData(ids: String): List<ListItem> {
-        TODO("Not yet implemented")
+        return api.getMultipleCharacters(ids = ids)
+            .map { dto -> Person(dto = dto) }
     }
 }
