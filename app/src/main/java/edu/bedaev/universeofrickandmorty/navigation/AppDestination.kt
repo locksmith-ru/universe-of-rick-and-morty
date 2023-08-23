@@ -38,7 +38,7 @@ object CharacterDetails : AppDestination {
     override val icon: ImageVector = Icons.Filled.Details
     override val route: String = "character_details"
 
-    const val personArgKey = "person_arg"
+    const val personArgKey = "person_arg_key"
 }
 
 object EpisodeDetails : AppDestination {
@@ -47,6 +47,14 @@ object EpisodeDetails : AppDestination {
     override val route: String = "episode_details"
 
     const val episodeArgKey: String = "episode_arg_key"
+}
+
+object LocationDetails: AppDestination{
+    override val titleResId: Int = R.string.about_title
+    override val icon: ImageVector = Icons.Filled.Settings
+    override val route: String = "location_details"
+
+    const val locationArgKey = "location _arg_key"
 }
 
 val navTabScreens = listOf(Characters, Locations, Episodes)

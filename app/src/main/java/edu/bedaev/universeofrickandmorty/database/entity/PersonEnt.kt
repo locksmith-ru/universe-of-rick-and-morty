@@ -12,7 +12,7 @@ import edu.bedaev.universeofrickandmorty.network.model.Origin
 data class PersonEnt(
     @PrimaryKey(autoGenerate = false)
     override val id: Int,
-    override val name: String,
+    override val name: String?,
     val status: String?,
     val species: String?,
     val type: String?,
@@ -20,7 +20,7 @@ data class PersonEnt(
     @Embedded(prefix = "origin_") val origin: Origin?,
     @Embedded(prefix = "location_") val location: Location?,
     val image: String?,
-    @ColumnInfo("episode_list") val episodeList: List<String>,
+    @ColumnInfo("episode_list") val episodeList: List<String>?,
     val url: String?,
     val created: String?,
     override val page: Int

@@ -6,7 +6,7 @@ data class PersonDto(
     //The id of the character.
     var id: Int,
     // The name of the character.
-    var name: String,
+    var name: String? = null,
     // The status of the character ('Alive', 'Dead' or 'unknown').
     var status: String? = null,
     // The species of the character.
@@ -23,7 +23,7 @@ data class PersonDto(
     // portraits since they are intended to be used as avatars.
     var image: String? = null,
     // List of episodes in which this character appeared.
-    @SerializedName("episode") var episodeList: ArrayList<String> = arrayListOf(),
+    @SerializedName("episode") var episodeList: ArrayList<String>? = null,
     // Link to the character's own URL endpoint.
     var url: String? = null,
     // Time at which the character was created in the database.

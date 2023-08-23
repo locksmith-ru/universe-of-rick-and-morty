@@ -15,6 +15,7 @@ import edu.bedaev.universeofrickandmorty.R
 import edu.bedaev.universeofrickandmorty.domain.model.ListItem
 import edu.bedaev.universeofrickandmorty.domain.model.Location
 import edu.bedaev.universeofrickandmorty.navigation.AppDestination
+import edu.bedaev.universeofrickandmorty.navigation.LocationDetails
 import edu.bedaev.universeofrickandmorty.navigation.Locations
 import edu.bedaev.universeofrickandmorty.navigation.navigateSingleTopTo
 import edu.bedaev.universeofrickandmorty.ui.AdaptiveScreenContent
@@ -80,7 +81,12 @@ fun LocationsScreen(
                         listItemView = { item ->
                             LocationItem(
                                 location = item as Location,
-                                onItemClicked = { listItem -> onItemClicked(item = listItem) }
+                                onItemClicked = { listItem ->
+                                    onItemClicked(
+                                        navController = navController,
+                                        item = listItem
+                                    )
+                                }
                             )
                         },
                         adaptiveParams = screenParams,
@@ -96,6 +102,15 @@ fun LocationsScreen(
     }
 }
 
-private fun onItemClicked(item: ListItem) {
+private fun onItemClicked(
+    navController: NavHostController,
+    item: ListItem
+) {
+    navController.currentBackStackEntry
+        ?.savedStateHandle?.set(
+            key = LocationDetails.locationArgKey,
+            value = item as Location
+        )
+    navController.navigate(LocationDetails.route)
     Log.d(TAG, "onItemClicked: ${item.id}")
 }

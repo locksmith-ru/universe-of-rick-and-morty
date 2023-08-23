@@ -12,11 +12,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import edu.bedaev.universeofrickandmorty.domain.model.Episode
+import edu.bedaev.universeofrickandmorty.domain.model.Location
 import edu.bedaev.universeofrickandmorty.domain.model.Person
 import edu.bedaev.universeofrickandmorty.ui.screen.characters.CharacterDetailsScreen
 import edu.bedaev.universeofrickandmorty.ui.screen.characters.CharactersScreen
 import edu.bedaev.universeofrickandmorty.ui.screen.episodes.EpisodeDetailsScreen
 import edu.bedaev.universeofrickandmorty.ui.screen.episodes.EpisodesScreen
+import edu.bedaev.universeofrickandmorty.ui.screen.locations.LocationDetailsScreen
 import edu.bedaev.universeofrickandmorty.ui.screen.locations.LocationsScreen
 import edu.bedaev.universeofrickandmorty.ui.utils.ContentType
 import edu.bedaev.universeofrickandmorty.ui.utils.NavigationType
@@ -95,6 +97,23 @@ fun AppNavHost(
                     episode = episode,
                     onBackPressed = { navController.popBackStack() },
                     onCharacterClicked = { id ->
+                        // todo need transition to character details screen
+                        Log.d("_NavHost", "onCharacter clicked=$id")
+                    }
+                )
+            }
+        }
+
+        composable(
+            route = LocationDetails.route
+        ){
+            val result = navController.previousBackStackEntry
+                ?.savedStateHandle?.get<Location>(key = LocationDetails.locationArgKey)
+            result?.let { location ->
+                LocationDetailsScreen(
+                    location = location,
+                    onBackPressed = { navController.popBackStack() },
+                    onItemClicked = { id ->
                         // todo need transition to character details screen
                         Log.d("_NavHost", "onCharacter clicked=$id")
                     }

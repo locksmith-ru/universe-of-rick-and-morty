@@ -84,7 +84,9 @@ fun CharacterDetailsScreen(
 
     val viewModel: EpisodeViewModel = hiltViewModel()
     LaunchedEffect(viewModel) {
-        viewModel.loadMultipleItems(stringList = person.episodeList)
+        person.episodeList?.let { list ->
+            viewModel.loadMultipleItems(stringList = list)
+        }
     }
 
     val episodes by viewModel.multipleListItemFlow.collectAsState(initial = emptyList())
@@ -176,7 +178,7 @@ fun CharacterDetailsScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 8.dp, start = paddingStart),
-                    text = person.name.uppercase(),
+                    text = person.name?.uppercase() ?: "",
                     textAlign = TextAlign.Start,
                     color = textColor,
                     style = MaterialTheme.typography.titleLarge,

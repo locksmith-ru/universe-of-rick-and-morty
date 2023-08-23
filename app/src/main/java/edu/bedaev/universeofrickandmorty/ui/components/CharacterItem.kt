@@ -69,7 +69,7 @@ fun CharacterItem(
             ) {
                 Text(
                     modifier = Modifier,
-                    text = person.name,
+                    text = person.name ?: "",
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.surface
                 )

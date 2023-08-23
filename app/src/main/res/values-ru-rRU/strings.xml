@@ -54,4 +54,9 @@
     <string name="air_date">Дата выхода в эфир:</string>
     <string name="episode_code">Код эпизода:</string>
 
+    <!--    одиночная локация-->
+    <string name="type">Тип:</string>
+    <string name="dimension">Измерение:</string>
+    <string name="resident">Жители:</string>
+
 </resources>

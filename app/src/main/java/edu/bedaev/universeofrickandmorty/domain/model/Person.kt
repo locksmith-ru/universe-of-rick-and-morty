@@ -11,7 +11,7 @@ import kotlin.random.Random
 @Parcelize
 data class Person(
     override val id: Int,
-    override val name: String,
+    override val name: String?,
     val status: String?,
     val species: String?,
     val type: String?,
@@ -19,7 +19,7 @@ data class Person(
     val origin: Origin?,
     val location: Location?,
     val image: String?,
-    val episodeList: List<String>,
+    val episodeList: List<String>?,
     override val url: String?,
     override val created: String?
 ) : ListItem, Parcelable {
