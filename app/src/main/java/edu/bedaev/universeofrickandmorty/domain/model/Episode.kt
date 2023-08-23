@@ -1,9 +1,12 @@
 package edu.bedaev.universeofrickandmorty.domain.model
 
+import android.os.Parcelable
 import edu.bedaev.universeofrickandmorty.database.entity.EpisodeEnt
 import edu.bedaev.universeofrickandmorty.network.model.EpisodeDto
 import edu.bedaev.universeofrickandmorty.network.model.Origin
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class Episode(
     override val id: Int,
     override val name: String,
@@ -12,7 +15,7 @@ data class Episode(
     val characters: List<String> = emptyList(),
     override val url: String? = null,
     override val created: String? = null
-) : ListItem {
+) : ListItem, Parcelable {
     constructor(dto: EpisodeDto) : this(
         id = dto.id,
         name = dto.name,
@@ -41,7 +44,7 @@ data class Episode(
                 name = Person.generateName((5..15).random()),
                 airDate = generateDate(),
                 episode = generateCode(),
-                characters = emptyList(),
+                characters = Person.generateStringList(length = 2),
                 url = Origin.generateUrl(5),
                 created = Person.generateDateStamp()
             )

@@ -50,4 +50,8 @@
     <string name="species_gender">Вид и пол:</string>
     <string name="first_seen">Впервые замечен в:</string>
 
+    <!--    одиночный эпизод-->
+    <string name="air_date">Дата выхода в эфир:</string>
+    <string name="episode_code">Код эпизода:</string>
+
 </resources>

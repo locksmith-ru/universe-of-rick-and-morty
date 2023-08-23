@@ -1,5 +1,6 @@
 package edu.bedaev.universeofrickandmorty.ui.screen.characters
 
+import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Scaffold
@@ -116,4 +117,5 @@ private fun onItemClicked(
         value = person
     )
     navHostController.navigateSingleTopTo(CharacterDetails.route)
+    Log.d(TAG, "onItemClicked: ${item.id}")
 }

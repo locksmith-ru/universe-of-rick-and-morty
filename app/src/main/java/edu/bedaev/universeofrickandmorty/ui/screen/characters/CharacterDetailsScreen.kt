@@ -1,6 +1,5 @@
 package edu.bedaev.universeofrickandmorty.ui.screen.characters
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -43,15 +42,38 @@ import edu.bedaev.universeofrickandmorty.R
 import edu.bedaev.universeofrickandmorty.domain.model.Episode
 import edu.bedaev.universeofrickandmorty.domain.model.Person
 import edu.bedaev.universeofrickandmorty.ui.components.EpisodeItem
-import edu.bedaev.universeofrickandmorty.ui.components.GradientDivider
+import edu.bedaev.universeofrickandmorty.ui.components.HorizontalGradientDivider
 import edu.bedaev.universeofrickandmorty.ui.screen.episodes.EpisodeViewModel
 import edu.bedaev.universeofrickandmorty.ui.utils.GlideImageWithPreview
+
+@Composable
+fun CharacterDetailsScreen(
+    modifier: Modifier = Modifier,
+    personId: Int = 0,
+    onBackPressed: () -> Unit = {},
+    onEpisodeClicked: (Int) -> Unit
+) {
+    val viewModel: CharactersViewModel = hiltViewModel()
+
+    LaunchedEffect(viewModel){
+        viewModel.loadMultipleItems(stringList = listOf(personId.toString()))
+    }
+
+    val characterList by viewModel.multipleListItemFlow.collectAsState(initial = emptyList())
+
+    if (characterList.isNotEmpty())
+        CharacterDetailsScreen(
+            modifier = modifier,
+            person = characterList.first() as Person,
+            onBackPressed = onBackPressed,
+            onEpisodeClicked = onEpisodeClicked
+        )
+}
 
 /**
  * Экран с деталями выбранного персонажа
  */
 @OptIn(ExperimentalMaterial3Api::class)
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun CharacterDetailsScreen(
     modifier: Modifier = Modifier,
@@ -62,7 +84,7 @@ fun CharacterDetailsScreen(
 
     val viewModel: EpisodeViewModel = hiltViewModel()
     LaunchedEffect(viewModel) {
-        viewModel.loadMultipleItems(urlList = person.episodeList)
+        viewModel.loadMultipleItems(stringList = person.episodeList)
     }
 
     val episodes by viewModel.multipleListItemFlow.collectAsState(initial = emptyList())
@@ -159,9 +181,9 @@ fun CharacterDetailsScreen(
                     color = textColor,
                     style = MaterialTheme.typography.titleLarge,
                 )
-                GradientDivider(
+                HorizontalGradientDivider(
                     modifier = Modifier.padding(vertical = 4.dp),
-                    dividerHeight = 3.dp
+                    height = 3.dp
                 )
                 PersonInfo(
                     modifier = Modifier
@@ -189,7 +211,7 @@ fun CharacterDetailsScreen(
                     color = textColor,
                     style = MaterialTheme.typography.titleLarge
                 )
-                GradientDivider(dividerHeight = 3.dp)
+                HorizontalGradientDivider(height = 3.dp)
             }
             // episodes items
             items(episodes.size) { index ->
@@ -221,7 +243,7 @@ private fun PersonInfo(
             textColor = textColor,
             status = person.status
         )
-        GradientDivider(dividerHeight = 1.dp)
+        HorizontalGradientDivider(height = 1.dp)
         // species and gender
         TextBlock(
             modifier = Modifier
@@ -230,7 +252,7 @@ private fun PersonInfo(
             subtitle = stringResource(id = R.string.species_gender),
             title = "${person.species}(${person.gender})"
         )
-        GradientDivider(dividerHeight = 1.dp)
+        HorizontalGradientDivider(height = 1.dp)
         // last known location
         TextBlock(
             modifier = Modifier
@@ -239,7 +261,7 @@ private fun PersonInfo(
             subtitle = stringResource(id = R.string.last_location),
             title = person.location?.name ?: stringResource(id = R.string.unknown)
         )
-        GradientDivider(dividerHeight = 1.dp)
+        HorizontalGradientDivider(height = 1.dp)
         // first seen
         TextBlock(
             modifier = Modifier
@@ -252,7 +274,7 @@ private fun PersonInfo(
 }
 
 @Composable
-private fun TextBlock(
+fun TextBlock(
     modifier: Modifier = Modifier,
     textColor: Color,
     subtitle: String,

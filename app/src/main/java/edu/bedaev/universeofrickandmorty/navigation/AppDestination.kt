@@ -38,7 +38,6 @@ object CharacterDetails : AppDestination {
     override val route: String = "character_details"
 
     const val personArgKey = "person_arg"
-
 }
 
 val navTabScreens = listOf(Characters, Locations, Episodes)

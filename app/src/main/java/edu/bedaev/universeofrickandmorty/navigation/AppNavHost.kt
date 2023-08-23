@@ -1,6 +1,8 @@
 package edu.bedaev.universeofrickandmorty.navigation
 
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -17,6 +19,7 @@ import edu.bedaev.universeofrickandmorty.ui.screen.locations.LocationsScreen
 import edu.bedaev.universeofrickandmorty.ui.utils.ContentType
 import edu.bedaev.universeofrickandmorty.ui.utils.NavigationType
 
+@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun AppNavHost(
     modifier: Modifier = Modifier,
@@ -67,7 +70,7 @@ fun AppNavHost(
             val result = navController
                 .previousBackStackEntry?.savedStateHandle
                 ?.get<Person>(key = CharacterDetails.personArgKey)
-            result?.let{ person ->
+            result?.let { person ->
                 CharacterDetailsScreen(
                     person = person,
                     onBackPressed = { navController.popBackStack() },

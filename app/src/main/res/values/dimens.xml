@@ -4,4 +4,10 @@
     <dimen name="vertical_space_between_text_small">4dp</dimen>
     <dimen name="vertical_space_between_text_medium">8dp</dimen>
     <dimen name="vertical_space_between_text_big">16dp</dimen>
+
+    <dimen name="padding_small">4dp</dimen>
+    <dimen name="padding_medium">8dp</dimen>
+    <dimen name="padding_big">16dp</dimen>
+    <dimen name="padding_large">24dp</dimen>
+    <dimen name="padding_huge">48dp</dimen>
 </resources>

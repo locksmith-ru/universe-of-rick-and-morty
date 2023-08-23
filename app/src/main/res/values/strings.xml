@@ -49,4 +49,8 @@
     <string name="species_gender">Species and gender:</string>
     <string name="first_seen">First seen in:</string>
 
+    <!--    одиночный эпизод-->
+    <string name="air_date">Air date:</string>
+    <string name="episode_code">Episode code:</string>
+
 </resources>

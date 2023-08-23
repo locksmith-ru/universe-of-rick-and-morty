@@ -80,7 +80,12 @@ fun EpisodesScreen(
                         listItemView = { listItem ->
                             EpisodeItem(
                                 episode = listItem as Episode,
-                                onItemClicked = { item -> onItemClicked(item = item) }
+                                onItemClicked = { item ->
+                                    onItemClicked(
+                                        navHostController = navController,
+                                        item = item
+                                    )
+                                }
                             )
                         },
                         adaptiveParams = screenParams,
@@ -96,6 +101,9 @@ fun EpisodesScreen(
     }
 }
 
-private fun onItemClicked(item: ListItem) {
-    Log.d(TAG, "onItemClicked: ${item.id}")
+private fun onItemClicked(
+    navHostController: NavHostController,
+    item: ListItem
+) {
+    Log.d(TAG, "onEpisodeClicked: id=${item.id}, name=${item.name}")
 }

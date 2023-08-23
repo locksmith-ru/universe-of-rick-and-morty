@@ -49,18 +49,18 @@ abstract class BaseViewModel(
     /**
      * Загрузка элементов по заданным id
      */
-    fun loadMultipleItems(urlList: List<String>) {
+    fun loadMultipleItems(stringList: List<String>) {
         viewModelScope.launch {
-            val ids = if (urlList.size == 1) {
-                val url = urlList.first()
+            val ids = if (stringList.size == 1) {
+                val url = stringList.first()
                 url.substring(url.lastIndexOf("/") + 1, url.length)
             } else {
-                urlList.joinToString(separator = ",") { url ->
+                stringList.joinToString(separator = ",") { url ->
                     url.substring(url.lastIndexOf("/") + 1, url.length)
                 }
             }
             kotlin.runCatching {
-                if (urlList.size == 1)
+                if (stringList.size == 1)
                     networkService.fetchSingleData(id = ids)
                 else
                     networkService.fetchMultipleData(ids = ids)

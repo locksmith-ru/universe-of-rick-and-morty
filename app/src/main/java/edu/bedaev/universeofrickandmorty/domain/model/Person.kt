@@ -87,10 +87,10 @@ data class Person(
                 }.joinToString(separator = "")
         }
 
-        private fun generateStringList(): List<String>{
+        fun generateStringList(length:Int = 3): List<String>{
             return (1..(Random.nextInt(1,50)))
                 .map { id ->
-                    "${Origin.generateUrl(3)}$id"
+                    "${Origin.generateUrl(length)}$id"
                 }
         }
 
