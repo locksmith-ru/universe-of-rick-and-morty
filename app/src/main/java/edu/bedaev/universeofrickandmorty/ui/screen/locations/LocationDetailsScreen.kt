@@ -1,5 +1,6 @@
 package edu.bedaev.universeofrickandmorty.ui.screen.locations
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -43,6 +44,24 @@ fun LocationDetailsScreen(
     onItemClicked: (Int) -> Unit = {}
 ) {
 
+    val viewModel: LocationViewModel = hiltViewModel()
+
+    LaunchedEffect(Unit) {
+        viewModel.loadMultipleItems(stringList = listOf(locationId.toString()))
+        Log.d("_LocationDetailsScreen", "launch with locationId")
+    }
+
+    val locations by viewModel.multipleListItemFlow.collectAsState(initial = emptyList())
+
+    if (locations.isNotEmpty()) {
+        LocationDetailsScreen(
+            modifier = modifier,
+            location = locations.first() as Location,
+            onBackPressed = onBackPressed,
+            onItemClicked = onItemClicked
+        )
+    }
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -56,6 +75,7 @@ fun LocationDetailsScreen(
     val viewModel: CharactersViewModel = hiltViewModel()
     LaunchedEffect(viewModel) {
         viewModel.loadMultipleItems(location.residents)
+        Log.d("_LocationDetailsScreen", "launch with object location")
     }
     val residents by viewModel.multipleListItemFlow.collectAsState(initial = emptyList())
 

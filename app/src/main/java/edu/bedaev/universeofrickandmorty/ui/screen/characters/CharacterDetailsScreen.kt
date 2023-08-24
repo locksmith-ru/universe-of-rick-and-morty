@@ -1,5 +1,6 @@
 package edu.bedaev.universeofrickandmorty.ui.screen.characters
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -55,8 +56,9 @@ fun CharacterDetailsScreen(
 ) {
     val viewModel: CharactersViewModel = hiltViewModel()
 
-    LaunchedEffect(viewModel){
+    LaunchedEffect(Unit) {
         viewModel.loadMultipleItems(stringList = listOf(personId.toString()))
+        Log.d("_CharacterDetailsScreen", "launch with personId")
     }
 
     val characterList by viewModel.multipleListItemFlow.collectAsState(initial = emptyList())
@@ -81,12 +83,12 @@ fun CharacterDetailsScreen(
     onBackPressed: () -> Unit = {},
     onEpisodeClicked: (Int) -> Unit
 ) {
-
     val viewModel: EpisodeViewModel = hiltViewModel()
     LaunchedEffect(viewModel) {
         person.episodeList?.let { list ->
             viewModel.loadMultipleItems(stringList = list)
         }
+        Log.d("_CharacterDetailsScreen", "launch with person object")
     }
 
     val episodes by viewModel.multipleListItemFlow.collectAsState(initial = emptyList())

@@ -7,6 +7,8 @@ import androidx.compose.material.icons.filled.PersonPin
 import androidx.compose.material.icons.filled.Screenshot
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import edu.bedaev.universeofrickandmorty.R
 
 interface AppDestination {
@@ -34,27 +36,64 @@ object Episodes : AppDestination {
 }
 
 object CharacterDetails : AppDestination {
+    const val personIdArgKey = "person_id"
+    const val personArgKey = "person_arg_key"
+
     override val titleResId: Int = R.string.about_title
     override val icon: ImageVector = Icons.Filled.Details
     override val route: String = "character_details"
 
-    const val personArgKey = "person_arg_key"
+    val routeWithArguments = "${route}?$personIdArgKey={${personIdArgKey}}"
+    val arguments = listOf(
+        navArgument(personIdArgKey) {
+            type = NavType.IntType
+            defaultValue = 0
+        }
+    )
+
+    fun passId(id: Int): String {
+        return "${route}?$personIdArgKey=$id"
+    }
 }
 
 object EpisodeDetails : AppDestination {
+    const val episodeArgKey: String = "episode_arg_key"
+    const val episodeIdArgKey = "episode_id"
+
     override val titleResId: Int = 0
     override val icon: ImageVector = Icons.Default.Settings
     override val route: String = "episode_details"
 
-    const val episodeArgKey: String = "episode_arg_key"
+    val routeWithArguments = "${route}?$episodeIdArgKey={${episodeIdArgKey}}"
+    val arguments = listOf(
+        navArgument(episodeIdArgKey) {
+            type = NavType.IntType
+            defaultValue = 0
+        }
+    )
+
+    fun passId(episodeId: Int): String =
+        "${route}?$episodeIdArgKey=$episodeId"
 }
 
-object LocationDetails: AppDestination{
+object LocationDetails : AppDestination {
+    const val locationArgKey = "location _arg_key"
+    const val locationIdArgKey = "location_id"
+
     override val titleResId: Int = R.string.about_title
     override val icon: ImageVector = Icons.Filled.Settings
     override val route: String = "location_details"
 
-    const val locationArgKey = "location _arg_key"
+    val routeWithArguments = "${route}?$locationIdArgKey={${locationIdArgKey}}"
+    val arguments = listOf(
+        navArgument(locationIdArgKey) {
+            type = NavType.IntType
+            defaultValue = 0
+        }
+    )
+
+    fun passId(locationId: Int): String =
+        "${route}?$locationIdArgKey=$locationId"
 }
 
 val navTabScreens = listOf(Characters, Locations, Episodes)

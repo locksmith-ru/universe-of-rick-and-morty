@@ -1,5 +1,6 @@
 package edu.bedaev.universeofrickandmorty.ui.screen.episodes
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -47,7 +48,23 @@ fun EpisodeDetailsScreen(
     onBackPressed: () -> Unit = {},
     onItemClicked: (Int) -> Unit = {}
 ) {
+    val viewModel: EpisodeViewModel = hiltViewModel()
 
+    LaunchedEffect(Unit) {
+        viewModel.loadMultipleItems(stringList = listOf(episodeId.toString()))
+        Log.d("_EpisodeDetailsScreen", "launch with episodeId")
+    }
+
+    val episodeList by viewModel.multipleListItemFlow.collectAsState(initial = emptyList())
+
+    if (episodeList.isNotEmpty()) {
+        EpisodeDetailsScreen(
+            modifier = modifier,
+            episode = episodeList.first() as Episode,
+            onBackPressed = onBackPressed,
+            onCharacterClicked = onItemClicked
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -61,6 +78,7 @@ fun EpisodeDetailsScreen(
     val viewModel: CharactersViewModel = hiltViewModel()
     LaunchedEffect(viewModel) {
         viewModel.loadMultipleItems(episode.characters)
+        Log.d("_EpisodeDetailsScreen", "launch with object episode")
     }
 
     val characters by viewModel.multipleListItemFlow.collectAsState(initial = emptyList())

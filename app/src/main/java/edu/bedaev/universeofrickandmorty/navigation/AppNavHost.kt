@@ -1,8 +1,6 @@
 package edu.bedaev.universeofrickandmorty.navigation
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -23,7 +21,6 @@ import edu.bedaev.universeofrickandmorty.ui.screen.locations.LocationsScreen
 import edu.bedaev.universeofrickandmorty.ui.utils.ContentType
 import edu.bedaev.universeofrickandmorty.ui.utils.NavigationType
 
-@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
 fun AppNavHost(
     modifier: Modifier = Modifier,
@@ -69,53 +66,95 @@ fun AppNavHost(
         }
 
         composable(
-            route = CharacterDetails.route
-        ) {
-            val result = navController
+            route = CharacterDetails.routeWithArguments,
+            arguments = CharacterDetails.arguments
+        ) { backStackEntry ->
+            val person = navController
                 .previousBackStackEntry?.savedStateHandle
                 ?.get<Person>(key = CharacterDetails.personArgKey)
-            result?.let { person ->
+            val personId = backStackEntry.arguments?.getInt(CharacterDetails.personIdArgKey)
+
+            if (personId != null && personId > 0) {
+                CharacterDetailsScreen(
+                    personId = personId,
+                    onBackPressed = { navController.popBackStack() },
+                    onEpisodeClicked = { episodeId ->
+                        // transition to single episode
+                        navController.navigate(EpisodeDetails.passId(episodeId = episodeId))
+                        Log.d("_NavHost", "CharacterDetails nested onEpisode clicked=$episodeId")
+                    }
+                )
+            } else if (person != null) {
                 CharacterDetailsScreen(
                     person = person,
                     onBackPressed = { navController.popBackStack() },
-                    onEpisodeClicked = { id ->
-                        // todo need transition to single episode screen
-                        Log.d("_NavHost", "onEpisode clicked=$id")
+                    onEpisodeClicked = { episodeId ->
+                        // transition to single episode screen
+                        navController.navigate(EpisodeDetails.passId(episodeId = episodeId))
+                        Log.d("_NavHost", "CharacterDetails onEpisode clicked=$episodeId")
                     }
                 )
             }
         }
 
         composable(
-            route = EpisodeDetails.route
-        ) {
-            val result = navController
+            route = EpisodeDetails.routeWithArguments,
+            arguments = EpisodeDetails.arguments
+        ) { backStackEntry ->
+            val episode = navController
                 .previousBackStackEntry?.savedStateHandle
                 ?.get<Episode>(key = EpisodeDetails.episodeArgKey)
-            result?.let { episode ->
+            val episodeId = backStackEntry.arguments?.getInt(EpisodeDetails.episodeIdArgKey)
+
+            if (episodeId != null && episodeId > 0) {
+                EpisodeDetailsScreen(
+                    episodeId = episodeId,
+                    onBackPressed = { navController.popBackStack() },
+                    onItemClicked = { personId ->
+                        // transition to character details screen
+                        navController.navigate(CharacterDetails.passId(id = personId))
+                        Log.d("_NavHost", "EpisodeDetails nested onCharacter clicked=$personId")
+                    }
+                )
+            } else if (episode != null) {
                 EpisodeDetailsScreen(
                     episode = episode,
                     onBackPressed = { navController.popBackStack() },
-                    onCharacterClicked = { id ->
-                        // todo need transition to character details screen
-                        Log.d("_NavHost", "onCharacter clicked=$id")
+                    onCharacterClicked = { personId ->
+                        // transition to character details screen
+                        navController.navigate(CharacterDetails.passId(id = personId))
+                        Log.d("_NavHost", "EpisodeDetails onCharacter clicked=$personId")
                     }
                 )
             }
         }
 
         composable(
-            route = LocationDetails.route
-        ){
-            val result = navController.previousBackStackEntry
+            route = LocationDetails.routeWithArguments,
+            arguments = LocationDetails.arguments
+        ) { backStackEntry ->
+            val location = navController.previousBackStackEntry
                 ?.savedStateHandle?.get<Location>(key = LocationDetails.locationArgKey)
-            result?.let { location ->
+            val locationId = backStackEntry.arguments?.getInt(LocationDetails.locationIdArgKey)
+
+            if (locationId != null && locationId > 0) {
+                LocationDetailsScreen(
+                    locationId = locationId,
+                    onBackPressed = { navController.popBackStack() },
+                    onItemClicked = { personId ->
+                        // transition to character details screen
+                        navController.navigate(CharacterDetails.passId(id = personId))
+                        Log.d("_NavHost", "LocationDetails nested onCharacter clicked=$personId")
+                    }
+                )
+            } else if (location != null) {
                 LocationDetailsScreen(
                     location = location,
                     onBackPressed = { navController.popBackStack() },
-                    onItemClicked = { id ->
-                        // todo need transition to character details screen
-                        Log.d("_NavHost", "onCharacter clicked=$id")
+                    onItemClicked = { personId ->
+                        // transition to character details screen
+                        navController.navigate(CharacterDetails.passId(id = personId))
+                        Log.d("_NavHost", "LocationDetails onCharacter clicked=$personId")
                     }
                 )
             }
