@@ -34,7 +34,7 @@ class CharactersViewModel
         loadingState = AppLoadingState.Loading
         viewModelScope.launch {
             kotlin.runCatching {
-                repo.fetchItems<CharacterRemoteKeys, PersonEnt>(
+                repo.fetchItems(
                     service = networkService,
                     keysDao = { db -> db.characterKeysDao() },
                     listItemDaoFactory = { db -> db.charactersDao() },
@@ -45,7 +45,7 @@ class CharactersViewModel
             }.fold(
                 onSuccess = { flowPagingData ->
                     loadingState =
-                        AppLoadingState.Success<Flow<PagingData<Person>>>(data = flowPagingData)
+                        AppLoadingState.Success(data = flowPagingData)
                 },
                 onFailure = {
                     Log.e(TAG, "loadContent an error has occurred: ${it.message}", it)

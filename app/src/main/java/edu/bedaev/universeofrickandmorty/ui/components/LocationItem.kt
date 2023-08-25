@@ -39,7 +39,7 @@ fun LocationItem(
             val startPadding = 24.dp
             Text(
                 modifier = Modifier.padding(start = startPadding),
-                text = location.name.orEmpty(),
+                text = location.name,
                 style = MaterialTheme.typography.headlineMedium,
                 color = MaterialTheme.colorScheme.surface
             )

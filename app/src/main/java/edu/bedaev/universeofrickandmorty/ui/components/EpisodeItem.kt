@@ -49,7 +49,7 @@ fun EpisodeItem(
                     modifier = Modifier
                         .padding(start = startPad)
                         .weight(3f),
-                    text = episode.name.orEmpty(),
+                    text = episode.name,
                     style = MaterialTheme.typography.titleLarge,
                     color = MaterialTheme.colorScheme.surface
                 )

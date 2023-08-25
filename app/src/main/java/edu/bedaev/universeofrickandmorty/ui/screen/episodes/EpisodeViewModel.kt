@@ -8,16 +8,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import edu.bedaev.universeofrickandmorty.data.EpisodeService
 import edu.bedaev.universeofrickandmorty.data.ListItemRepository
 import edu.bedaev.universeofrickandmorty.database.entity.EpisodeEnt
-import edu.bedaev.universeofrickandmorty.database.entity.EpisodeRemoteKeys
 import edu.bedaev.universeofrickandmorty.domain.model.Episode
-import edu.bedaev.universeofrickandmorty.domain.model.ListItem
 import edu.bedaev.universeofrickandmorty.ui.screen.AppLoadingState
 import edu.bedaev.universeofrickandmorty.ui.screen.BaseViewModel
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.channels.trySendBlocking
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -38,7 +32,7 @@ class EpisodeViewModel
         loadingState = AppLoadingState.Loading
         viewModelScope.launch {
             kotlin.runCatching {
-                repository.fetchItems<EpisodeRemoteKeys, EpisodeEnt>(
+                repository.fetchItems(
                     service = networkService,
                     keysDao = { db -> db.episodeKeysDao() },
                     listItemDaoFactory = { db -> db.episodesDao() },
@@ -49,7 +43,7 @@ class EpisodeViewModel
             }.fold(
                 onSuccess = { flowPagingData ->
                     loadingState =
-                        AppLoadingState.Success<Flow<PagingData<Episode>>>(data = flowPagingData)
+                        AppLoadingState.Success(data = flowPagingData)
                 },
                 onFailure = {
                     Log.e(TAG, "loadContent an error has occurred: ${it.message}", it)
