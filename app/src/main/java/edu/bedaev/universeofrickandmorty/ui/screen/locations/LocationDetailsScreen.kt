@@ -73,7 +73,7 @@ fun LocationDetailsScreen(
     onItemClicked: (Int) -> Unit = {}
 ) {
     val viewModel: CharactersViewModel = hiltViewModel()
-    LaunchedEffect(viewModel) {
+    LaunchedEffect(Unit) {
         viewModel.loadMultipleItems(location.residents)
         Log.d("_LocationDetailsScreen", "launch with object location")
     }

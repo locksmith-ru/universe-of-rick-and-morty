@@ -76,7 +76,7 @@ fun EpisodeDetailsScreen(
     onCharacterClicked: (Int) -> Unit = {}
 ) {
     val viewModel: CharactersViewModel = hiltViewModel()
-    LaunchedEffect(viewModel) {
+    LaunchedEffect(Unit) {
         viewModel.loadMultipleItems(episode.characters)
         Log.d("_EpisodeDetailsScreen", "launch with object episode")
     }

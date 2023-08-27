@@ -69,6 +69,8 @@ fun AppNavHost(
             route = CharacterDetails.routeWithArguments,
             arguments = CharacterDetails.arguments
         ) { backStackEntry ->
+            val contentType: ContentType? = navController.previousBackStackEntry
+                ?.savedStateHandle?.get(key = CharacterDetails.contentTypeArgKey)
             val person = navController
                 .previousBackStackEntry?.savedStateHandle
                 ?.get<Person>(key = CharacterDetails.personArgKey)
@@ -77,6 +79,7 @@ fun AppNavHost(
             if (personId != null && personId > 0) {
                 CharacterDetailsScreen(
                     personId = personId,
+                    contentType = contentType,
                     onBackPressed = { navController.popBackStack() },
                     onEpisodeClicked = { episodeId ->
                         // transition to single episode
@@ -87,6 +90,7 @@ fun AppNavHost(
             } else if (person != null) {
                 CharacterDetailsScreen(
                     person = person,
+                    contentType = contentType,
                     onBackPressed = { navController.popBackStack() },
                     onEpisodeClicked = { episodeId ->
                         // transition to single episode screen

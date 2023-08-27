@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -88,7 +90,8 @@ fun CharactersScreen(
                                 onItemClicked = { listItem ->
                                     onItemClicked(
                                         navHostController = navController,
-                                        item = listItem
+                                        item = listItem,
+                                        contentType = screenParams.second
                                     )
                                 }
                             )
@@ -109,12 +112,17 @@ fun CharactersScreen(
 
 private fun onItemClicked(
     navHostController: NavHostController,
-    item: ListItem
+    item: ListItem,
+    contentType: ContentType
 ) {
     val person = item as Person
     navHostController.currentBackStackEntry?.savedStateHandle?.set(
         key = CharacterDetails.personArgKey,
         value = person
+    )
+    navHostController.currentBackStackEntry?.savedStateHandle?.set(
+        key = CharacterDetails.contentTypeArgKey,
+        value = contentType
     )
     navHostController.navigate(CharacterDetails.route)
     Log.d(TAG, "onItemClicked: ${item.id}")

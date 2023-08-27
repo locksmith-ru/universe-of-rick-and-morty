@@ -17,7 +17,9 @@
 package edu.bedaev.universeofrickandmorty.ui.utils
 
 import android.graphics.Rect
+import android.os.Parcelable
 import androidx.window.layout.FoldingFeature
+import kotlinx.parcelize.Parcelize
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.contract
 
@@ -60,6 +62,7 @@ enum class NavigationType {
 /**
  * Content shown depending on size and state of device.
  */
-enum class ContentType {
+@Parcelize
+enum class ContentType : Parcelable{
     LIST_ONLY, LIST_AND_DETAIL
 }

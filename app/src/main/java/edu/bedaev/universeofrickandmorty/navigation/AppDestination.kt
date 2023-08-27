@@ -10,6 +10,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import edu.bedaev.universeofrickandmorty.R
+import edu.bedaev.universeofrickandmorty.ui.utils.ContentType
 
 interface AppDestination {
     val titleResId: Int
@@ -36,6 +37,7 @@ object Episodes : AppDestination {
 }
 
 object CharacterDetails : AppDestination {
+    const val contentTypeArgKey = "content_type"
     const val personIdArgKey = "person_id"
     const val personArgKey = "person_arg_key"
 
