@@ -18,7 +18,6 @@ import edu.bedaev.universeofrickandmorty.domain.model.Person
 import edu.bedaev.universeofrickandmorty.navigation.AppDestination
 import edu.bedaev.universeofrickandmorty.navigation.CharacterDetails
 import edu.bedaev.universeofrickandmorty.navigation.Characters
-import edu.bedaev.universeofrickandmorty.navigation.CONTENT_TYPE_ARG_KEY
 import edu.bedaev.universeofrickandmorty.navigation.navigateSingleTopTo
 import edu.bedaev.universeofrickandmorty.ui.AdaptiveScreenContent
 import edu.bedaev.universeofrickandmorty.ui.components.CharacterItem
@@ -89,8 +88,7 @@ fun CharactersScreen(
                                 onItemClicked = { listItem ->
                                     onItemClicked(
                                         navHostController = navController,
-                                        item = listItem,
-                                        contentType = screenParams.second
+                                        item = listItem
                                     )
                                 }
                             )
@@ -111,17 +109,12 @@ fun CharactersScreen(
 
 private fun onItemClicked(
     navHostController: NavHostController,
-    item: ListItem,
-    contentType: ContentType
+    item: ListItem
 ) {
     val person = item as Person
     navHostController.currentBackStackEntry?.savedStateHandle?.set(
         key = CharacterDetails.personArgKey,
         value = person
-    )
-    navHostController.currentBackStackEntry?.savedStateHandle?.set(
-        key = CONTENT_TYPE_ARG_KEY,
-        value = contentType
     )
     navHostController.navigate(CharacterDetails.route)
     Log.d(TAG, "onItemClicked: ${item.id}")

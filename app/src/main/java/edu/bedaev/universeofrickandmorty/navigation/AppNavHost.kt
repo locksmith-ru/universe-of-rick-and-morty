@@ -69,8 +69,6 @@ fun AppNavHost(
             route = CharacterDetails.routeWithArguments,
             arguments = CharacterDetails.arguments
         ) { backStackEntry ->
-            val contentType: ContentType? = navController.previousBackStackEntry
-                ?.savedStateHandle?.get(key = CONTENT_TYPE_ARG_KEY)
             val person = navController
                 .previousBackStackEntry?.savedStateHandle
                 ?.get<Person>(key = CharacterDetails.personArgKey)
@@ -79,7 +77,7 @@ fun AppNavHost(
             if (personId != null && personId > 0) {
                 CharacterDetailsScreen(
                     personId = personId,
-                    contentType = contentType,
+                    contentType = screenParams.second,
                     onBackPressed = { navController.popBackStack() },
                     onEpisodeClicked = { episodeId ->
                         // transition to single episode
@@ -90,7 +88,7 @@ fun AppNavHost(
             } else if (person != null) {
                 CharacterDetailsScreen(
                     person = person,
-                    contentType = contentType,
+                    contentType = screenParams.second,
                     onBackPressed = { navController.popBackStack() },
                     onEpisodeClicked = { episodeId ->
                         // transition to single episode screen
@@ -117,10 +115,6 @@ fun AppNavHost(
                     onBackPressed = { navController.popBackStack() },
                     onItemClicked = { personId ->
                         // transition to character details screen
-                        navController.currentBackStackEntry?.savedStateHandle?.set(
-                            key = CONTENT_TYPE_ARG_KEY,
-                            value = screenParams.second
-                        )
                         navController.navigate(CharacterDetails.passId(id = personId))
                         Log.d("_NavHost", "EpisodeDetails nested onCharacter clicked=$personId")
                     }
@@ -132,10 +126,6 @@ fun AppNavHost(
                     onBackPressed = { navController.popBackStack() },
                     onCharacterClicked = { personId ->
                         // transition to character details screen
-                        navController.currentBackStackEntry?.savedStateHandle?.set(
-                            key = CONTENT_TYPE_ARG_KEY,
-                            value = screenParams.second
-                        )
                         navController.navigate(CharacterDetails.passId(id = personId))
                         Log.d("_NavHost", "EpisodeDetails onCharacter clicked=$personId")
                     }
@@ -154,6 +144,7 @@ fun AppNavHost(
             if (locationId != null && locationId > 0) {
                 LocationDetailsScreen(
                     locationId = locationId,
+                    contentType = screenParams.second,
                     onBackPressed = { navController.popBackStack() },
                     onItemClicked = { personId ->
                         // transition to character details screen
@@ -164,6 +155,7 @@ fun AppNavHost(
             } else if (location != null) {
                 LocationDetailsScreen(
                     location = location,
+                    contentType = screenParams.second,
                     onBackPressed = { navController.popBackStack() },
                     onItemClicked = { personId ->
                         // transition to character details screen

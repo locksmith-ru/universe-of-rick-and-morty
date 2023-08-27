@@ -85,8 +85,7 @@ fun EpisodesScreen(
                                 onItemClicked = { item ->
                                     onItemClicked(
                                         navHostController = navController,
-                                        item = item,
-                                        contentType = screenParams.second
+                                        item = item
                                     )
                                 }
                             )
@@ -106,16 +105,11 @@ fun EpisodesScreen(
 
 private fun onItemClicked(
     navHostController: NavHostController,
-    item: ListItem,
-    contentType: ContentType
+    item: ListItem
 ) {
     navHostController.currentBackStackEntry?.savedStateHandle?.set(
         key = EpisodeDetails.episodeArgKey,
         value = item as Episode
-    )
-    navHostController.currentBackStackEntry?.savedStateHandle?.set(
-        key = CONTENT_TYPE_ARG_KEY,
-        value = contentType
     )
     navHostController.navigate(EpisodeDetails.route)
     Log.d(TAG, "onEpisodeClicked: id=${item.id}, name=${item.name}")
