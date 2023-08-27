@@ -3,13 +3,17 @@ package edu.bedaev.universeofrickandmorty.ui.screen.episodes
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material3.Divider
@@ -35,16 +39,19 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import edu.bedaev.universeofrickandmorty.R
 import edu.bedaev.universeofrickandmorty.domain.model.Episode
+import edu.bedaev.universeofrickandmorty.domain.model.ListItem
 import edu.bedaev.universeofrickandmorty.domain.model.Person
 import edu.bedaev.universeofrickandmorty.ui.components.CharacterItem
 import edu.bedaev.universeofrickandmorty.ui.components.HorizontalGradientDivider
 import edu.bedaev.universeofrickandmorty.ui.screen.characters.CharactersViewModel
 import edu.bedaev.universeofrickandmorty.ui.screen.characters.TextBlock
+import edu.bedaev.universeofrickandmorty.ui.utils.ContentType
 
 @Composable
 fun EpisodeDetailsScreen(
     modifier: Modifier = Modifier,
     episodeId: Int = 0,
+    contentType: ContentType = ContentType.LIST_ONLY,
     onBackPressed: () -> Unit = {},
     onItemClicked: (Int) -> Unit = {}
 ) {
@@ -61,6 +68,7 @@ fun EpisodeDetailsScreen(
         EpisodeDetailsScreen(
             modifier = modifier,
             episode = episodeList.first() as Episode,
+            contentType = contentType,
             onBackPressed = onBackPressed,
             onCharacterClicked = onItemClicked
         )
@@ -72,6 +80,7 @@ fun EpisodeDetailsScreen(
 fun EpisodeDetailsScreen(
     modifier: Modifier = Modifier,
     episode: Episode,
+    contentType: ContentType,
     onBackPressed: () -> Unit = {},
     onCharacterClicked: (Int) -> Unit = {}
 ) {
@@ -105,60 +114,91 @@ fun EpisodeDetailsScreen(
             )
         }
     ) { paddingValues ->
-        val paddingStart = dimensionResource(id = R.dimen.character_detail_start_padding)
-        val textColor = MaterialTheme.colorScheme.surface
-        val lazyState = rememberLazyListState()
-        LazyColumn(
-            state = lazyState,
+
+        if (contentType == ContentType.LIST_ONLY) {
+            VerticalListContent(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(
+                        top = paddingValues.calculateTopPadding(),
+                        start = 4.dp, end = 4.dp,
+                        bottom = 8.dp
+                    )
+                    .background(color = MaterialTheme.colorScheme.inverseSurface),
+                episode = episode,
+                characters = characters,
+                onCharacterClicked = onCharacterClicked
+            )
+        } else {
+            ListAndDetailsContent(
+                modifier = Modifier
+                    .padding(
+                        top = paddingValues.calculateTopPadding()
+                    )
+                    .background(color = MaterialTheme.colorScheme.inverseSurface),
+                episode = episode,
+                characters = characters,
+                onCharacterClicked = onCharacterClicked
+            )
+        }
+    }
+}
+
+/**
+ * Details and list of characters for tablet and desktop devices
+ */
+@Composable
+private fun ListAndDetailsContent(
+    modifier: Modifier = Modifier,
+    episode: Episode,
+    characters: List<ListItem>,
+    onCharacterClicked: (Int) -> Unit
+) {
+    val textColor = MaterialTheme.colorScheme.surface
+    Row(modifier = modifier.fillMaxSize()) {
+        val scrollState = rememberScrollState()
+        // left column with an episode details
+        Column(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(
-                    top = paddingValues.calculateTopPadding(),
-                    start = 4.dp, end = 4.dp,
-                    bottom = 8.dp
-                )
-                .background(color = MaterialTheme.colorScheme.inverseSurface)
+                .weight(1f)
+                .verticalScroll(state = scrollState, enabled = true)
         ) {
-            item {
-                HeaderWithDivider(
-                    modifier = Modifier
-                        .fillParentMaxWidth()
-                        .padding(top = 48.dp),
-                    text = episode.name.uppercase(),
-                    textColor = textColor
-                )
-            }
-
-            item {
-                Column(
-                    modifier = Modifier.padding(
-                        top = dimensionResource(id = R.dimen.vertical_space_between_text_big),
-                        start = paddingStart
-                    )
-                ) {
-                    // air date
-                    TextBlock(
-                        textColor = textColor,
-                        subtitle = stringResource(id = R.string.air_date),
-                        title = episode.airDate ?: stringResource(id = R.string.unknown)
-                    )
-                    Divider(modifier = Modifier.padding(end = paddingStart))
-                    Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.padding_big)))
-                    // episode code
-                    TextBlock(
-                        textColor = textColor,
-                        subtitle = stringResource(id = R.string.episode_code),
-                        title = episode.episode ?: stringResource(id = R.string.unknown)
-                    )
-                    Divider(modifier = Modifier.padding(end = paddingStart))
-                }
-            }
-
+            HeaderWithDivider(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = dimensionResource(id = R.dimen.padding_huge)),
+                text = episode.name.uppercase(),
+                textColor = textColor
+            )
+            // air date
+            TextBlock(
+                modifier = Modifier.padding(top = dimensionResource(id = R.dimen.padding_huge),
+                    start = dimensionResource(id = R.dimen.padding_huge)),
+                textColor = textColor, subtitle = stringResource(id = R.string.air_date),
+                title = episode.airDate ?: stringResource(id = R.string.unknown)
+            )
+            Divider(modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.padding_huge)))
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.padding_big)))
+            // episode code
+            TextBlock(
+                modifier = Modifier.padding(start = dimensionResource(id = R.dimen.padding_huge)),
+                textColor = textColor, subtitle = stringResource(id = R.string.episode_code),
+                title = episode.episode ?: stringResource(id = R.string.unknown)
+            )
+            Divider(modifier = Modifier.padding(horizontal = dimensionResource(id = R.dimen.padding_huge)))
+        }
+        val lazyState = rememberLazyListState()
+        // right column with character list, which meet in the episode
+        LazyColumn(
+            modifier = Modifier.weight(1f),
+            state = lazyState
+        ) {
+            // items here
             item {
                 // characters in the episode
                 HeaderWithDivider(
                     modifier = Modifier
-                        .fillParentMaxWidth()
+                        .fillMaxWidth()
                         .padding(
                             top = dimensionResource(id = R.dimen.padding_huge),
                             bottom = dimensionResource(id = R.dimen.padding_large)
@@ -167,7 +207,6 @@ fun EpisodeDetailsScreen(
                     text = stringResource(id = R.string.characters).uppercase()
                 )
             }
-
             items(characters.size) { index ->
                 val item = characters[index]
                 Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.padding_medium)))
@@ -184,6 +223,91 @@ fun EpisodeDetailsScreen(
                 Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.padding_small)))
                 Divider()
             }
+        }
+    }
+}
+
+/**
+ * Vertical list content for mobile devices
+ */
+@Composable
+private fun VerticalListContent(
+    modifier: Modifier = Modifier,
+    episode: Episode,
+    characters: List<ListItem>,
+    onCharacterClicked: (Int) -> Unit
+) {
+    val paddingStart = dimensionResource(id = R.dimen.character_detail_start_padding)
+    val textColor = MaterialTheme.colorScheme.surface
+    val lazyState = rememberLazyListState()
+    LazyColumn(
+        state = lazyState,
+        modifier = modifier
+    ) {
+        item {
+            HeaderWithDivider(
+                modifier = Modifier
+                    .fillParentMaxWidth()
+                    .padding(top = 48.dp),
+                text = episode.name.uppercase(),
+                textColor = textColor
+            )
+        }
+
+        item {
+            Column(
+                modifier = Modifier.padding(
+                    top = dimensionResource(id = R.dimen.vertical_space_between_text_big),
+                    start = paddingStart
+                )
+            ) {
+                // air date
+                TextBlock(
+                    textColor = textColor,
+                    subtitle = stringResource(id = R.string.air_date),
+                    title = episode.airDate ?: stringResource(id = R.string.unknown)
+                )
+                Divider(modifier = Modifier.padding(end = paddingStart))
+                Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.padding_big)))
+                // episode code
+                TextBlock(
+                    textColor = textColor,
+                    subtitle = stringResource(id = R.string.episode_code),
+                    title = episode.episode ?: stringResource(id = R.string.unknown)
+                )
+                Divider(modifier = Modifier.padding(end = paddingStart))
+            }
+        }
+
+        item {
+            // characters in the episode
+            HeaderWithDivider(
+                modifier = Modifier
+                    .fillParentMaxWidth()
+                    .padding(
+                        top = dimensionResource(id = R.dimen.padding_huge),
+                        bottom = dimensionResource(id = R.dimen.padding_large)
+                    ),
+                textColor = textColor,
+                text = stringResource(id = R.string.characters).uppercase()
+            )
+        }
+
+        items(characters.size) { index ->
+            val item = characters[index]
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.padding_medium)))
+            CharacterItem(
+                modifier = Modifier
+                    .padding(horizontal = dimensionResource(id = R.dimen.padding_small)),
+                person = item as Person,
+                imageShape = CircleShape,
+                imageBorderWidth = 4.dp,
+                onItemClicked = { listItem ->
+                    onCharacterClicked(listItem.id)
+                }
+            )
+            Spacer(modifier = Modifier.height(dimensionResource(id = R.dimen.padding_small)))
+            Divider()
         }
     }
 }

@@ -70,7 +70,7 @@ fun AppNavHost(
             arguments = CharacterDetails.arguments
         ) { backStackEntry ->
             val contentType: ContentType? = navController.previousBackStackEntry
-                ?.savedStateHandle?.get(key = CharacterDetails.contentTypeArgKey)
+                ?.savedStateHandle?.get(key = CONTENT_TYPE_ARG_KEY)
             val person = navController
                 .previousBackStackEntry?.savedStateHandle
                 ?.get<Person>(key = CharacterDetails.personArgKey)
@@ -113,9 +113,14 @@ fun AppNavHost(
             if (episodeId != null && episodeId > 0) {
                 EpisodeDetailsScreen(
                     episodeId = episodeId,
+                    contentType = screenParams.second,
                     onBackPressed = { navController.popBackStack() },
                     onItemClicked = { personId ->
                         // transition to character details screen
+                        navController.currentBackStackEntry?.savedStateHandle?.set(
+                            key = CONTENT_TYPE_ARG_KEY,
+                            value = screenParams.second
+                        )
                         navController.navigate(CharacterDetails.passId(id = personId))
                         Log.d("_NavHost", "EpisodeDetails nested onCharacter clicked=$personId")
                     }
@@ -123,9 +128,14 @@ fun AppNavHost(
             } else if (episode != null) {
                 EpisodeDetailsScreen(
                     episode = episode,
+                    contentType = screenParams.second,
                     onBackPressed = { navController.popBackStack() },
                     onCharacterClicked = { personId ->
                         // transition to character details screen
+                        navController.currentBackStackEntry?.savedStateHandle?.set(
+                            key = CONTENT_TYPE_ARG_KEY,
+                            value = screenParams.second
+                        )
                         navController.navigate(CharacterDetails.passId(id = personId))
                         Log.d("_NavHost", "EpisodeDetails onCharacter clicked=$personId")
                     }

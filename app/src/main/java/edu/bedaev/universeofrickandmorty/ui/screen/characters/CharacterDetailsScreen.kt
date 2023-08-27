@@ -72,6 +72,7 @@ fun CharacterDetailsScreen(
         CharacterDetailsScreen(
             modifier = modifier,
             person = characterList.first() as Person,
+            contentType = contentType,
             onBackPressed = onBackPressed,
             onEpisodeClicked = onEpisodeClicked
         )
@@ -154,7 +155,7 @@ fun CharacterDetailsScreen(
 }
 
 @Composable
-fun ListAndDetailsContent(
+private fun ListAndDetailsContent(
     modifier: Modifier = Modifier,
     person: Person,
     episodes: List<ListItem>,

@@ -15,6 +15,7 @@ import edu.bedaev.universeofrickandmorty.R
 import edu.bedaev.universeofrickandmorty.domain.model.Episode
 import edu.bedaev.universeofrickandmorty.domain.model.ListItem
 import edu.bedaev.universeofrickandmorty.navigation.AppDestination
+import edu.bedaev.universeofrickandmorty.navigation.CONTENT_TYPE_ARG_KEY
 import edu.bedaev.universeofrickandmorty.navigation.EpisodeDetails
 import edu.bedaev.universeofrickandmorty.navigation.Episodes
 import edu.bedaev.universeofrickandmorty.navigation.navigateSingleTopTo
@@ -84,7 +85,8 @@ fun EpisodesScreen(
                                 onItemClicked = { item ->
                                     onItemClicked(
                                         navHostController = navController,
-                                        item = item
+                                        item = item,
+                                        contentType = screenParams.second
                                     )
                                 }
                             )
@@ -104,11 +106,16 @@ fun EpisodesScreen(
 
 private fun onItemClicked(
     navHostController: NavHostController,
-    item: ListItem
+    item: ListItem,
+    contentType: ContentType
 ) {
     navHostController.currentBackStackEntry?.savedStateHandle?.set(
         key = EpisodeDetails.episodeArgKey,
         value = item as Episode
+    )
+    navHostController.currentBackStackEntry?.savedStateHandle?.set(
+        key = CONTENT_TYPE_ARG_KEY,
+        value = contentType
     )
     navHostController.navigate(EpisodeDetails.route)
     Log.d(TAG, "onEpisodeClicked: id=${item.id}, name=${item.name}")

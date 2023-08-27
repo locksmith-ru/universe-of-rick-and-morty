@@ -5,8 +5,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -20,6 +18,7 @@ import edu.bedaev.universeofrickandmorty.domain.model.Person
 import edu.bedaev.universeofrickandmorty.navigation.AppDestination
 import edu.bedaev.universeofrickandmorty.navigation.CharacterDetails
 import edu.bedaev.universeofrickandmorty.navigation.Characters
+import edu.bedaev.universeofrickandmorty.navigation.CONTENT_TYPE_ARG_KEY
 import edu.bedaev.universeofrickandmorty.navigation.navigateSingleTopTo
 import edu.bedaev.universeofrickandmorty.ui.AdaptiveScreenContent
 import edu.bedaev.universeofrickandmorty.ui.components.CharacterItem
@@ -121,7 +120,7 @@ private fun onItemClicked(
         value = person
     )
     navHostController.currentBackStackEntry?.savedStateHandle?.set(
-        key = CharacterDetails.contentTypeArgKey,
+        key = CONTENT_TYPE_ARG_KEY,
         value = contentType
     )
     navHostController.navigate(CharacterDetails.route)

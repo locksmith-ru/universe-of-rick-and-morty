@@ -65,7 +65,7 @@ fun CharacterItem(
             Column(
                 modifier = Modifier
                     .weight(3f)
-                    .padding(horizontal = 8.dp)
+                    .padding(horizontal = 16.dp)
             ) {
                 Text(
                     modifier = Modifier,
