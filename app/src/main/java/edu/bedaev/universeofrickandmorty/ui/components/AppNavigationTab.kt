@@ -91,10 +91,10 @@ fun AppNavigationRail(
 }
 
 @Composable
-fun AppNavigationDrawer(
+inline fun AppNavigationDrawer(
     modifier: Modifier = Modifier,
-    onMenuDrawerClicked: () -> Unit = {},
-    onTabSelected: (AppDestination) -> Unit = {},
+    crossinline onMenuDrawerClicked: () -> Unit = {},
+    crossinline onTabSelected: (AppDestination) -> Unit = {},
     destinations: List<AppDestination> = navTabScreens,
     currentScreen: AppDestination = Characters
 ) {

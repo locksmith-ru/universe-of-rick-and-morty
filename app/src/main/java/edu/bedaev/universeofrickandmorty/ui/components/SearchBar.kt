@@ -72,10 +72,10 @@ fun SearchBar(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ClosedBar(
+inline fun ClosedBar(
     modifier: Modifier = Modifier,
     title: String = "",
-    onSearchClicked: () -> Unit = {}
+    crossinline onSearchClicked: () -> Unit = {}
 ) {
     TopAppBar(
         modifier = modifier,
@@ -100,13 +100,13 @@ fun ClosedBar(
 }
 
 @Composable
-fun OpenedBar(
+inline fun OpenedBar(
     modifier: Modifier = Modifier,
     text: String = "",
     hint: String = "",
-    onTextChange: (String) -> Unit = {},
-    onSearchClicked: (String) -> Unit = {},
-    onCloseClicked: () -> Unit = {}
+    crossinline onTextChange: (String) -> Unit = {},
+    crossinline onSearchClicked: (String) -> Unit = {},
+    crossinline onCloseClicked: () -> Unit = {}
 ) {
     Surface(
         modifier = modifier

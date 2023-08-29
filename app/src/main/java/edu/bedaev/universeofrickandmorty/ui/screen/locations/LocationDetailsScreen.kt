@@ -44,12 +44,12 @@ import edu.bedaev.universeofrickandmorty.ui.screen.episodes.HeaderWithDivider
 import edu.bedaev.universeofrickandmorty.ui.utils.ContentType
 
 @Composable
-fun LocationDetailsScreen(
+inline fun LocationDetailsScreen(
     modifier: Modifier = Modifier,
     locationId: Int = 0,
     contentType: ContentType,
-    onBackPressed: () -> Unit = {},
-    onItemClicked: (Int) -> Unit = {}
+    crossinline onBackPressed: () -> Unit = {},
+    crossinline onItemClicked: (Int) -> Unit = {}
 ) {
 
     val viewModel: LocationViewModel = hiltViewModel()
@@ -75,12 +75,12 @@ fun LocationDetailsScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LocationDetailsScreen(
+inline fun LocationDetailsScreen(
     modifier: Modifier = Modifier,
     location: Location,
     contentType: ContentType,
-    onBackPressed: () -> Unit = {},
-    onItemClicked: (Int) -> Unit = {}
+    crossinline onBackPressed: () -> Unit = {},
+    crossinline onItemClicked: (Int) -> Unit = {}
 ) {
     val viewModel: CharactersViewModel = hiltViewModel()
     LaunchedEffect(Unit) {
@@ -140,11 +140,11 @@ fun LocationDetailsScreen(
 }
 
 @Composable
-private fun ListAndDetailsContent(
+inline fun ListAndDetailsContent(
     modifier: Modifier = Modifier,
     location: Location,
     residents: List<ListItem>,
-    onItemClicked: (Int) -> Unit
+    crossinline onItemClicked: (Int) -> Unit
 ){
     val textColor = MaterialTheme.colorScheme.surface
     Row(modifier = modifier.fillMaxSize()){
@@ -227,11 +227,11 @@ private fun ListAndDetailsContent(
 }
 
 @Composable
-private fun VerticalContentList(
+inline fun VerticalContentList(
     modifier:Modifier = Modifier,
     location: Location,
     residents: List<ListItem>,
-    onItemClicked: (Int) -> Unit
+    crossinline onItemClicked: (Int) -> Unit
 ) {
     val paddingStart = dimensionResource(id = R.dimen.character_detail_start_padding)
     val textColor = MaterialTheme.colorScheme.surface

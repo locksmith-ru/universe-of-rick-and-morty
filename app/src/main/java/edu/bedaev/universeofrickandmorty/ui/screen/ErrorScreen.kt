@@ -20,9 +20,9 @@ import edu.bedaev.universeofrickandmorty.R
 import edu.bedaev.universeofrickandmorty.ui.theme.AppTheme
 
 @Composable
-fun ErrorScreen(
+inline fun ErrorScreen(
     modifier: Modifier = Modifier,
-    onRetry: () -> Unit = {}
+    crossinline onRetry: () -> Unit = {}
 ) {
     Column(
         modifier = modifier

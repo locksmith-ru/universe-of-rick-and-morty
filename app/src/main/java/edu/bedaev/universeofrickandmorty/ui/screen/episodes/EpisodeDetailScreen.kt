@@ -48,12 +48,12 @@ import edu.bedaev.universeofrickandmorty.ui.screen.characters.TextBlock
 import edu.bedaev.universeofrickandmorty.ui.utils.ContentType
 
 @Composable
-fun EpisodeDetailsScreen(
+inline fun EpisodeDetailsScreen(
     modifier: Modifier = Modifier,
     episodeId: Int = 0,
     contentType: ContentType = ContentType.LIST_ONLY,
-    onBackPressed: () -> Unit = {},
-    onItemClicked: (Int) -> Unit = {}
+    crossinline onBackPressed: () -> Unit = {},
+    crossinline onItemClicked: (Int) -> Unit = {}
 ) {
     val viewModel: EpisodeViewModel = hiltViewModel()
 
@@ -77,12 +77,12 @@ fun EpisodeDetailsScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun EpisodeDetailsScreen(
+inline fun EpisodeDetailsScreen(
     modifier: Modifier = Modifier,
     episode: Episode,
     contentType: ContentType,
-    onBackPressed: () -> Unit = {},
-    onCharacterClicked: (Int) -> Unit = {}
+    crossinline onBackPressed: () -> Unit = {},
+    crossinline onCharacterClicked: (Int) -> Unit = {}
 ) {
     val viewModel: CharactersViewModel = hiltViewModel()
     LaunchedEffect(Unit) {
@@ -148,11 +148,11 @@ fun EpisodeDetailsScreen(
  * Details and list of characters for tablet and desktop devices
  */
 @Composable
-private fun ListAndDetailsContent(
+inline fun ListAndDetailsContent(
     modifier: Modifier = Modifier,
     episode: Episode,
     characters: List<ListItem>,
-    onCharacterClicked: (Int) -> Unit
+    crossinline onCharacterClicked: (Int) -> Unit
 ) {
     val textColor = MaterialTheme.colorScheme.surface
     Row(modifier = modifier.fillMaxSize()) {
@@ -231,11 +231,11 @@ private fun ListAndDetailsContent(
  * Vertical list content for mobile devices
  */
 @Composable
-private fun VerticalListContent(
+inline fun VerticalListContent(
     modifier: Modifier = Modifier,
     episode: Episode,
     characters: List<ListItem>,
-    onCharacterClicked: (Int) -> Unit
+    crossinline onCharacterClicked: (Int) -> Unit
 ) {
     val paddingStart = dimensionResource(id = R.dimen.character_detail_start_padding)
     val textColor = MaterialTheme.colorScheme.surface
@@ -340,18 +340,3 @@ fun HeaderWithDivider(
         height = dividerHeight
     )
 }
-
-/*
-@Preview(showBackground = true, name = "Light", group = "screens")
-@Preview(
-    showBackground = true, name = "Dark", group = "screens",
-    uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL
-)
-@Composable
-fun PreviewEpisodeDetailsScreen() {
-    AppTheme {
-        Surface {
-            EpisodeDetailsScreen(episode = Episode.fakeEpisode())
-        }
-    }
-}*/

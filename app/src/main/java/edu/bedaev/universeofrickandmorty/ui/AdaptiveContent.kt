@@ -63,7 +63,7 @@ import kotlinx.coroutines.launch
 fun AdaptiveScreenContent(
     modifier: Modifier = Modifier,
     pagingData: LazyPagingItems<ListItem>,
-    listItemView: @Composable ((ListItem) -> Unit)? = null,
+    listItemView: @Composable ((ListItem) -> Unit),
     adaptiveParams: Pair<NavigationType, ContentType> = Pair(
         NavigationType.BOTTOM_NAVIGATION,
         ContentType.LIST_ONLY

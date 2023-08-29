@@ -23,10 +23,10 @@ import edu.bedaev.universeofrickandmorty.domain.model.ListItem
 import edu.bedaev.universeofrickandmorty.ui.theme.AppTheme
 
 @Composable
-fun EpisodeItem(
+inline fun EpisodeItem(
     modifier: Modifier = Modifier,
     episode: Episode,
-    onItemClicked: (ListItem) -> Unit = {}
+    crossinline onItemClicked: (ListItem) -> Unit = {}
 ) {
     Card(
         modifier = modifier

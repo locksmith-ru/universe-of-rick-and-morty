@@ -35,13 +35,13 @@ import edu.bedaev.universeofrickandmorty.ui.theme.AppTheme
 import edu.bedaev.universeofrickandmorty.ui.utils.GlideImageWithPreview
 
 @Composable
-fun CharacterItem(
+inline fun CharacterItem(
     modifier: Modifier = Modifier,
     person: Person,
     imageShape: Shape = MaterialTheme.shapes.extraSmall,
     imageBorderColor: Color = MaterialTheme.colorScheme.surface,
     imageBorderWidth: Dp = 1.dp,
-    onItemClicked: (ListItem) -> Unit = {}
+    crossinline onItemClicked: (ListItem) -> Unit = {}
 ) {
     Card(
         modifier = modifier

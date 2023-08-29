@@ -21,10 +21,10 @@ import edu.bedaev.universeofrickandmorty.domain.model.Location
 import edu.bedaev.universeofrickandmorty.ui.theme.AppTheme
 
 @Composable
-fun LocationItem(
+inline fun LocationItem(
     modifier: Modifier = Modifier,
     location: Location,
-    onItemClicked: (ListItem) -> Unit = {}
+    crossinline onItemClicked: (ListItem) -> Unit = {}
 ) {
     Card(
         modifier = modifier

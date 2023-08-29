@@ -52,12 +52,12 @@ import edu.bedaev.universeofrickandmorty.ui.utils.ContentType
 import edu.bedaev.universeofrickandmorty.ui.utils.GlideImageWithPreview
 
 @Composable
-fun CharacterDetailsScreen(
+inline fun CharacterDetailsScreen(
     modifier: Modifier = Modifier,
     personId: Int = 0,
     contentType: ContentType? = ContentType.LIST_ONLY,
-    onBackPressed: () -> Unit = {},
-    onEpisodeClicked: (Int) -> Unit
+    crossinline onBackPressed: () -> Unit = {},
+    noinline onEpisodeClicked: (Int) -> Unit
 ) {
     val viewModel: CharactersViewModel = hiltViewModel()
 
@@ -83,12 +83,12 @@ fun CharacterDetailsScreen(
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CharacterDetailsScreen(
+inline fun CharacterDetailsScreen(
     modifier: Modifier = Modifier,
     person: Person,
     contentType: ContentType? = ContentType.LIST_ONLY,
-    onBackPressed: () -> Unit = {},
-    onEpisodeClicked: (Int) -> Unit
+    crossinline onBackPressed: () -> Unit = {},
+    noinline onEpisodeClicked: (Int) -> Unit
 ) {
     val viewModel: EpisodeViewModel = hiltViewModel()
     LaunchedEffect(Unit) {
@@ -155,11 +155,11 @@ fun CharacterDetailsScreen(
 }
 
 @Composable
-private fun ListAndDetailsContent(
+inline fun ListAndDetailsContent(
     modifier: Modifier = Modifier,
     person: Person,
     episodes: List<ListItem>,
-    onEpisodeClicked: (Int) -> Unit
+    crossinline onEpisodeClicked: (Int) -> Unit
 ) {
     val textColor = MaterialTheme.colorScheme.surface
     Row(
@@ -247,11 +247,11 @@ private fun ListAndDetailsContent(
 }
 
 @Composable
-private fun SimpleListContent(
+inline fun SimpleListContent(
     modifier: Modifier = Modifier,
     person: Person,
     episodes: List<ListItem>,
-    onEpisodeClicked: (Int) -> Unit
+    crossinline onEpisodeClicked: (Int) -> Unit
 ) {
     val paddingStart = dimensionResource(id = R.dimen.character_detail_start_padding)
     val textColor = MaterialTheme.colorScheme.surface
@@ -362,7 +362,7 @@ private fun SimpleListContent(
 }
 
 @Composable
-private fun PersonInfo(
+fun PersonInfo(
     modifier: Modifier = Modifier,
     textColor: Color,
     person: Person
