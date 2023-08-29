@@ -8,7 +8,5 @@
 - adaptive design (phone, tablet, desktop)
 
 ![phone](demo/RickAndMortyPhone.gif)
-
 ![tablet](demo/RickAnMortyTablet.gif)
-
 ![desktop](demo/RickAndMortyDesktop.gif)
