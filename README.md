@@ -7,8 +7,8 @@
 - Caching data with Room database
 - adaptive design (phone, tablet, desktop)
 
-![phone](https://github.com/locksmith-ru/universe-of-rick-and-morty/tree/master/demo/RickAndMortyPhone.gif)
+![phone](demo/RickAndMortyPhone.gif)
 
-![tablet](https://github.com/locksmith-ru/universe-of-rick-and-morty/tree/master/demo/RickAnMortyTablet.gif)
+![tablet](demo/RickAnMortyTablet.gif)
 
-![desktop](https://github.com/locksmith-ru/universe-of-rick-and-morty/tree/master/demo/RickAndMortyDesktop.gif)
+![desktop](demo/RickAndMortyDesktop.gif)
